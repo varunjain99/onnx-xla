@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/distributed_runtime/libtensor_coding.a
+bazel-out/k8-opt/bin/tensorflow/core/distributed_runtime/_objs/tensor_coding/tensorflow/core/distributed_runtime/tensor_coding.o

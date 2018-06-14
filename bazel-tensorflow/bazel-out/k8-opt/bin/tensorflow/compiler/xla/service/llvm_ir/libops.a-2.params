@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/llvm_ir/libops.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/llvm_ir/_objs/ops/tensorflow/compiler/xla/service/llvm_ir/ops.o

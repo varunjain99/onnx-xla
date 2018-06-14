@@ -1,0 +1,3 @@
+tensorflow/compiler/xla/protobuf_util.cc:42:8: warning: 'std::__cxx11::string xla::protobuf_util::{anonymous}::SanitizeFilename(const string&)' defined but not used [-Wunused-function]
+ string SanitizeFilename(const string& file_name) {
+        ^

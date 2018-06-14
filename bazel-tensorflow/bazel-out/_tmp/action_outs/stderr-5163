@@ -1,0 +1,17 @@
+external/llvm/lib/IR/Attributes.cpp: In member function 'std::__cxx11::string llvm::Attribute::getAsString(bool) const':
+external/llvm/lib/IR/Attributes.cpp:398:23: warning: 'NumElems' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       Result += utostr(*NumElems);
+                       ^
+external/llvm/lib/IR/Attributes.cpp: In function 'void llvm::AttributeFuncs::mergeAttributesForInlining(llvm::Function&, const llvm::Function&)':
+external/llvm/lib/IR/Attributes.cpp:1676:7: warning: 'CallerStackProbeSize' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       if (CallerStackProbeSize > CalleeStackProbeSize) {
+       ^
+external/llvm/lib/IR/Attributes.cpp:1672:16: note: 'CallerStackProbeSize' was declared here
+       uint64_t CallerStackProbeSize;
+                ^
+external/llvm/lib/IR/Attributes.cpp:1676:7: warning: 'CalleeStackProbeSize' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       if (CallerStackProbeSize > CalleeStackProbeSize) {
+       ^
+external/llvm/lib/IR/Attributes.cpp:1667:14: note: 'CalleeStackProbeSize' was declared here
+     uint64_t CalleeStackProbeSize;
+              ^

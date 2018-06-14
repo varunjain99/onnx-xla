@@ -1,0 +1,4 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libsimple_orc_jit.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/simple_orc_jit/tensorflow/compiler/xla/service/cpu/simple_orc_jit.o
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/simple_orc_jit/tensorflow/compiler/xla/service/cpu/windows_compatibility.o

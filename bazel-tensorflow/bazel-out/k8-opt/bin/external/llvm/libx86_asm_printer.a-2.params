@@ -1,0 +1,6 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libx86_asm_printer.a
+bazel-out/k8-opt/bin/external/llvm/_objs/x86_asm_printer/external/llvm/lib/Target/X86/InstPrinter/X86ATTInstPrinter.o
+bazel-out/k8-opt/bin/external/llvm/_objs/x86_asm_printer/external/llvm/lib/Target/X86/InstPrinter/X86InstComments.o
+bazel-out/k8-opt/bin/external/llvm/_objs/x86_asm_printer/external/llvm/lib/Target/X86/InstPrinter/X86InstPrinterCommon.o
+bazel-out/k8-opt/bin/external/llvm/_objs/x86_asm_printer/external/llvm/lib/Target/X86/InstPrinter/X86IntelInstPrinter.o

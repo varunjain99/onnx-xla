@@ -1,0 +1,22 @@
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp: In function 'llvm::Error llvm::codeview::consume(llvm::BinaryStreamReader&, llvm::APSInt&)':
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp:90:9: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Num = APSInt(APInt(64, N, true), false);
+         ^
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp:83:9: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Num = APSInt(APInt(32, N, FalseVal), true);
+         ^
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp:76:9: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Num = APSInt(APInt(32, N, true), false);
+         ^
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp:69:9: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Num = APSInt(APInt(16, N, false), true);
+         ^
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp:62:9: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Num = APSInt(APInt(16, N, true), false);
+         ^
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp:55:9: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Num = APSInt(APInt(8, N, true), false);
+         ^
+external/llvm/lib/DebugInfo/CodeView/RecordSerialization.cpp:50:3: warning: 'Short' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   switch (Short) {
+   ^

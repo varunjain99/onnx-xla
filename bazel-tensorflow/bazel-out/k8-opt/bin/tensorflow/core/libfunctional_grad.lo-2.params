@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/libfunctional_grad.lo
+bazel-out/k8-opt/bin/tensorflow/core/_objs/functional_grad/tensorflow/core/ops/functional_grad.o

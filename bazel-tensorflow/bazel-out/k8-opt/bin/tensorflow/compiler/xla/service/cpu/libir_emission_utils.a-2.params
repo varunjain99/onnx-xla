@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libir_emission_utils.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/ir_emission_utils/tensorflow/compiler/xla/service/cpu/ir_emission_utils.o

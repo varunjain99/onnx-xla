@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/gpu/libpartition_assignment.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/gpu/_objs/partition_assignment/tensorflow/compiler/xla/service/gpu/partition_assignment.o

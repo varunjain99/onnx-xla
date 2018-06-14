@@ -1,0 +1,4 @@
+external/llvm/lib/CodeGen/BranchFolding.cpp: In member function 'bool llvm::BranchFolder::TailMergeBlocks(llvm::MachineFunction&)':
+external/llvm/lib/CodeGen/BranchFolding.cpp:1165:9: warning: 'ML' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         if (ML != MLI->getLoopFor(PBB))
+         ^

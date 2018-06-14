@@ -1,0 +1,13 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libaarch64_desc.a
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64AsmBackend.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64ELFObjectWriter.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64ELFStreamer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64MCAsmInfo.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64MCCodeEmitter.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64MCExpr.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64MCTargetDesc.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64MachObjectWriter.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64TargetStreamer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64WinCOFFObjectWriter.o
+bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_desc/external/llvm/lib/Target/AArch64/MCTargetDesc/AArch64WinCOFFStreamer.o

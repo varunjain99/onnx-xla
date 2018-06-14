@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/gpu/libparallel_loop_emitter.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/gpu/_objs/parallel_loop_emitter/tensorflow/compiler/xla/service/gpu/parallel_loop_emitter.o

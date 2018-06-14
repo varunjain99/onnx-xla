@@ -1,0 +1,37 @@
+tensorflow/compiler/xla/service/cpu/shape_partition.cc: In member function 'std::vector<long long int> xla::cpu::ShapePartitionAssigner::Run(tensorflow::int64)':
+tensorflow/compiler/xla/service/cpu/shape_partition.cc:53:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < outer_dims.size(); ++i) {
+                       ^
+tensorflow/compiler/xla/service/cpu/shape_partition.cc:67:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < dimension_partition_counts.size(); ++i) {
+                         ^
+tensorflow/compiler/xla/service/cpu/shape_partition.cc: In constructor 'xla::cpu::ShapePartitionIterator::ShapePartitionIterator(const xla::Shape&, const std::vector<long long int>&)':
+tensorflow/compiler/xla/service/cpu/shape_partition.cc:107:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < dimensions_.size(); ++i) {
+                     ^
+tensorflow/compiler/xla/service/cpu/shape_partition.cc:115:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < dimension_partition_sizes_.size(); ++i) {
+                     ^
+tensorflow/compiler/xla/service/cpu/shape_partition.cc: In member function 'std::vector<std::pair<long long int, long long int> > xla::cpu::ShapePartitionIterator::GetPartition(tensorflow::int64) const':
+tensorflow/compiler/xla/service/cpu/shape_partition.cc:134:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < partition.size(); ++i) {
+                       ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/layout_util.h:23,
+                 from ./tensorflow/compiler/xla/shape_util.h:25,
+                 from ./tensorflow/compiler/xla/service/cpu/shape_partition.h:21,
+                 from tensorflow/compiler/xla/service/cpu/shape_partition.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LEImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:115:5:   required from here
+./tensorflow/core/platform/default/logging.h:232:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:232:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+ ^

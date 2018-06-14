@@ -1,0 +1,13 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/libgpu_runtime_impl.pic.lo
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_bfc_allocator.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_cudamalloc_allocator.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_debug_allocator.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_device.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_device_factory.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_managed_allocator.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_stream_util.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_util.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/gpu_util_platform_specific.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/pool_allocator.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_runtime_impl/tensorflow/core/common_runtime/gpu/process_state.pic.o

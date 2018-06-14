@@ -1,0 +1,5 @@
+In function 'LLVMOpaqueTargetMachine* LLVMCreateTargetMachine(LLVMTargetRef, const char*, const char*, const char*, LLVMCodeGenOptLevel, LLVMRelocMode, LLVMCodeModel)':
+cc1plus: warning: 'RM' may be used uninitialized in this function [-Wmaybe-uninitialized]
+external/llvm/lib/Target/TargetMachineC.cpp:107:26: note: 'RM' was declared here
+   Optional<Reloc::Model> RM;
+                          ^

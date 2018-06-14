@@ -1,0 +1,15 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libinst_combine.a
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineAddSub.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineAndOrXor.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineCalls.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineCasts.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineCompares.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineLoadStoreAlloca.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineMulDivRem.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombinePHI.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineSelect.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineShifts.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineSimplifyDemanded.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstCombineVectorOps.o
+bazel-out/k8-opt/bin/external/llvm/_objs/inst_combine/external/llvm/lib/Transforms/InstCombine/InstructionCombining.o

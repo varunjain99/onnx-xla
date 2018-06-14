@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/grappler/libgrappler_item.pic.a
+bazel-out/k8-opt/bin/tensorflow/core/grappler/_objs/grappler_item/tensorflow/core/grappler/grappler_item.pic.o

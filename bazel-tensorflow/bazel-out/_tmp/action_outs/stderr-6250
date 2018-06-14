@@ -1,0 +1,4 @@
+external/llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp: In member function 'std::pair<llvm::SDValue, llvm::SDValue> llvm::TargetLowering::LowerCallTo(llvm::TargetLowering::CallLoweringInfo&) const':
+external/llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp:8496:29: warning: 'AssertOp' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Optional<ISD::NodeType> AssertOp;
+                             ^

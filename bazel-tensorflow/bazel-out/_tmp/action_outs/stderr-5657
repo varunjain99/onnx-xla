@@ -1,0 +1,11 @@
+external/llvm/lib/Transforms/InstCombine/InstructionCombining.cpp: In member function 'llvm::Value* llvm::InstCombiner::SimplifySelectsFeedingBinaryOp(llvm::BinaryOperator&, llvm::Value*, llvm::Value*)':
+external/llvm/lib/Transforms/InstCombine/InstructionCombining.cpp:738:32: warning: 'D' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       SI = Builder.CreateSelect(A, Builder.CreateBinOp(Opcode, B, D), V1);
+                                ^
+external/llvm/lib/Transforms/InstCombine/InstructionCombining.cpp: In member function 'llvm::Value* llvm::InstCombiner::SimplifyUsingDistributiveLaws(llvm::BinaryOperator&)':
+external/llvm/lib/Transforms/InstCombine/InstructionCombining.cpp:635:71: warning: 'RHSOpcode' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         if (Value *V = tryFactorization(I, RHSOpcode, LHS, Ident, C, D))
+                                                                       ^
+external/llvm/lib/Transforms/InstCombine/InstructionCombining.cpp:621:63: warning: 'LHSOpcode' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       if (Value *V = tryFactorization(I, LHSOpcode, A, B, C, D))
+                                                               ^

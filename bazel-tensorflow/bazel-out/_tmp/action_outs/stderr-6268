@@ -1,0 +1,7 @@
+external/llvm/lib/CodeGen/SelectionDAG/SelectionDAGISel.cpp: In member function 'virtual bool llvm::SelectionDAGISel::runOnMachineFunction(llvm::MachineFunction&)':
+external/llvm/lib/CodeGen/SelectionDAG/SelectionDAGISel.cpp:238:25: warning: '*((void*)& OLC +12)' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       IS.TM.setFastISel(SavedFastISel);
+                         ^
+external/llvm/lib/CodeGen/SelectionDAG/SelectionDAGISel.cpp:403:19: note: '*((void*)& OLC +12)' was declared here
+   OptLevelChanger OLC(*this, NewOptLevel);
+                   ^

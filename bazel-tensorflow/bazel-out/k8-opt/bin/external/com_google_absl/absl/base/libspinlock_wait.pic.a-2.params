@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/com_google_absl/absl/base/libspinlock_wait.pic.a
+bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/spinlock_wait/external/com_google_absl/absl/base/internal/spinlock_wait.pic.o

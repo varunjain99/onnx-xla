@@ -1,0 +1,17 @@
+external/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp: In member function 'llvm::SDValue {anonymous}::DAGCombiner::visitOR(llvm::SDNode*)':
+external/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp:5424:23: warning: '*((void*)& FirstByteProvider +8)' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   if (MemoryByteOffset(*FirstByteProvider) != 0)
+                       ^
+external/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp:5361:26: note: '*((void*)& FirstByteProvider +8)' was declared here
+   Optional<ByteProvider> FirstByteProvider;
+                          ^
+external/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp:5424:23: warning: 'FirstByteProvider' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   if (MemoryByteOffset(*FirstByteProvider) != 0)
+                       ^
+external/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp:5361:26: note: 'FirstByteProvider' was declared here
+   Optional<ByteProvider> FirstByteProvider;
+                          ^
+external/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp: In member function 'bool {anonymous}::DAGCombiner::MergeConsecutiveStores(llvm::StoreSDNode*)':
+external/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp:13791:54: warning: 'RootNode' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         if (!checkMergeStoreCandidatesForDependencies(
+                                                      ^

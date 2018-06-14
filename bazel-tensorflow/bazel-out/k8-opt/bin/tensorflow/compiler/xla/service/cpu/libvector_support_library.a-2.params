@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libvector_support_library.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/vector_support_library/tensorflow/compiler/xla/service/cpu/vector_support_library.o

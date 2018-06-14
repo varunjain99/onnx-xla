@@ -1,0 +1,609 @@
+tensorflow/compiler/xla/literal_util.cc: In function 'void xla::{anonymous}::ConvertEndianShort(std::__cxx11::string*)':
+tensorflow/compiler/xla/literal_util.cc:53:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < bytes->size(); i += 2) {
+                       ^
+tensorflow/compiler/xla/literal_util.cc: In static member function 'static xla::Literal xla::Literal::MoveIntoTuple(tensorflow::gtl::MutableArraySlice<xla::Literal>)':
+tensorflow/compiler/xla/literal_util.cc:366:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < elements.size(); ++i) {
+                     ^
+tensorflow/compiler/xla/literal_util.cc: In lambda function:
+tensorflow/compiler/xla/literal_util.cc:455:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for (int i = 0; i < dest_shape_index.size(); ++i) {
+                           ^
+tensorflow/compiler/xla/literal_util.cc:466:51: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for (int64 i = dest_shape_index.size(); i < index.size(); ++i) {
+                                                   ^
+tensorflow/compiler/xla/literal_util.cc: In static member function 'static std::unique_ptr<xla::Literal> xla::Literal::CreateR1U8(tensorflow::StringPiece)':
+tensorflow/compiler/xla/literal_util.cc:765:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < value.size(); ++i) {
+                     ^
+tensorflow/compiler/xla/literal_util.cc: In member function 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::LiteralBase::Broadcast(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>) const':
+tensorflow/compiler/xla/literal_util.cc:817:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < dimensions.size(); i++) {
+                       ^
+tensorflow/compiler/xla/literal_util.cc: In lambda function:
+tensorflow/compiler/xla/literal_util.cc:836:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for (int64 i = 0; i < dimensions.size(); ++i) {
+                             ^
+tensorflow/compiler/xla/literal_util.cc: In static member function 'static std::unique_ptr<xla::Literal> xla::Literal::ReshapeSlice(tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const xla::LiteralSlice&)':
+tensorflow/compiler/xla/literal_util.cc:885:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < new_dimensions.size(); ++i) {
+                       ^
+tensorflow/compiler/xla/literal_util.cc: In static member function 'static std::unique_ptr<xla::Literal> xla::Literal::MakeTuple(tensorflow::gtl::ArraySlice<const xla::Literal*>)':
+tensorflow/compiler/xla/literal_util.cc:1522:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < elements.size(); ++i) {
+                     ^
+tensorflow/compiler/xla/literal_util.cc: In static member function 'static std::unique_ptr<xla::Literal> xla::Literal::MakeTupleFromSlices(tensorflow::gtl::ArraySlice<xla::LiteralSlice>)':
+tensorflow/compiler/xla/literal_util.cc:1535:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < elements.size(); ++i) {
+                     ^
+tensorflow/compiler/xla/literal_util.cc: In static member function 'static std::unique_ptr<xla::Literal> xla::Literal::MakeTupleOwned(std::vector<std::unique_ptr<xla::Literal> >)':
+tensorflow/compiler/xla/literal_util.cc:1549:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < elements.size(); ++i) {
+                       ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from tensorflow/compiler/xla/literal_util.cc:16:
+tensorflow/compiler/xla/literal_util.cc: In member function 'tensorflow::Status xla::LiteralBase::Piece::CopyFromProto(const xla::LiteralProto&)':
+tensorflow/compiler/xla/literal_util.cc:2218:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       TF_RET_CHECK(proto.c64s_size() == complex_data.size() * 2);
+                                      ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:2218:7: note: in expansion of macro 'TF_RET_CHECK'
+       TF_RET_CHECK(proto.c64s_size() == complex_data.size() * 2);
+       ^
+tensorflow/compiler/xla/literal_util.cc:2219:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (int64 i = 0; i < complex_data.size(); ++i) {
+                           ^
+tensorflow/compiler/xla/literal_util.cc: In constructor 'xla::BorrowingLiteral::BorrowingLiteral(tensorflow::gtl::ArraySlice<const char*>, const xla::Shape&)':
+tensorflow/compiler/xla/literal_util.cc:2364:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < src_buf_ptrs.size(); ++i) {
+                     ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from tensorflow/compiler/xla/literal_util.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LEImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:115:5:   required from here
+./tensorflow/core/platform/default/logging.h:232:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:232:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+ ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'xla::{anonymous}::ConvertType(xla::LiteralSlice)::<lambda(const xla::Shape&, const xla::ShapeIndex&)> [with FromNativeT = tensorflow::bfloat16; ToNativeT = float]':
+tensorflow/compiler/xla/literal_util.cc:90:25:   required from 'struct xla::{anonymous}::ConvertType(xla::LiteralSlice) [with FromNativeT = tensorflow::bfloat16; ToNativeT = float]::<lambda(const class xla::Shape&, const class xla::ShapeIndex&)>'
+tensorflow/compiler/xla/literal_util.cc:83:29:   required from 'std::unique_ptr<xla::Literal> xla::{anonymous}::ConvertType(xla::LiteralSlice) [with FromNativeT = tensorflow::bfloat16; ToNativeT = float]'
+tensorflow/compiler/xla/literal_util.cc:238:51:   required from here
+tensorflow/compiler/xla/literal_util.cc:91:33: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             for (int64 i = 0; i < src.size(); ++i) {
+                                 ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'xla::{anonymous}::ConvertType(xla::LiteralSlice)::<lambda(const xla::Shape&, const xla::ShapeIndex&)> [with FromNativeT = float; ToNativeT = tensorflow::bfloat16]':
+tensorflow/compiler/xla/literal_util.cc:90:25:   required from 'struct xla::{anonymous}::ConvertType(xla::LiteralSlice) [with FromNativeT = float; ToNativeT = tensorflow::bfloat16]::<lambda(const class xla::Shape&, const class xla::ShapeIndex&)>'
+tensorflow/compiler/xla/literal_util.cc:83:29:   required from 'std::unique_ptr<xla::Literal> xla::{anonymous}::ConvertType(xla::LiteralSlice) [with FromNativeT = float; ToNativeT = tensorflow::bfloat16]'
+tensorflow/compiler/xla/literal_util.cc:243:50:   required from here
+tensorflow/compiler/xla/literal_util.cc:91:33: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from tensorflow/compiler/xla/literal_util.cc:16:
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = unsigned char]':
+tensorflow/compiler/xla/literal_util.cc:522:52:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = short unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:525:53:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:528:53:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = long long unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:531:53:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = signed char]':
+tensorflow/compiler/xla/literal_util.cc:534:51:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = short int]':
+tensorflow/compiler/xla/literal_util.cc:537:52:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = int]':
+tensorflow/compiler/xla/literal_util.cc:540:52:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = long long int]':
+tensorflow/compiler/xla/literal_util.cc:543:52:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = Eigen::half]':
+tensorflow/compiler/xla/literal_util.cc:546:51:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = tensorflow::bfloat16]':
+tensorflow/compiler/xla/literal_util.cc:549:55:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = float]':
+tensorflow/compiler/xla/literal_util.cc:552:52:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = double]':
+tensorflow/compiler/xla/literal_util.cc:555:53:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = std::complex<float>]':
+tensorflow/compiler/xla/literal_util.cc:558:56:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::Literal::CopySliceFromInternal(const xla::LiteralBase&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>) [with NativeT = bool]':
+tensorflow/compiler/xla/literal_util.cc:561:51:   required from here
+tensorflow/compiler/xla/literal_util.cc:251:53: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+                                                     ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:251:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(src_literal.shape()) == src_base.size());
+   ^
+tensorflow/compiler/xla/literal_util.cc:252:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+                                         ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/literal_util.cc:252:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(ShapeUtil::Rank(shape()) == dest_base.size());
+   ^
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_EQImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+tensorflow/compiler/xla/literal_util.cc:754:3:   required from here
+./tensorflow/core/platform/default/logging.h:230:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+                         ==)  // Compilation error with CHECK_EQ(NULL, x)?
+                         ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:229:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_EQ,
+ ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = bool]':
+tensorflow/compiler/xla/literal_util.cc:1794:61:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   if (multi_index->size() == ShapeUtil::Rank(subshape())) {
+                           ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = unsigned char]':
+tensorflow/compiler/xla/literal_util.cc:1796:62:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = int]':
+tensorflow/compiler/xla/literal_util.cc:1798:62:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = long long int]':
+tensorflow/compiler/xla/literal_util.cc:1800:62:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:1802:63:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = long long unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:1804:63:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = float]':
+tensorflow/compiler/xla/literal_util.cc:1806:62:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = double]':
+tensorflow/compiler/xla/literal_util.cc:1808:63:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = Eigen::half]':
+tensorflow/compiler/xla/literal_util.cc:1810:61:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = tensorflow::bfloat16]':
+tensorflow/compiler/xla/literal_util.cc:1812:65:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::LiteralBase::Piece::EqualElementsInternal(const xla::LiteralBase::Piece&, std::vector<long long int>*) const [with NativeT = std::complex<float>]':
+tensorflow/compiler/xla/literal_util.cc:1814:66:   required from here
+tensorflow/compiler/xla/literal_util.cc:1775:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = unsigned char]':
+tensorflow/compiler/xla/literal_util.cc:1866:75:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < data.size(); ++i) {
+                       ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:1871:77:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = long long unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:1876:77:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = signed char]':
+tensorflow/compiler/xla/literal_util.cc:1880:71:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = int]':
+tensorflow/compiler/xla/literal_util.cc:1882:73:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = long long int]':
+tensorflow/compiler/xla/literal_util.cc:1884:73:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = float]':
+tensorflow/compiler/xla/literal_util.cc:1886:73:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = double]':
+tensorflow/compiler/xla/literal_util.cc:1888:75:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = Eigen::half]':
+tensorflow/compiler/xla/literal_util.cc:1891:70:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = tensorflow::bfloat16]':
+tensorflow/compiler/xla/literal_util.cc:1894:78:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = bool]':
+tensorflow/compiler/xla/literal_util.cc:1897:73:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = std::complex<float>]':
+tensorflow/compiler/xla/literal_util.cc:1950:52:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = short int]':
+tensorflow/compiler/xla/literal_util.cc:1994:64:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'bool xla::{anonymous}::AllElementsEqualValue(tensorflow::gtl::ArraySlice<T>, NativeT) [with NativeT = short unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:1998:65:   required from here
+tensorflow/compiler/xla/literal_util.cc:1845:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::{anonymous}::CopyFromRepeatedField(tensorflow::gtl::MutableArraySlice<NativeT>, const RepeatedFieldT&) [with RepeatedFieldT = google::protobuf::RepeatedField<bool>; NativeT = bool]':
+tensorflow/compiler/xla/literal_util.cc:2174:7:   required from here
+tensorflow/compiler/xla/literal_util.cc:2155:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   if (dest.size() != src.size()) {
+                   ^
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::{anonymous}::CopyFromRepeatedField(tensorflow::gtl::MutableArraySlice<NativeT>, const RepeatedFieldT&) [with RepeatedFieldT = google::protobuf::RepeatedField<int>; NativeT = int]':
+tensorflow/compiler/xla/literal_util.cc:2182:7:   required from here
+tensorflow/compiler/xla/literal_util.cc:2155:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::{anonymous}::CopyFromRepeatedField(tensorflow::gtl::MutableArraySlice<NativeT>, const RepeatedFieldT&) [with RepeatedFieldT = google::protobuf::RepeatedField<long int>; NativeT = long long int]':
+tensorflow/compiler/xla/literal_util.cc:2185:7:   required from here
+tensorflow/compiler/xla/literal_util.cc:2155:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::{anonymous}::CopyFromRepeatedField(tensorflow::gtl::MutableArraySlice<NativeT>, const RepeatedFieldT&) [with RepeatedFieldT = google::protobuf::RepeatedField<unsigned int>; NativeT = unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:2188:7:   required from here
+tensorflow/compiler/xla/literal_util.cc:2155:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::{anonymous}::CopyFromRepeatedField(tensorflow::gtl::MutableArraySlice<NativeT>, const RepeatedFieldT&) [with RepeatedFieldT = google::protobuf::RepeatedField<long unsigned int>; NativeT = long long unsigned int]':
+tensorflow/compiler/xla/literal_util.cc:2191:7:   required from here
+tensorflow/compiler/xla/literal_util.cc:2155:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::{anonymous}::CopyFromRepeatedField(tensorflow::gtl::MutableArraySlice<NativeT>, const RepeatedFieldT&) [with RepeatedFieldT = google::protobuf::RepeatedField<float>; NativeT = float]':
+tensorflow/compiler/xla/literal_util.cc:2211:7:   required from here
+tensorflow/compiler/xla/literal_util.cc:2155:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+tensorflow/compiler/xla/literal_util.cc: In instantiation of 'tensorflow::Status xla::{anonymous}::CopyFromRepeatedField(tensorflow::gtl::MutableArraySlice<NativeT>, const RepeatedFieldT&) [with RepeatedFieldT = google::protobuf::RepeatedField<double>; NativeT = double]':
+tensorflow/compiler/xla/literal_util.cc:2214:7:   required from here
+tensorflow/compiler/xla/literal_util.cc:2155:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from tensorflow/compiler/xla/literal_util.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_EQImpl(const T1&, const T2&, const char*) [with T1 = long unsigned int; T2 = long long int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+tensorflow/compiler/xla/literal_util.cc:2359:3:   required from here
+./tensorflow/core/platform/default/logging.h:230:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+                         ==)  // Compilation error with CHECK_EQ(NULL, x)?
+                         ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:229:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_EQ,
+ ^
+In file included from tensorflow/compiler/xla/literal_util.cc:16:0:
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'tensorflow::Status xla::LiteralBase::Piece::ForEachMutableHelper(const Fn&, xla::LiteralBase::Piece*, xla::ShapeIndex*) [with Fn = xla::LiteralBase::Piece::ForEachMutableSubpiece(const Fn&) [with Fn = xla::Literal::DeallocateBuffers()::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]':
+./tensorflow/compiler/xla/literal_util.h:430:24:   required from 'void xla::LiteralBase::Piece::ForEachMutableSubpiece(const Fn&) [with Fn = xla::Literal::DeallocateBuffers()::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]'
+tensorflow/compiler/xla/literal_util.cc:195:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:495:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (int64 i = 0; i < piece->children_.size(); ++i) {
+                           ^
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'tensorflow::Status xla::LiteralBase::Piece::ForEachMutableHelper(const Fn&, xla::LiteralBase::Piece*, xla::ShapeIndex*) [with Fn = xla::LiteralBase::Piece::ForEachMutableSubpiece(const Fn&) [with Fn = xla::LiteralBase::CreateFromShape(const xla::Shape&)::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]':
+./tensorflow/compiler/xla/literal_util.h:430:24:   required from 'void xla::LiteralBase::Piece::ForEachMutableSubpiece(const Fn&) [with Fn = xla::LiteralBase::CreateFromShape(const xla::Shape&)::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]'
+tensorflow/compiler/xla/literal_util.cc:217:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:495:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'tensorflow::Status xla::LiteralBase::Piece::ForEachMutableHelper(const Fn&, xla::LiteralBase::Piece*, xla::ShapeIndex*) [with Fn = xla::LiteralBase::Piece::ForEachMutableSubpiece(const Fn&) [with Fn = xla::Literal::DecomposeTuple()::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]':
+./tensorflow/compiler/xla/literal_util.h:430:24:   required from 'void xla::LiteralBase::Piece::ForEachMutableSubpiece(const Fn&) [with Fn = xla::Literal::DecomposeTuple()::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]'
+tensorflow/compiler/xla/literal_util.cc:351:10:   required from here
+./tensorflow/compiler/xla/literal_util.h:495:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'tensorflow::Status xla::LiteralBase::Piece::ForEachMutableHelper(const Fn&, xla::LiteralBase::Piece*, xla::ShapeIndex*) [with Fn = xla::Literal::CopyFrom(const xla::LiteralSlice&, const xla::ShapeIndex&, const xla::ShapeIndex&)::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]':
+./tensorflow/compiler/xla/literal_util.h:439:67:   required from 'tensorflow::Status xla::LiteralBase::Piece::ForEachMutableSubpieceWithStatus(const Fn&) [with Fn = xla::Literal::CopyFrom(const xla::LiteralSlice&, const xla::ShapeIndex&, const xla::ShapeIndex&)::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]'
+tensorflow/compiler/xla/literal_util.cc:471:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:495:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'tensorflow::Status xla::LiteralBase::Piece::ForEachHelper(const Fn&, const xla::LiteralBase::Piece&, xla::ShapeIndex*) const [with Fn = xla::LiteralBase::Piece::ForEachSubpiece(const Fn&) const [with Fn = xla::Literal::MoveFrom(xla::Literal&&, const xla::ShapeIndex&)::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]':
+./tensorflow/compiler/xla/literal_util.h:401:24:   required from 'void xla::LiteralBase::Piece::ForEachSubpiece(const Fn&) const [with Fn = xla::Literal::MoveFrom(xla::Literal&&, const xla::ShapeIndex&)::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]'
+tensorflow/compiler/xla/literal_util.cc:500:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:469:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (int64 i = 0; i < piece.children_.size(); ++i) {
+                           ^
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'bool xla::LiteralBase::Piece::ForEachHelperBool(const Fn&, const xla::LiteralBase::Piece&, xla::ShapeIndex*) const [with Fn = xla::LiteralBase::operator==(const xla::LiteralBase&) const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]':
+./tensorflow/compiler/xla/literal_util.h:417:51:   required from 'bool xla::LiteralBase::Piece::ForEachSubpieceWithBool(const Fn&) const [with Fn = xla::LiteralBase::operator==(const xla::LiteralBase&) const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]'
+tensorflow/compiler/xla/literal_util.cc:1837:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:482:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (int64 i = 0; i < piece.children_.size(); ++i) {
+                           ^
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'bool xla::LiteralBase::Piece::ForEachHelperBool(const Fn&, const xla::LiteralBase::Piece&, xla::ShapeIndex*) const [with Fn = xla::LiteralBase::IsAll(tensorflow::int8) const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]':
+./tensorflow/compiler/xla/literal_util.h:417:51:   required from 'bool xla::LiteralBase::Piece::ForEachSubpieceWithBool(const Fn&) const [with Fn = xla::LiteralBase::IsAll(tensorflow::int8) const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]'
+tensorflow/compiler/xla/literal_util.cc:1913:4:   required from here
+./tensorflow/compiler/xla/literal_util.h:482:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'bool xla::LiteralBase::Piece::ForEachHelperBool(const Fn&, const xla::LiteralBase::Piece&, xla::ShapeIndex*) const [with Fn = xla::LiteralBase::IsAllFloat(float) const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]':
+./tensorflow/compiler/xla/literal_util.h:417:51:   required from 'bool xla::LiteralBase::Piece::ForEachSubpieceWithBool(const Fn&) const [with Fn = xla::LiteralBase::IsAllFloat(float) const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]'
+tensorflow/compiler/xla/literal_util.cc:1943:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:482:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'bool xla::LiteralBase::Piece::ForEachHelperBool(const Fn&, const xla::LiteralBase::Piece&, xla::ShapeIndex*) const [with Fn = xla::LiteralBase::IsAllFirst() const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]':
+./tensorflow/compiler/xla/literal_util.h:417:51:   required from 'bool xla::LiteralBase::Piece::ForEachSubpieceWithBool(const Fn&) const [with Fn = xla::LiteralBase::IsAllFirst() const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]'
+tensorflow/compiler/xla/literal_util.cc:2039:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:482:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'tensorflow::Status xla::LiteralBase::Piece::ForEachHelper(const Fn&, const xla::LiteralBase::Piece&, xla::ShapeIndex*) const [with Fn = xla::LiteralBase::Piece::ForEachSubpiece(const Fn&) const [with Fn = xla::LiteralBase::ToProto() const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]':
+./tensorflow/compiler/xla/literal_util.h:401:24:   required from 'void xla::LiteralBase::Piece::ForEachSubpiece(const Fn&) const [with Fn = xla::LiteralBase::ToProto() const::<lambda(const xla::ShapeIndex&, const xla::LiteralBase::Piece&)>]'
+tensorflow/compiler/xla/literal_util.cc:2245:8:   required from here
+./tensorflow/compiler/xla/literal_util.h:469:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (int64 i = 0; i < piece.children_.size(); ++i) {
+                           ^
+./tensorflow/compiler/xla/literal_util.h: In instantiation of 'tensorflow::Status xla::LiteralBase::Piece::ForEachMutableHelper(const Fn&, xla::LiteralBase::Piece*, xla::ShapeIndex*) [with Fn = xla::Literal::CreateFromProto(const xla::LiteralProto&)::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]':
+./tensorflow/compiler/xla/literal_util.h:439:67:   required from 'tensorflow::Status xla::LiteralBase::Piece::ForEachMutableSubpieceWithStatus(const Fn&) [with Fn = xla::Literal::CreateFromProto(const xla::LiteralProto&)::<lambda(const xla::ShapeIndex&, xla::LiteralBase::Piece*)>]'
+tensorflow/compiler/xla/literal_util.cc:2267:3:   required from here
+./tensorflow/compiler/xla/literal_util.h:495:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (int64 i = 0; i < piece->children_.size(); ++i) {
+                           ^
+In file included from ./tensorflow/compiler/xla/array2d.h:27:0,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from tensorflow/compiler/xla/literal_util.cc:16:
+./tensorflow/compiler/xla/array.h: In instantiation of 'tensorflow::int64 xla::Array<T>::calculate_index(const U&) const [with U = std::array<long long int, 2ul>; T = float; tensorflow::int64 = long long int]':
+./tensorflow/compiler/xla/array.h:375:35:   required from 'typename std::enable_if<xla::array_impl::conjunction<std::is_integral<Dims>...>::value, T&>::type xla::Array<T>::operator()(Dims ...) [with Dims = {long long int, long long int}; T = float; typename std::enable_if<xla::array_impl::conjunction<std::is_integral<Dims>...>::value, T&>::type = float&]'
+./tensorflow/compiler/xla/array2d.h:109:13:   required from 'xla::MakeLinspaceArray2D(double, double, tensorflow::int64, tensorflow::int64)::<lambda(tensorflow::int64, NativeT)> [with NativeT = float; tensorflow::int64 = long long int]'
+./tensorflow/compiler/xla/array2d.h:108:27:   required from 'struct xla::MakeLinspaceArray2D(double, double, tensorflow::int64, tensorflow::int64) [with NativeT = float; tensorflow::int64 = long long int]::<lambda(tensorflow::int64, float)>'
+./tensorflow/compiler/xla/array2d.h:110:3:   required from 'std::unique_ptr<xla::Array2D<NativeT> > xla::MakeLinspaceArray2D(double, double, tensorflow::int64, tensorflow::int64) [with NativeT = float; tensorflow::int64 = long long int]'
+tensorflow/compiler/xla/literal_util.cc:775:56:   required from here
+./tensorflow/compiler/xla/array.h:550:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < sizes_.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from tensorflow/compiler/xla/literal_util.cc:16:
+./tensorflow/compiler/xla/array.h: In instantiation of 'tensorflow::int64 xla::Array<T>::dim(tensorflow::int64) const [with T = float; tensorflow::int64 = long long int]':
+./tensorflow/compiler/xla/literal_util.h:1512:5:   required from 'void xla::Literal::PopulateFromArray(const xla::Array<T>&) [with NativeT = float]'
+./tensorflow/compiler/xla/literal_util.h:1315:3:   required from 'static std::unique_ptr<xla::Literal> xla::Literal::CreateFromArrayWithLayout(const xla::Array<T>&, const xla::Layout&) [with NativeT = float]'
+./tensorflow/compiler/xla/literal_util.h:1322:35:   required from 'static std::unique_ptr<xla::Literal> xla::Literal::CreateFromArray(const xla::Array<T>&) [with NativeT = float]'
+./tensorflow/compiler/xla/literal_util.h:1335:25:   required from 'static std::unique_ptr<xla::Literal> xla::Literal::CreateR2FromArray2D(const xla::Array2D<NativeT>&) [with NativeT = float]'
+tensorflow/compiler/xla/literal_util.cc:776:36:   required from here
+./tensorflow/compiler/xla/array.h:401:13: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     CHECK(n < sizes_.size());
+             ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/compiler/xla/array.h:401:5: note: in expansion of macro 'CHECK'
+     CHECK(n < sizes_.size());
+     ^

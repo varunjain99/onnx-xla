@@ -1,0 +1,6 @@
+external/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp:2210:3: warning: multi-line comment [-Wcomment]
+   //      * *    \|                                 \
+   ^
+external/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp:2213:3: warning: multi-line comment [-Wcomment]
+   //          *  |  \
+   ^

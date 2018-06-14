@@ -1,0 +1,4 @@
+external/llvm/lib/CodeGen/SelectionDAG/LegalizeDAG.cpp: In member function 'bool {anonymous}::SelectionDAGLegalize::ExpandNode(llvm::SDNode*)':
+external/llvm/lib/CodeGen/SelectionDAG/LegalizeDAG.cpp:3767:28: warning: 'TrueValue' may be used uninitialized in this function [-Wmaybe-uninitialized]
+                        Tmp3);
+                            ^

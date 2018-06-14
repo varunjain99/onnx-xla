@@ -1,0 +1,4 @@
+jemalloc/include/jemalloc/internal/size_classes.sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/external/jemalloc/include/jemalloc/internal/size_classes.sh
+jemalloc/size_classes_sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/execroot/org_tensorflow/bazel-out/host/bin/external/jemalloc/size_classes_sh
+org_tensorflow/external/jemalloc/include/jemalloc/internal/size_classes.sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/external/jemalloc/include/jemalloc/internal/size_classes.sh
+org_tensorflow/external/jemalloc/size_classes_sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/execroot/org_tensorflow/bazel-out/host/bin/external/jemalloc/size_classes_sh

@@ -1,0 +1,10 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libprofile_data.a
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/GCOV.o
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/InstrProf.o
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/InstrProfReader.o
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/InstrProfWriter.o
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/ProfileSummaryBuilder.o
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/SampleProf.o
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/SampleProfReader.o
+bazel-out/k8-opt/bin/external/llvm/_objs/profile_data/external/llvm/lib/ProfileData/SampleProfWriter.o

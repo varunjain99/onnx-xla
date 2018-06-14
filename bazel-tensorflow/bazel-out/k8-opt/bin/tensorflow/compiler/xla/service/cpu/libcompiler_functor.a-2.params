@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libcompiler_functor.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/compiler_functor/tensorflow/compiler/xla/service/cpu/compiler_functor.o

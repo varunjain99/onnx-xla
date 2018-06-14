@@ -1,0 +1,5 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/third_party/address_sorting/libaddress_sorting.a
+bazel-out/k8-opt/bin/external/grpc/third_party/address_sorting/_objs/address_sorting/external/grpc/third_party/address_sorting/address_sorting.o
+bazel-out/k8-opt/bin/external/grpc/third_party/address_sorting/_objs/address_sorting/external/grpc/third_party/address_sorting/address_sorting_posix.o
+bazel-out/k8-opt/bin/external/grpc/third_party/address_sorting/_objs/address_sorting/external/grpc/third_party/address_sorting/address_sorting_windows.o

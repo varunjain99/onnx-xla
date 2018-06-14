@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/libgpu_lib.a
+bazel-out/k8-opt/bin/tensorflow/core/_objs/gpu_lib/tensorflow/core/common_runtime/gpu/gpu_event_mgr.o

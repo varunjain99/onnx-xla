@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/highwayhash/libsip_hash.pic.a
+bazel-out/k8-opt/bin/external/highwayhash/_objs/sip_hash/external/highwayhash/highwayhash/sip_hash.pic.o

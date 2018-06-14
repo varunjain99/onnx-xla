@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libcpu_layout_assignment.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/cpu_layout_assignment/tensorflow/compiler/xla/service/cpu/cpu_layout_assignment.o

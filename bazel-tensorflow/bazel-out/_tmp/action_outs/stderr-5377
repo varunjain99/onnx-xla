@@ -1,0 +1,4 @@
+external/llvm/lib/Analysis/DependenceAnalysis.cpp: In member function 'void llvm::DependenceInfo::unifySubscriptType(llvm::ArrayRef<llvm::DependenceInfo::Subscript*>)':
+external/llvm/lib/Analysis/DependenceAnalysis.cpp:837:40: warning: 'widestType' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       Pair->Src = SE->getSignExtendExpr(Src, widestType);
+                                        ^

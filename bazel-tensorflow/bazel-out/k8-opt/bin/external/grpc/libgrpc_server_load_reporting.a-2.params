@@ -1,0 +1,4 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_server_load_reporting.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_server_load_reporting/external/grpc/src/core/ext/filters/load_reporting/server_load_reporting_filter.o
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_server_load_reporting/external/grpc/src/core/ext/filters/load_reporting/server_load_reporting_plugin.o

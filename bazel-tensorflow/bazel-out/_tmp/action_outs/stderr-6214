@@ -1,0 +1,13 @@
+external/llvm/lib/Target/X86/X86OptimizeLEAs.cpp: In member function 'virtual bool {anonymous}::OptimizeLEAPass::runOnMachineFunction(llvm::MachineFunction&)':
+external/llvm/lib/Target/X86/X86OptimizeLEAs.cpp:371:62: warning: 'AddrDispShift' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       if (BestLEA != nullptr && !isInt<8>(AddrDispShiftTemp) &&
+                                                              ^
+external/llvm/lib/Target/X86/X86OptimizeLEAs.cpp:515:13: note: 'AddrDispShift' was declared here
+     int64_t AddrDispShift;
+             ^
+external/llvm/lib/Target/X86/X86OptimizeLEAs.cpp:527:5: warning: 'Dist' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     if (Dist < 0) {
+     ^
+external/llvm/lib/Target/X86/X86OptimizeLEAs.cpp:516:9: note: 'Dist' was declared here
+     int Dist;
+         ^

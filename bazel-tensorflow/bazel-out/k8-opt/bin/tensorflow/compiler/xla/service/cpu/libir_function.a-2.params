@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libir_function.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/ir_function/tensorflow/compiler/xla/service/cpu/ir_function.o

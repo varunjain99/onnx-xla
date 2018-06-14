@@ -1,0 +1,10 @@
+external/llvm/lib/Target/X86/X86CmovConversion.cpp: In function 'bool {anonymous}::X86CmovConverterPass::collectCmovCandidates(llvm::ArrayRef<llvm::MachineBasicBlock*>, {anonymous}::X86CmovConverterPass::CmovGroups&, bool)':
+external/llvm/lib/Target/X86/X86CmovConversion.cpp:322:16: warning: 'MemOpCC' may be used uninitialized in this function [-Wmaybe-uninitialized]
+           else if (CC != MemOpCC)
+                ^
+external/llvm/lib/Target/X86/X86CmovConversion.cpp:315:54: warning: 'FirstOppCC' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         if (FoundNonCMOVInst || (CC != FirstCC && CC != FirstOppCC))
+                                                      ^
+external/llvm/lib/Target/X86/X86CmovConversion.cpp:315:37: warning: 'FirstCC' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         if (FoundNonCMOVInst || (CC != FirstCC && CC != FirstOppCC))
+                                     ^

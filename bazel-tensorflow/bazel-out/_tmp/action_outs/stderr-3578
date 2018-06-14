@@ -1,0 +1,4 @@
+tensorflow/compiler/xla/service/name_uniquer.cc: In static member function 'static std::__cxx11::string xla::NameUniquer::GetSanitizedName(const string&)':
+tensorflow/compiler/xla/service/name_uniquer.cc:47:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 1; i < result.length(); i++) {
+                     ^

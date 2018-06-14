@@ -1,0 +1,10 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libvectorize.a
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/LoadStoreVectorizer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/LoopVectorizationLegality.o
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/LoopVectorize.o
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/SLPVectorizer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/VPlan.o
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/VPlanHCFGBuilder.o
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/VPlanVerifier.o
+bazel-out/k8-opt/bin/external/llvm/_objs/vectorize/external/llvm/lib/Transforms/Vectorize/Vectorize.o

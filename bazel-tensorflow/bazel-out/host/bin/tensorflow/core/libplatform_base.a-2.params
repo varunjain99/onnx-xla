@@ -1,0 +1,5 @@
+rcsD
+bazel-out/host/bin/tensorflow/core/libplatform_base.a
+bazel-out/host/bin/tensorflow/core/_objs/platform_base/tensorflow/core/platform/default/logging.o
+bazel-out/host/bin/tensorflow/core/_objs/platform_base/tensorflow/core/platform/posix/env_time.o
+bazel-out/host/bin/tensorflow/core/_objs/platform_base/tensorflow/core/platform/env_time.o

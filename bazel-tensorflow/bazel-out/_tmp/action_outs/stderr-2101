@@ -1,0 +1,3 @@
+external/llvm/lib/Support/UnicodeCaseFold.cpp:8:1: warning: multi-line comment [-Wcomment]
+ //   utils/unicode-case-fold.py \
+ ^

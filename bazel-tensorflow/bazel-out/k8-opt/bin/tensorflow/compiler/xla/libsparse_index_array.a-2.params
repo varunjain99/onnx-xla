@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/libsparse_index_array.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/sparse_index_array/tensorflow/compiler/xla/sparse_index_array.o

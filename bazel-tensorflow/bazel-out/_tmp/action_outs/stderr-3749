@@ -1,0 +1,58 @@
+In file included from tensorflow/compiler/xla/service/hlo_instruction.cc:16:0:
+./tensorflow/compiler/xla/service/hlo_instruction.h: In member function 'void xla::HloInstruction::ReplaceCalledComputations(std::function<xla::HloComputation*(xla::HloComputation*)>)':
+./tensorflow/compiler/xla/service/hlo_instruction.h:1159:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < called_computations_.size(); ++i) {
+                         ^
+tensorflow/compiler/xla/service/hlo_instruction.cc: In function 'bool xla::{anonymous}::OrderIsTopologicalSort(const std::vector<const xla::HloInstruction*>&)':
+tensorflow/compiler/xla/service/hlo_instruction.cc:2557:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < order.size(); i++) {
+                     ^
+tensorflow/compiler/xla/service/hlo_instruction.cc: In static member function 'static xla::HloInstruction::FusionReusesParamElements::UseKind xla::HloInstruction::FusionReusesParamElements::ComputeInternal(tensorflow::int64, const xla::HloInstruction&, tensorflow::gtl::FlatMap<const xla::HloInstruction*, xla::HloInstruction::UseKind>*)':
+tensorflow/compiler/xla/service/hlo_instruction.cc:2701:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (int64 j = 0; j < hlo.operands_.size(); ++j) {
+                           ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/hlo_instruction.h:36,
+                 from tensorflow/compiler/xla/service/hlo_instruction.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LEImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:115:5:   required from here
+./tensorflow/core/platform/default/logging.h:232:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:232:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+ ^
+In file included from ./tensorflow/compiler/xla/array2d.h:27:0,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/hlo_instruction.h:36,
+                 from tensorflow/compiler/xla/service/hlo_instruction.cc:16:
+./tensorflow/compiler/xla/array.h: In instantiation of 'bool xla::Array<T>::operator==(const xla::Array<T>&) const [with T = long long int]':
+./tensorflow/compiler/xla/service/hlo_sharding.h:177:38:   required from here
+./tensorflow/compiler/xla/array.h:425:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < sizes_.size(); ++i) {
+                         ^
+tensorflow/compiler/xla/service/hlo_instruction.cc: In member function 'virtual bool xla::HloInstruction::IdenticalSlowPath(const xla::HloInstruction&, const std::function<bool(const xla::HloComputation*, const xla::HloComputation*)>&) const':
+tensorflow/compiler/xla/service/hlo_instruction.cc:1541:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+tensorflow/compiler/xla/service/hlo_instruction.cc: In function 'bool xla::PushDFSChild(Visitor*, xla::DFSStack*, xla::HloInstruction*) [with Visitor = xla::DfsHloVisitorBase<xla::HloInstruction*>; xla::DFSStack = tensorflow::gtl::InlinedVector<std::pair<int, xla::HloInstruction*>, 16>]':
+tensorflow/compiler/xla/service/hlo_instruction.cc:2430:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+tensorflow/compiler/xla/service/hlo_instruction.cc: In function 'bool xla::PushDFSChild(Visitor*, xla::DFSStack*, xla::HloInstruction*) [with Visitor = xla::DfsHloVisitorBase<const xla::HloInstruction*>; xla::DFSStack = tensorflow::gtl::InlinedVector<std::pair<int, xla::HloInstruction*>, 16>]':
+tensorflow/compiler/xla/service/hlo_instruction.cc:2430:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+tensorflow/compiler/xla/service/hlo_instruction.cc: In function 'std::__cxx11::string xla::ToString(xla::HloInstruction::FusionKind)':
+tensorflow/compiler/xla/service/hlo_instruction.cc:2799:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^

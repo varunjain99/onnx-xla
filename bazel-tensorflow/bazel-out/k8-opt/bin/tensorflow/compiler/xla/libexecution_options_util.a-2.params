@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/libexecution_options_util.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/execution_options_util/tensorflow/compiler/xla/execution_options_util.o

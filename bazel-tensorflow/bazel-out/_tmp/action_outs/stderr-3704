@@ -1,0 +1,238 @@
+In file included from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19:0,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_evaluator.h:63:3: warning: multi-line comment [-Wcomment]
+   //            /       \
+   ^
+./tensorflow/compiler/xla/service/hlo_evaluator.h:65:3: warning: multi-line comment [-Wcomment]
+   //        /      \
+   ^
+In file included from ./tensorflow/compiler/xla/service/hlo_computation.h:33:0,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:23,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_instruction.h: In member function 'void xla::HloInstruction::ReplaceCalledComputations(std::function<xla::HloComputation*(xla::HloComputation*)>)':
+./tensorflow/compiler/xla/service/hlo_instruction.h:1159:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < called_computations_.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LEImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:115:5:   required from here
+./tensorflow/core/platform/default/logging.h:232:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:232:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+ ^
+In file included from ./tensorflow/compiler/xla/array2d.h:27:0,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/array.h: In instantiation of 'bool xla::Array<T>::operator==(const xla::Array<T>&) const [with T = long long int]':
+./tensorflow/compiler/xla/service/hlo_sharding.h:177:38:   required from here
+./tensorflow/compiler/xla/array.h:425:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < sizes_.size(); ++i) {
+                         ^
+In file included from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:0:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleConvolution(xla::HloInstruction*)::<lambda(tensorflow::gtl::ArraySlice<long long int>)> [with ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:879:18:   required from 'struct xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleConvolution(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]::<lambda(class tensorflow::gtl::ArraySlice<long long int>)>'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:964:5:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleConvolution(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:911:33: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           for (int64 ki = 0; ki < rhs_spatial_index.size(); ++ki) {
+                                 ^
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandlePad(xla::HloInstruction*)::<lambda(tensorflow::gtl::ArraySlice<long long int>)> [with ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1159:28:   required from 'struct xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandlePad(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]::<lambda(class tensorflow::gtl::ArraySlice<long long int>)>'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1161:5:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandlePad(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1143:26: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       for (auto i = 0; i < input_index.size(); ++i) {
+                          ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleReduce(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]':
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1386:51: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     TF_RET_CHECK(ShapeUtil::Rank(reduce->shape()) ==
+                                                   ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1386:5: note: in expansion of macro 'TF_RET_CHECK'
+     TF_RET_CHECK(ShapeUtil::Rank(reduce->shape()) ==
+     ^
+In file included from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:0:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1417:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < arg_dimensions.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/env.h:24:0,
+                 from ./tensorflow/core/lib/core/threadpool.h:21,
+                 from ./tensorflow/compiler/xla/shape_util.h:32,
+                 from ./tensorflow/compiler/xla/literal_util.h:37,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleReduce(xla::HloInstruction*)::<lambda(tensorflow::gtl::ArraySlice<long long int>)> [with ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1426:5:   required from 'struct xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleReduce(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]::<lambda(class tensorflow::gtl::ArraySlice<long long int>)>'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1426:5:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleReduce(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1431:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           for (int64 i = 0; i < multi_index.size(); ++i) {
+                               ^
+./tensorflow/core/lib/core/errors.h:71:43: note: in definition of macro 'TF_RETURN_IF_ERROR'
+     const ::tensorflow::Status _status = (__VA_ARGS__);  \
+                                           ^
+In file included from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:0:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1196:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1966:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < start.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/env.h:24:0,
+                 from ./tensorflow/core/lib/core/threadpool.h:21,
+                 from ./tensorflow/compiler/xla/shape_util.h:32,
+                 from ./tensorflow/compiler/xla/literal_util.h:37,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&)::<lambda(tensorflow::gtl::ArraySlice<long long int>)> [with IndexT = int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'struct xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = int; ReturnT = long long int; ElementwiseT = long long int]::<lambda(class tensorflow::gtl::ArraySlice<long long int>)>'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = int; ReturnT = long long int; ElementwiseT = long long int]'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1196:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1976:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           for (int64 i = 0; i < operand_indices.size(); ++i) {
+                               ^
+./tensorflow/core/lib/core/errors.h:71:43: note: in definition of macro 'TF_RETURN_IF_ERROR'
+     const ::tensorflow::Status _status = (__VA_ARGS__);  \
+                                           ^
+In file included from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:0:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = long long int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1202:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1966:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < start.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/env.h:24:0,
+                 from ./tensorflow/core/lib/core/threadpool.h:21,
+                 from ./tensorflow/compiler/xla/shape_util.h:32,
+                 from ./tensorflow/compiler/xla/literal_util.h:37,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&)::<lambda(tensorflow::gtl::ArraySlice<long long int>)> [with IndexT = long long int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'struct xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = long long int; ReturnT = long long int; ElementwiseT = long long int]::<lambda(class tensorflow::gtl::ArraySlice<long long int>)>'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = long long int; ReturnT = long long int; ElementwiseT = long long int]'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1202:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1976:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           for (int64 i = 0; i < operand_indices.size(); ++i) {
+                               ^
+./tensorflow/core/lib/core/errors.h:71:43: note: in definition of macro 'TF_RETURN_IF_ERROR'
+     const ::tensorflow::Status _status = (__VA_ARGS__);  \
+                                           ^
+In file included from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:0:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = unsigned int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1208:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1966:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < start.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/env.h:24:0,
+                 from ./tensorflow/core/lib/core/threadpool.h:21,
+                 from ./tensorflow/compiler/xla/shape_util.h:32,
+                 from ./tensorflow/compiler/xla/literal_util.h:37,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&)::<lambda(tensorflow::gtl::ArraySlice<long long int>)> [with IndexT = unsigned int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'struct xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = unsigned int; ReturnT = long long int; ElementwiseT = long long int]::<lambda(class tensorflow::gtl::ArraySlice<long long int>)>'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = unsigned int; ReturnT = long long int; ElementwiseT = long long int]'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1208:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1976:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           for (int64 i = 0; i < operand_indices.size(); ++i) {
+                               ^
+./tensorflow/core/lib/core/errors.h:71:43: note: in definition of macro 'TF_RETURN_IF_ERROR'
+     const ::tensorflow::Status _status = (__VA_ARGS__);  \
+                                           ^
+In file included from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:0:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = long long unsigned int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1214:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1966:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < start.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/env.h:24:0,
+                 from ./tensorflow/core/lib/core/threadpool.h:21,
+                 from ./tensorflow/compiler/xla/shape_util.h:32,
+                 from ./tensorflow/compiler/xla/literal_util.h:37,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h: In instantiation of 'xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&)::<lambda(tensorflow::gtl::ArraySlice<long long int>)> [with IndexT = long long unsigned int; ReturnT = long long int; ElementwiseT = long long int]':
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'struct xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = long long unsigned int; ReturnT = long long int; ElementwiseT = long long int]::<lambda(class tensorflow::gtl::ArraySlice<long long int>)>'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1974:5:   required from 'xla::StatusOr<std::unique_ptr<xla::Literal> > xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::DynamicSlice(const xla::Literal&, const xla::Literal&, const xla::Shape&) [with IndexT = long long unsigned int; ReturnT = long long int; ElementwiseT = long long int]'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1214:9:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandleDynamicSlice(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1976:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           for (int64 i = 0; i < operand_indices.size(); ++i) {
+                               ^
+./tensorflow/core/lib/core/errors.h:71:43: note: in definition of macro 'TF_RETURN_IF_ERROR'
+     const ::tensorflow::Status _status = (__VA_ARGS__);  \
+                                           ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:19,
+                 from tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_EQImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:703:5:   required from 'static tensorflow::Status xla::ShapeUtil::ForEachIndexInternal(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const FnType&, bool) [with FnType = xla::ShapeUtil::ForEachIndex(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const FnType&) [with FnType = xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandlePad(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]::<lambda(tensorflow::gtl::ArraySlice<long long int>)>]::<lambda(tensorflow::gtl::ArraySlice<long long int>)>]'
+./tensorflow/compiler/xla/shape_util.h:607:32:   required from 'static tensorflow::Status xla::ShapeUtil::ForEachIndexWithStatus(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const FnType&) [with FnType = xla::ShapeUtil::ForEachIndex(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const FnType&) [with FnType = xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandlePad(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]::<lambda(tensorflow::gtl::ArraySlice<long long int>)>]::<lambda(tensorflow::gtl::ArraySlice<long long int>)>]'
+./tensorflow/compiler/xla/shape_util.h:632:27:   required from 'static void xla::ShapeUtil::ForEachIndex(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const FnType&) [with FnType = xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandlePad(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]::<lambda(tensorflow::gtl::ArraySlice<long long int>)>]'
+./tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor.h:1167:28:   required from 'tensorflow::Status xla::HloEvaluatorTypedVisitor<ReturnT, ElementwiseT>::HandlePad(xla::HloInstruction*) [with ReturnT = long long int; ElementwiseT = long long int]'
+tensorflow/compiler/xla/service/hlo_evaluator_typed_visitor_int64.cc:21:16:   required from here
+./tensorflow/core/platform/default/logging.h:230:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+                         ==)  // Compilation error with CHECK_EQ(NULL, x)?
+                         ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:229:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_EQ,
+ ^

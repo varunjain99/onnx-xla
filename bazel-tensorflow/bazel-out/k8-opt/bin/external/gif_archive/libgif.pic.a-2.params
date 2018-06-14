@@ -1,0 +1,10 @@
+rcsD
+bazel-out/k8-opt/bin/external/gif_archive/libgif.pic.a
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/dgif_lib.pic.o
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/egif_lib.pic.o
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/gif_err.pic.o
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/gif_font.pic.o
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/gif_hash.pic.o
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/gifalloc.pic.o
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/openbsd-reallocarray.pic.o
+bazel-out/k8-opt/bin/external/gif_archive/_objs/gif/external/gif_archive/lib/quantize.pic.o

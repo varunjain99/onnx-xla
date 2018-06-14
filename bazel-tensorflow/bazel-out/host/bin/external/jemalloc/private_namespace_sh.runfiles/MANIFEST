@@ -1,0 +1,4 @@
+jemalloc/include/jemalloc/internal/private_namespace.sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/external/jemalloc/include/jemalloc/internal/private_namespace.sh
+jemalloc/private_namespace_sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/execroot/org_tensorflow/bazel-out/host/bin/external/jemalloc/private_namespace_sh
+org_tensorflow/external/jemalloc/include/jemalloc/internal/private_namespace.sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/external/jemalloc/include/jemalloc/internal/private_namespace.sh
+org_tensorflow/external/jemalloc/private_namespace_sh /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/execroot/org_tensorflow/bazel-out/host/bin/external/jemalloc/private_namespace_sh

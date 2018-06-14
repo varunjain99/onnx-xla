@@ -1,0 +1,4 @@
+external/llvm/lib/Object/MachOObjectFile.cpp: In constructor 'llvm::object::BindRebaseSegInfo::BindRebaseSegInfo(const llvm::object::MachOObjectFile*)':
+external/llvm/lib/Object/MachOObjectFile.cpp:3951:12: warning: 'CurSegAddress' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   uint64_t CurSegAddress;
+            ^

@@ -1,0 +1,16 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libalts_frame_protector.a
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/crypt/aes_gcm.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/crypt/gsec.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/frame_protector/alts_counter.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/frame_protector/alts_crypter.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/frame_protector/alts_frame_protector.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/frame_protector/alts_record_protocol_crypter_common.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/frame_protector/alts_seal_privacy_integrity_crypter.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/frame_protector/alts_unseal_privacy_integrity_crypter.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/frame_protector/frame_handler.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/zero_copy_frame_protector/alts_grpc_integrity_only_record_protocol.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/zero_copy_frame_protector/alts_grpc_privacy_integrity_record_protocol.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/zero_copy_frame_protector/alts_grpc_record_protocol_common.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/zero_copy_frame_protector/alts_iovec_record_protocol.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_frame_protector/external/grpc/src/core/tsi/alts/zero_copy_frame_protector/alts_zero_copy_grpc_protector.o

@@ -1,0 +1,4 @@
+external/llvm/lib/Transforms/IPO/SampleProfile.cpp: In member function 'void {anonymous}::SampleProfileLoader::propagateWeights(llvm::Function&)':
+external/llvm/lib/Transforms/IPO/SampleProfile.cpp:1332:19: warning: 'MaxDestInst' may be used uninitialized in this function [-Wmaybe-uninitialized]
+                << "most popular destination for conditional branches at "
+                   ^

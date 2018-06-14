@@ -1,0 +1,17 @@
+rcsD
+bazel-out/k8-opt/bin/external/zlib_archive/libzlib.pic.a
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/adler32.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/compress.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/crc32.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/deflate.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzclose.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzlib.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzread.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzwrite.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/infback.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/inffast.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/inflate.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/inftrees.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/trees.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/uncompr.pic.o
+bazel-out/k8-opt/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/zutil.pic.o

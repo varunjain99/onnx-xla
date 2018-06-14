@@ -1,0 +1,4 @@
+tensorflow/compiler/xla/service/device_memory_allocator.cc: In member function 'xla::StatusOr<stream_executor::StreamExecutor*> xla::StreamExecutorMemoryAllocator::GetStreamExecutor(int)':
+tensorflow/compiler/xla/service/device_memory_allocator.cc:62:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   if (device_ordinal >= stream_executors_.size()) {
+                      ^

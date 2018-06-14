@@ -1,0 +1,21 @@
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp: In member function 'std::pair<llvm::RuntimeDyldCheckerExprEval::EvalResult, llvm::StringRef> llvm::RuntimeDyldCheckerExprEval::evalNumberExpr(llvm::StringRef) const':
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp:100:59: warning: 'Value' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     EvalResult(uint64_t Value) : Value(Value), ErrorMsg("") {}
+                                                           ^
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp:477:14: note: 'Value' was declared here
+     uint64_t Value;
+              ^
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp: In member function 'std::pair<llvm::RuntimeDyldCheckerExprEval::EvalResult, llvm::StringRef> llvm::RuntimeDyldCheckerExprEval::evalSliceExpr(const std::pair<llvm::RuntimeDyldCheckerExprEval::EvalResult, llvm::StringRef>&) const':
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp:100:59: warning: 'Value' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     EvalResult(uint64_t Value) : Value(Value), ErrorMsg("") {}
+                                                           ^
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp:477:14: note: 'Value' was declared here
+     uint64_t Value;
+              ^
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp: In member function 'std::pair<llvm::RuntimeDyldCheckerExprEval::EvalResult, llvm::StringRef> llvm::RuntimeDyldCheckerExprEval::evalLoadExpr(llvm::StringRef) const':
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp:100:59: warning: 'Value' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     EvalResult(uint64_t Value) : Value(Value), ErrorMsg("") {}
+                                                           ^
+external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldChecker.cpp:477:14: note: 'Value' was declared here
+     uint64_t Value;
+              ^

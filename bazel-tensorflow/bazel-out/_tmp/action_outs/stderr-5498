@@ -1,0 +1,11 @@
+external/llvm/lib/Transforms/Instrumentation/MemorySanitizer.cpp: In function 'bool {anonymous}::MemorySanitizerVisitor::handleMaskedLoad(llvm::IntrinsicInst&)':
+external/llvm/lib/Transforms/Instrumentation/MemorySanitizer.cpp:2613:48: warning: 'OriginPtr' may be used uninitialized in this function [-Wmaybe-uninitialized]
+             getOrigin(PassThru), IRB.CreateLoad(OriginPtr));
+                                                ^
+external/llvm/lib/Transforms/Instrumentation/MemorySanitizer.cpp: In function 'void {anonymous}::MemorySanitizerVisitor::visitIntrinsicInst(llvm::IntrinsicInst&)':
+external/llvm/lib/Transforms/Instrumentation/MemorySanitizer.cpp:2154:37: warning: 'OriginPtr' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         setOrigin(&I, IRB.CreateLoad(OriginPtr));
+                                     ^
+external/llvm/lib/Transforms/Instrumentation/MemorySanitizer.cpp:2137:24: note: 'OriginPtr' was declared here
+     Value *ShadowPtr, *OriginPtr;
+                        ^

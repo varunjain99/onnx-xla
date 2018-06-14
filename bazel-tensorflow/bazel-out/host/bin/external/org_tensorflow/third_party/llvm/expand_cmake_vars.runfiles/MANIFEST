@@ -1,0 +1,12 @@
+__init__.py 
+org_tensorflow/__init__.py 
+org_tensorflow/external/__init__.py 
+org_tensorflow/external/org_tensorflow/__init__.py 
+org_tensorflow/external/org_tensorflow/third_party/__init__.py 
+org_tensorflow/external/org_tensorflow/third_party/llvm/__init__.py 
+org_tensorflow/external/org_tensorflow/third_party/llvm/expand_cmake_vars /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/execroot/org_tensorflow/bazel-out/host/bin/external/org_tensorflow/third_party/llvm/expand_cmake_vars
+org_tensorflow/external/org_tensorflow/third_party/llvm/expand_cmake_vars.py /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/external/org_tensorflow/third_party/llvm/expand_cmake_vars.py
+org_tensorflow/third_party/__init__.py 
+org_tensorflow/third_party/llvm/__init__.py 
+org_tensorflow/third_party/llvm/expand_cmake_vars /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/execroot/org_tensorflow/bazel-out/host/bin/external/org_tensorflow/third_party/llvm/expand_cmake_vars
+org_tensorflow/third_party/llvm/expand_cmake_vars.py /root/.cache/bazel/_bazel_root/68a62076e91007a7908bc42a32e4cff9/external/org_tensorflow/third_party/llvm/expand_cmake_vars.py

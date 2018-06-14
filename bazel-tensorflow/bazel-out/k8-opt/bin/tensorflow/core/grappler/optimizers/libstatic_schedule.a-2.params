@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libstatic_schedule.a
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/static_schedule/tensorflow/core/grappler/optimizers/static_schedule.o

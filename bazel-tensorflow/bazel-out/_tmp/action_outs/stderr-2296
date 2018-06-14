@@ -1,0 +1,4 @@
+external/llvm/lib/MC/MachObjectWriter.cpp: In member function 'void llvm::MachObjectWriter::writeNlist(llvm::MachObjectWriter::MachSymbolData&, const llvm::MCAsmLayout&)':
+external/llvm/lib/MC/MachObjectWriter.cpp:380:39: warning: 'AliaseeInfo' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Address = AliaseeInfo->StringIndex;
+                                       ^

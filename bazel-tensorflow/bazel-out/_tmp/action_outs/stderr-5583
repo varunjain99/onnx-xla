@@ -1,0 +1,3 @@
+external/llvm/lib/Transforms/Utils/LoopUtils.cpp:1378:3: warning: multi-line comment [-Wcomment]
+   //      Header <--\            | Header <--\           | Header <--\
+   ^

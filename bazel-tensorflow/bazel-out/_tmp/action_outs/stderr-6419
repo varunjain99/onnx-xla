@@ -1,0 +1,4 @@
+external/llvm/lib/Transforms/Scalar/SROA.cpp: In function 'llvm::Value* getAdjustedPtr({anonymous}::IRBuilderTy&, const llvm::DataLayout&, llvm::Value*, llvm::APInt, llvm::Type*, llvm::Twine)':
+external/llvm/lib/Transforms/Scalar/SROA.cpp:1594:34: warning: 'OffsetBasePtr' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       if (OffsetPtr && OffsetPtr != OffsetBasePtr)
+                                  ^

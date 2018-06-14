@@ -1,0 +1,4 @@
+external/llvm/lib/IR/AsmWriter.cpp: In function 'void WriteConstantInternal(llvm::raw_ostream&, const llvm::Constant*, {anonymous}::TypePrinting&, llvm::SlotTracker*, const llvm::Module*)':
+external/llvm/lib/IR/AsmWriter.cpp:1484:21: warning: 'InRangeOp' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       if (InRangeOp && unsigned(OI - CE->op_begin()) == *InRangeOp)
+                     ^

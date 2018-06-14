@@ -1,0 +1,89 @@
+tensorflow/core/grappler/optimizers/constant_folding.cc:2525:3: warning: multi-line comment [-Wcomment]
+   //                     / \              / \
+   ^
+tensorflow/core/grappler/optimizers/constant_folding.cc:2527:3: warning: multi-line comment [-Wcomment]
+   //                       / \              / \
+   ^
+tensorflow/core/grappler/optimizers/constant_folding.cc:2612:3: warning: multi-line comment [-Wcomment]
+   //                     /   \                /    \
+   ^
+tensorflow/core/grappler/optimizers/constant_folding.cc:2614:3: warning: multi-line comment [-Wcomment]
+   //                  / \                          / \
+   ^
+In file included from ./tensorflow/core/framework/common_shape_fns.h:22:0,
+                 from ./tensorflow/core/framework/resource_mgr.h:24,
+                 from ./tensorflow/core/grappler/optimizers/constant_folding.h:21,
+                 from tensorflow/core/grappler/optimizers/constant_folding.cc:18:
+./tensorflow/core/util/tensor_format.h: In function 'tensorflow::TensorShape tensorflow::ShapeFromFormat(tensorflow::TensorFormat, tensorflow::int64, tensorflow::gtl::ArraySlice<long long int>, tensorflow::int64)':
+./tensorflow/core/util/tensor_format.h:457:45: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     if (format == FORMAT_NHWC_VECT_W && dim == spatial.size() - 1) {
+                                             ^
+tensorflow/core/grappler/optimizers/constant_folding.cc: In member function 'tensorflow::Status tensorflow::grappler::ConstantFolding::MaterializeShapes(const tensorflow::grappler::GraphProperties&)':
+tensorflow/core/grappler/optimizers/constant_folding.cc:391:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int port_idx = 0; port_idx < output.size(); ++port_idx) {
+                                     ^
+tensorflow/core/grappler/optimizers/constant_folding.cc: In member function 'tensorflow::Status tensorflow::grappler::ConstantFolding::MaterializeBroadcastGradientArgs(const tensorflow::NodeDef&, const tensorflow::grappler::GraphProperties&)':
+tensorflow/core/grappler/optimizers/constant_folding.cc:567:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = common_dims; i < shape1.size(); ++i) {
+                               ^
+tensorflow/core/grappler/optimizers/constant_folding.cc:572:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = common_dims; i < shape2.size(); ++i) {
+                               ^
+tensorflow/core/grappler/optimizers/constant_folding.cc: In member function 'tensorflow::Status tensorflow::grappler::ConstantFolding::FoldNode(tensorflow::NodeDef*, tensorflow::GraphDef*)':
+tensorflow/core/grappler/optimizers/constant_folding.cc:1164:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < const_nodes.size(); i++) {
+                     ^
+tensorflow/core/grappler/optimizers/constant_folding.cc:1242:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           } else if (port < const_nodes.size() &&
+                           ^
+tensorflow/core/grappler/optimizers/constant_folding.cc: In member function 'tensorflow::Status tensorflow::grappler::ConstantFolding::RemoveShuffleOrTranspose(const tensorflow::grappler::GraphProperties&, bool, tensorflow::GraphDef*, tensorflow::NodeDef*, bool*)':
+tensorflow/core/grappler/optimizers/constant_folding.cc:1829:30: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       if (permutation.size() != shape.dim_size()) {
+                              ^
+tensorflow/core/grappler/optimizers/constant_folding.cc: In member function 'tensorflow::Status tensorflow::grappler::ConstantFolding::SimplifyStridedSlice(const tensorflow::grappler::GraphProperties&, bool, tensorflow::GraphDef*, tensorflow::NodeDef*, bool*)':
+tensorflow/core/grappler/optimizers/constant_folding.cc:2043:15: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             j >= ellipsis_index + expanded_ellipsis_indices.size()) {
+               ^
+tensorflow/core/grappler/optimizers/constant_folding.cc: In member function 'bool tensorflow::grappler::ConstantFolding::PartialAssocOpConstFolding(tensorflow::GraphDef*, tensorflow::grappler::GraphProperties*, tensorflow::NodeDef*)':
+tensorflow/core/grappler/optimizers/constant_folding.cc:2815:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     if (const_inputs.size() == num_non_control_inputs &&
+                             ^
+tensorflow/core/grappler/optimizers/constant_folding.cc:2824:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         const_inputs.size() < num_non_control_inputs &&
+                             ^
+tensorflow/core/grappler/optimizers/constant_folding.cc: In member function 'bool tensorflow::grappler::ConstantFolding::PartialConcatConstFolding(tensorflow::GraphDef*, tensorflow::grappler::GraphProperties*, tensorflow::NodeDef*)':
+tensorflow/core/grappler/optimizers/constant_folding.cc:2963:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for (int i = 0; i < tmp.size(); ++i) {
+                           ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/refcount.h:20,
+                 from ./tensorflow/core/platform/tensor_coding.h:21,
+                 from ./tensorflow/core/framework/resource_handle.h:19,
+                 from ./tensorflow/core/framework/allocator.h:24,
+                 from ./tensorflow/core/framework/tensor.h:20,
+                 from ./tensorflow/core/framework/device_base.h:23,
+                 from ./tensorflow/core/grappler/optimizers/constant_folding.h:19,
+                 from tensorflow/core/grappler/optimizers/constant_folding.cc:18:
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetTensorDim(tensorflow::gtl::ArraySlice<T>, tensorflow::TensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:409:47:   required from here
+./tensorflow/core/util/tensor_format.h:377:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attributes.size())
+                             ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:377:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attributes.size())
+   ^
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetFilterDim(tensorflow::gtl::ArraySlice<T>, tensorflow::FilterTensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:418:54:   required from here
+./tensorflow/core/util/tensor_format.h:392:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attribute.size())
+                             ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:392:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attribute.size())
+   ^

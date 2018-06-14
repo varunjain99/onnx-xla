@@ -1,0 +1,4 @@
+external/llvm/lib/Transforms/Scalar/SimpleLoopUnswitch.cpp: In function 'bool unswitchLoop(llvm::Loop&, llvm::DominatorTree&, llvm::LoopInfo&, llvm::AssumptionCache&, llvm::TargetTransformInfo&, bool, llvm::function_ref<void(bool, llvm::ArrayRef<llvm::Loop*>)>)':
+external/llvm/lib/Transforms/Scalar/SimpleLoopUnswitch.cpp:1892:3: warning: 'BestUnswitchCost' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   if (BestUnswitchCost >= UnswitchThreshold) {
+   ^

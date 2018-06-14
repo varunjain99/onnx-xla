@@ -1,0 +1,12 @@
+tensorflow/compiler/xla/service/hlo_opcode.cc: In function 'std::__cxx11::string xla::HloOpcodeString(xla::HloOpcode)':
+tensorflow/compiler/xla/service/hlo_opcode.cc:31:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+tensorflow/compiler/xla/service/hlo_opcode.cc: In function 'bool xla::HloOpcodeIsComparison(xla::HloOpcode)':
+tensorflow/compiler/xla/service/hlo_opcode.cc:62:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+tensorflow/compiler/xla/service/hlo_opcode.cc: In function 'bool xla::HloOpcodeIsVariadic(xla::HloOpcode)':
+tensorflow/compiler/xla/service/hlo_opcode.cc:72:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^

@@ -1,0 +1,4 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc/external/grpc/src/core/lib/surface/init.o
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc/external/grpc/src/core/plugin_registry/grpc_plugin_registry.o

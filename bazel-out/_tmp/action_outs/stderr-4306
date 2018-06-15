@@ -1,0 +1,41 @@
+In file included from ./tensorflow/core/framework/common_shape_fns.h:22:0,
+                 from ./tensorflow/core/framework/resource_mgr.h:24,
+                 from ./tensorflow/core/common_runtime/device.h:43,
+                 from ./tensorflow/core/common_runtime/device_mgr.h:24,
+                 from tensorflow/core/grappler/optimizers/function_optimizer.cc:20:
+./tensorflow/core/util/tensor_format.h: In function 'tensorflow::TensorShape tensorflow::ShapeFromFormat(tensorflow::TensorFormat, tensorflow::int64, tensorflow::gtl::ArraySlice<long long int>, tensorflow::int64)':
+./tensorflow/core/util/tensor_format.h:457:45: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     if (format == FORMAT_NHWC_VECT_W && dim == spatial.size() - 1) {
+                                             ^
+tensorflow/core/grappler/optimizers/function_optimizer.cc: In function 'tensorflow::NodeDef tensorflow::grappler::{anonymous}::InlinedFunctionInputsNode(const tensorflow::NodeDef&, const tensorflow::grappler::GrapplerFunctionItem&)':
+tensorflow/core/grappler/optimizers/function_optimizer.cc:548:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int i = 0; i < input_arg.placeholders.size(); ++i) {
+                       ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/core/grappler/optimizers/graph_optimizer.h:20,
+                 from ./tensorflow/core/grappler/optimizers/function_optimizer.h:19,
+                 from tensorflow/core/grappler/optimizers/function_optimizer.cc:16:
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetTensorDim(tensorflow::gtl::ArraySlice<T>, tensorflow::TensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:409:47:   required from here
+./tensorflow/core/util/tensor_format.h:377:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attributes.size())
+                             ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:377:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attributes.size())
+   ^
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetFilterDim(tensorflow::gtl::ArraySlice<T>, tensorflow::FilterTensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:418:54:   required from here
+./tensorflow/core/util/tensor_format.h:392:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attribute.size())
+                             ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:392:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attribute.size())
+   ^

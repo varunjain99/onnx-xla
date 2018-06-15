@@ -1,0 +1,5 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_nanopb.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_nanopb/external/grpc/third_party/nanopb/pb_common.o
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_nanopb/external/grpc/third_party/nanopb/pb_decode.o
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_nanopb/external/grpc/third_party/nanopb/pb_encode.o

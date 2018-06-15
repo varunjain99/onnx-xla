@@ -1,0 +1,10 @@
+rcsD
+bazel-out/k8-opt/bin/external/double_conversion/libdouble-conversion.pic.a
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/bignum.pic.o
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/bignum-dtoa.pic.o
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/cached-powers.pic.o
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/diy-fp.pic.o
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/double-conversion.pic.o
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/fast-dtoa.pic.o
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/fixed-dtoa.pic.o
+bazel-out/k8-opt/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/strtod.pic.o

@@ -1,0 +1,11 @@
+external/llvm/lib/DebugInfo/CodeView/CVTypeVisitor.cpp: In function 'llvm::Error llvm::codeview::visitMemberRecordStream(llvm::ArrayRef<unsigned char>, llvm::codeview::TypeVisitorCallbacks&)':
+external/llvm/lib/DebugInfo/CodeView/CVTypeVisitor.cpp:177:23: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     Record.Kind = Leaf;
+                       ^
+In file included from external/llvm/include/llvm/DebugInfo/CodeView/RecordSerialization.h:18:0,
+                 from external/llvm/include/llvm/DebugInfo/CodeView/CVRecord.h:16,
+                 from external/llvm/include/llvm/DebugInfo/CodeView/CVTypeVisitor.h:13,
+                 from external/llvm/lib/DebugInfo/CodeView/CVTypeVisitor.cpp:10:
+external/llvm/include/llvm/Support/BinaryStreamReader.h:93:44: note: 'N' was declared here
+     typename std::underlying_type<T>::type N;
+                                            ^

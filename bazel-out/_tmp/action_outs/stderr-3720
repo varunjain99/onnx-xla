@@ -1,0 +1,107 @@
+In file included from tensorflow/compiler/xla/service/hlo_evaluator.cc:15:0:
+./tensorflow/compiler/xla/service/hlo_evaluator.h:63:3: warning: multi-line comment [-Wcomment]
+   //            /       \
+   ^
+./tensorflow/compiler/xla/service/hlo_evaluator.h:65:3: warning: multi-line comment [-Wcomment]
+   //        /      \
+   ^
+In file included from ./tensorflow/compiler/xla/service/hlo_computation.h:33:0,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:23,
+                 from tensorflow/compiler/xla/service/hlo_evaluator.cc:15:
+./tensorflow/compiler/xla/service/hlo_instruction.h: In member function 'void xla::HloInstruction::ReplaceCalledComputations(std::function<xla::HloComputation*(xla::HloComputation*)>)':
+./tensorflow/compiler/xla/service/hlo_instruction.h:1159:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < called_computations_.size(); ++i) {
+                         ^
+tensorflow/compiler/xla/service/hlo_evaluator.cc: In member function 'virtual tensorflow::Status xla::HloEvaluator::HandleConcatenate(xla::HloInstruction*)':
+tensorflow/compiler/xla/service/hlo_evaluator.cc:384:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 1; i < operands.size(); ++i) {
+                       ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from tensorflow/compiler/xla/service/hlo_evaluator.cc:15:
+tensorflow/compiler/xla/service/hlo_evaluator.cc: In member function 'virtual tensorflow::Status xla::HloEvaluator::HandleBroadcast(xla::HloInstruction*)':
+tensorflow/compiler/xla/service/hlo_evaluator.cc:894:47: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   TF_RET_CHECK(broadcast->dimensions().size() ==
+                                               ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+tensorflow/compiler/xla/service/hlo_evaluator.cc:894:3: note: in expansion of macro 'TF_RET_CHECK'
+   TF_RET_CHECK(broadcast->dimensions().size() ==
+   ^
+tensorflow/compiler/xla/service/hlo_evaluator.cc:901:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int64 i = 0; i < broadcast->dimensions().size(); ++i) {
+                       ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from tensorflow/compiler/xla/service/hlo_evaluator.cc:15:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LEImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:115:5:   required from here
+./tensorflow/core/platform/default/logging.h:232:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:232:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+ ^
+In file included from ./tensorflow/compiler/xla/array2d.h:27:0,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from tensorflow/compiler/xla/service/hlo_evaluator.cc:15:
+./tensorflow/compiler/xla/array.h: In instantiation of 'bool xla::Array<T>::operator==(const xla::Array<T>&) const [with T = long long int]':
+./tensorflow/compiler/xla/service/hlo_sharding.h:177:38:   required from here
+./tensorflow/compiler/xla/array.h:425:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < sizes_.size(); ++i) {
+                         ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/array.h:30,
+                 from ./tensorflow/compiler/xla/array2d.h:27,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/dfs_hlo_visitor_with_default.h:19,
+                 from ./tensorflow/compiler/xla/service/hlo_evaluator.h:22,
+                 from tensorflow/compiler/xla/service/hlo_evaluator.cc:15:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LTImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+tensorflow/compiler/xla/service/hlo_evaluator.cc:342:3:   required from here
+./tensorflow/core/platform/default/logging.h:233:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LT, <)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:233:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LT, <)
+ ^
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_EQImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:703:5:   required from 'static tensorflow::Status xla::ShapeUtil::ForEachIndexInternal(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const FnType&, bool) [with FnType = std::_Bind<xla::HloEvaluator::HandleGather(xla::HloInstruction*)::<lambda(tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>)>(std::_Placeholder<1>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>)>]'
+./tensorflow/compiler/xla/shape_util.h:607:32:   required from 'static tensorflow::Status xla::ShapeUtil::ForEachIndexWithStatus(const xla::Shape&, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, const FnType&) [with FnType = std::_Bind<xla::HloEvaluator::HandleGather(xla::HloInstruction*)::<lambda(tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>)>(std::_Placeholder<1>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>)>]'
+./tensorflow/compiler/xla/shape_util.h:621:45:   required from 'static tensorflow::Status xla::ShapeUtil::ForEachIndexWithStatus(const xla::Shape&, const xla::ShapeUtil::IndexIterationSpace&, FnTy&&) [with FnTy = std::_Bind<xla::HloEvaluator::HandleGather(xla::HloInstruction*)::<lambda(tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>)>(std::_Placeholder<1>, tensorflow::gtl::ArraySlice<long long int>, tensorflow::gtl::ArraySlice<long long int>)>]'
+tensorflow/compiler/xla/service/hlo_evaluator.cc:878:5:   required from here
+./tensorflow/core/platform/default/logging.h:230:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+                         ==)  // Compilation error with CHECK_EQ(NULL, x)?
+                         ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:229:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_EQ,
+ ^

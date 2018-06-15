@@ -1,0 +1,17 @@
+rcsD
+bazel-out/host/bin/external/zlib_archive/libzlib.a
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/adler32.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/compress.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/crc32.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/deflate.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzclose.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzlib.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzread.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/gzwrite.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/infback.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/inffast.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/inflate.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/inftrees.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/trees.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/uncompr.o
+bazel-out/host/bin/external/zlib_archive/_objs/zlib/external/zlib_archive/zutil.o

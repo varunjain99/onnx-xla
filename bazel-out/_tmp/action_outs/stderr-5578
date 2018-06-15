@@ -1,0 +1,3 @@
+external/llvm/lib/Transforms/Utils/BreakCriticalEdges.cpp:206:5: warning: multi-line comment [-Wcomment]
+     //       ---> NewBB -----\
+     ^

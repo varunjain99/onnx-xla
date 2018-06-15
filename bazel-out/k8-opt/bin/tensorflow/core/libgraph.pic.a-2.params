@@ -1,0 +1,10 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/libgraph.pic.a
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/algorithm.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/colors.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/control_flow.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/costmodel.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/graph_partition.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/optimizer_cse.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/subgraph.pic.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/graph/tensorflow/core/graph/validate.pic.o

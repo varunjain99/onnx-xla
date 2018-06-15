@@ -1,0 +1,4 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libcpu_runtime.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/cpu_runtime/tensorflow/compiler/xla/service/cpu/cpu_runtime.o
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/cpu_runtime/tensorflow/compiler/xla/service/cpu/xfeed_manager.o

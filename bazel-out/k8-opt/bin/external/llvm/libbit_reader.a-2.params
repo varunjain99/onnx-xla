@@ -1,0 +1,7 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libbit_reader.a
+bazel-out/k8-opt/bin/external/llvm/_objs/bit_reader/external/llvm/lib/Bitcode/Reader/BitReader.o
+bazel-out/k8-opt/bin/external/llvm/_objs/bit_reader/external/llvm/lib/Bitcode/Reader/BitcodeReader.o
+bazel-out/k8-opt/bin/external/llvm/_objs/bit_reader/external/llvm/lib/Bitcode/Reader/BitstreamReader.o
+bazel-out/k8-opt/bin/external/llvm/_objs/bit_reader/external/llvm/lib/Bitcode/Reader/MetadataLoader.o
+bazel-out/k8-opt/bin/external/llvm/_objs/bit_reader/external/llvm/lib/Bitcode/Reader/ValueList.o

@@ -1,0 +1,58 @@
+In file included from ./tensorflow/compiler/xla/service/cpu/dot_op_emitter.h:22:0,
+                 from tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:16:
+./tensorflow/compiler/xla/service/hlo_instruction.h: In member function 'void xla::HloInstruction::ReplaceCalledComputations(std::function<xla::HloComputation*(xla::HloComputation*)>)':
+./tensorflow/compiler/xla/service/hlo_instruction.h:1159:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < called_computations_.size(); ++i) {
+                         ^
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc: In member function 'void xla::cpu::{anonymous}::MemoryTile::StoreTile(tensorflow::gtl::ArraySlice<llvm::Value*>, llvm::Value*) const':
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:85:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < pointers_.size(); i++) {
+                         ^
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc: In member function 'std::vector<std::vector<llvm::Value*, std::allocator<llvm::Value*> > > xla::cpu::{anonymous}::MemoryTile::LoadBroadcastTile(llvm::Value*, tensorflow::int64) const':
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:101:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < pointers_.size(); i++) {
+                         ^
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc: In member function 'tensorflow::Status xla::cpu::DotOpEmitter::Emit()':
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:1384:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int dimension = 0; dimension < lhs_index.size(); ++dimension) {
+                                     ^
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:1389:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int dimension = 0; dimension < rhs_index.size(); ++dimension) {
+                                     ^
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc: In member function 'xla::llvm_ir::IrArray::Index xla::cpu::DotOpEmitter::EmitOperandArrayLoopNest(xla::llvm_ir::ForLoopNest*, const xla::llvm_ir::IrArray&, tensorflow::int64, tensorflow::StringPiece)':
+tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:1575:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int dimension = 0; dimension < index.size(); ++dimension) {
+                                     ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/layout_util.h:23,
+                 from ./tensorflow/compiler/xla/shape_util.h:25,
+                 from ./tensorflow/compiler/xla/shape_layout.h:21,
+                 from ./tensorflow/compiler/xla/service/computation_layout.h:23,
+                 from ./tensorflow/compiler/xla/service/hlo_module_config.h:21,
+                 from ./tensorflow/compiler/xla/service/cpu/cpu_options.h:19,
+                 from ./tensorflow/compiler/xla/service/cpu/dot_op_emitter.h:20,
+                 from tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LEImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/shape_util.h:115:5:   required from here
+./tensorflow/core/platform/default/logging.h:232:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:232:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+ ^
+In file included from ./tensorflow/compiler/xla/array2d.h:27:0,
+                 from ./tensorflow/compiler/xla/literal_util.h:30,
+                 from ./tensorflow/compiler/xla/service/hlo_instruction.h:36,
+                 from ./tensorflow/compiler/xla/service/cpu/dot_op_emitter.h:22,
+                 from tensorflow/compiler/xla/service/cpu/dot_op_emitter.cc:16:
+./tensorflow/compiler/xla/array.h: In instantiation of 'bool xla::Array<T>::operator==(const xla::Array<T>&) const [with T = long long int]':
+./tensorflow/compiler/xla/service/hlo_sharding.h:177:38:   required from here
+./tensorflow/compiler/xla/array.h:425:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < sizes_.size(); ++i) {
+                         ^

@@ -1,0 +1,7 @@
+bazel-out/k8-opt/genfiles/tensorflow/core/protobuf/config.pb_text.cc: In function 'bool tensorflow::internal::ProtoParseFromScanner(tensorflow::strings::Scanner*, bool, bool, tensorflow::ConfigProto*)':
+bazel-out/k8-opt/genfiles/tensorflow/core/protobuf/config.pb_text.cc:857:34: warning: 'map_value' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       (*map)[map_key] = map_value;
+                                  ^
+bazel-out/k8-opt/genfiles/tensorflow/core/protobuf/config.pb_text.cc:848:9: note: 'map_value' was declared here
+   int32 map_value;
+         ^

@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/llvm_ir/libllvm_loop.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/llvm_ir/_objs/llvm_loop/tensorflow/compiler/xla/service/llvm_ir/llvm_loop.o

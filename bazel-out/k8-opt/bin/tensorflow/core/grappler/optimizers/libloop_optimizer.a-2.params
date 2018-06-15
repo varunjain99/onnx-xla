@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libloop_optimizer.a
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/loop_optimizer/tensorflow/core/grappler/optimizers/loop_optimizer.o

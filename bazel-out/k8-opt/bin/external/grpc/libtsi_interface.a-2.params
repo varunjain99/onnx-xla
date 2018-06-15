@@ -1,0 +1,4 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libtsi_interface.a
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi_interface/external/grpc/src/core/tsi/transport_security.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi_interface/external/grpc/src/core/tsi/transport_security_adapter.o

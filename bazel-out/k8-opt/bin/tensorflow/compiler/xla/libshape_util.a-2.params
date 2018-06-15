@@ -1,0 +1,6 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/libshape_util.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/shape_util/tensorflow/compiler/xla/index_util.o
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/shape_util/tensorflow/compiler/xla/layout_util.o
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/shape_util/tensorflow/compiler/xla/primitive_util.o
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/shape_util/tensorflow/compiler/xla/shape_util.o

@@ -1,0 +1,13 @@
+external/llvm/lib/Target/X86/X86ISelLowering.cpp:26917:3: warning: multi-line comment [-Wcomment]
+   //   | \
+   ^
+external/llvm/lib/Target/X86/X86ISelLowering.cpp:26921:3: warning: multi-line comment [-Wcomment]
+   //   | \
+   ^
+external/llvm/lib/Target/X86/X86ISelLowering.cpp:26935:3: warning: multi-line comment [-Wcomment]
+   //   | \
+   ^
+external/llvm/lib/Target/X86/X86ISelLowering.cpp: In function 'llvm::SDValue LowerBuildVectorv4x32(llvm::SDValue, llvm::SelectionDAG&, const llvm::X86Subtarget&)':
+external/llvm/lib/Target/X86/X86ISelLowering.cpp:6584:27: warning: 'FirstNonZeroIdx' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   if (Elt == FirstNonZero && EltIdx == FirstNonZeroIdx)
+                           ^

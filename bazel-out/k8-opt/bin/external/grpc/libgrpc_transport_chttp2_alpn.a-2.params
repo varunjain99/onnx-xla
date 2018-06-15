@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_transport_chttp2_alpn.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_chttp2_alpn/external/grpc/src/core/ext/transport/chttp2/alpn/alpn.o

@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libgraph_rewriter.a
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/graph_rewriter/tensorflow/core/grappler/optimizers/graph_rewriter.o

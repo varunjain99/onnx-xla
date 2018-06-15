@@ -1,0 +1,17 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/liborc_jit.a
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/Core.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/ExecutionUtils.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/IRCompileLayer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/IRTransformLayer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/IndirectionUtils.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/Layer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/Legacy.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/NullResolver.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/ObjectTransformLayer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/OrcABISupport.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/OrcCBindings.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/OrcError.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/OrcMCJITReplacement.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/RPCUtils.o
+bazel-out/k8-opt/bin/external/llvm/_objs/orc_jit/external/llvm/lib/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.o

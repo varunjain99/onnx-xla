@@ -1,0 +1,13 @@
+In file included from tensorflow/core/ops/functional_grad.cc:17:0:
+./tensorflow/core/framework/function.h:672:15: warning: 'tensorflow::unused_grad_0' defined but not used [-Wunused-variable]
+   static bool unused_grad_##ctr = SHOULD_REGISTER_OP_GRADIENT && \
+               ^
+./tensorflow/core/framework/function.h:669:3: note: in expansion of macro 'REGISTER_OP_GRADIENT_UNIQ'
+   REGISTER_OP_GRADIENT_UNIQ(ctr, name, fn)
+   ^
+./tensorflow/core/framework/function.h:663:3: note: in expansion of macro 'REGISTER_OP_GRADIENT_UNIQ_HELPER'
+   REGISTER_OP_GRADIENT_UNIQ_HELPER(__COUNTER__, name, fn)
+   ^
+tensorflow/core/ops/functional_grad.cc:56:1: note: in expansion of macro 'REGISTER_OP_GRADIENT'
+ REGISTER_OP_GRADIENT("MapAccumulate", MapAccumulateGrad);
+ ^

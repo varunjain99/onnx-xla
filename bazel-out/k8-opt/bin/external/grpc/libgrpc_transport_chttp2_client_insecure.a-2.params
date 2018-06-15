@@ -1,0 +1,4 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_transport_chttp2_client_insecure.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_chttp2_client_insecure/external/grpc/src/core/ext/transport/chttp2/client/insecure/channel_create.o
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_chttp2_client_insecure/external/grpc/src/core/ext/transport/chttp2/client/insecure/channel_create_posix.o

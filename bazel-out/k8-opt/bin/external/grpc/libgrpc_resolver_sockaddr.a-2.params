@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_resolver_sockaddr.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_resolver_sockaddr/external/grpc/src/core/ext/filters/client_channel/resolver/sockaddr/sockaddr_resolver.o

@@ -1,0 +1,17 @@
+rcsD
+bazel-out/k8-opt/bin/external/png_archive/libpng.pic.a
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/png.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngerror.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngget.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngmem.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngpread.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngread.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngrio.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngrtran.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngrutil.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngset.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngtrans.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngwio.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngwrite.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngwtran.pic.o
+bazel-out/k8-opt/bin/external/png_archive/_objs/png/external/png_archive/pngwutil.pic.o

@@ -1,0 +1,12 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libalts_util.a
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/lib/security/credentials/alts/check_gcp_environment.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/lib/security/credentials/alts/check_gcp_environment_linux.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/lib/security/credentials/alts/check_gcp_environment_no_op.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/lib/security/credentials/alts/check_gcp_environment_windows.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/lib/security/credentials/alts/grpc_alts_credentials_client_options.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/lib/security/credentials/alts/grpc_alts_credentials_options.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/lib/security/credentials/alts/grpc_alts_credentials_server_options.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/tsi/alts/handshaker/alts_handshaker_service_api.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/tsi/alts/handshaker/alts_handshaker_service_api_util.o
+bazel-out/k8-opt/bin/external/grpc/_objs/alts_util/external/grpc/src/core/tsi/alts/handshaker/transport_security_common_api.o

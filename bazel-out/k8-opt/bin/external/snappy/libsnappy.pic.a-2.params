@@ -1,0 +1,5 @@
+rcsD
+bazel-out/k8-opt/bin/external/snappy/libsnappy.pic.a
+bazel-out/k8-opt/bin/external/snappy/_objs/snappy/external/snappy/snappy.pic.o
+bazel-out/k8-opt/bin/external/snappy/_objs/snappy/external/snappy/snappy-sinksource.pic.o
+bazel-out/k8-opt/bin/external/snappy/_objs/snappy/external/snappy/snappy-stubs-internal.pic.o

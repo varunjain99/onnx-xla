@@ -1,0 +1,4 @@
+tensorflow/core/grappler/optimizers/graph_rewriter.cc: In member function 'void tensorflow::grappler::GraphRewriter::RecordConnectivity(const tensorflow::NodeDef&, const std::unordered_set<std::__cxx11::basic_string<char> >&)':
+tensorflow/core/grappler/optimizers/graph_rewriter.cc:161:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       if (position < fanin_info->outputs.size() &&
+                    ^

@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libsymbolic_shapes.a
+bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/symbolic_shapes/tensorflow/core/grappler/optimizers/symbolic_shapes.o

@@ -1,0 +1,28 @@
+tensorflow/compiler/xla/service/llvm_ir/loop_emitter.cc: In lambda function:
+tensorflow/compiler/xla/service/llvm_ir/loop_emitter.cc:65:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int64 i = 0; i < target_arrays.size(); ++i) {
+                         ^
+tensorflow/compiler/xla/service/llvm_ir/loop_emitter.cc: In member function 'virtual std::vector<xla::llvm_ir::IrArray::Index> xla::llvm_ir::LoopEmitter::EmitIndexAndSetExitBasicBlock(tensorflow::StringPiece)':
+tensorflow/compiler/xla/service/llvm_ir/loop_emitter.cc:106:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (int i = 0; i < LayoutUtil::MinorToMajor(shape_).size(); ++i) {
+                     ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/compiler/xla/status.h:19,
+                 from ./tensorflow/compiler/xla/statusor.h:71,
+                 from ./tensorflow/compiler/xla/map_util.h:22,
+                 from ./tensorflow/compiler/xla/service/llvm_ir/ir_array.h:24,
+                 from ./tensorflow/compiler/xla/service/llvm_ir/loop_emitter.h:24,
+                 from tensorflow/compiler/xla/service/llvm_ir/loop_emitter.cc:16:
+./tensorflow/core/platform/default/logging.h: In instantiation of 'std::__cxx11::string* tensorflow::internal::Check_LEImpl(const T1&, const T2&, const char*) [with T1 = long long int; T2 = long unsigned int; std::__cxx11::string = std::__cxx11::basic_string<char>]':
+./tensorflow/compiler/xla/service/llvm_ir/ir_array.h:101:7:   required from here
+./tensorflow/core/platform/default/logging.h:232:35: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+                                   ^
+./tensorflow/core/platform/macros.h:88:49: note: in definition of macro 'TF_PREDICT_TRUE'
+ #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+                                                 ^
+./tensorflow/core/platform/default/logging.h:232:1: note: in expansion of macro 'TF_DEFINE_CHECK_OP_IMPL'
+ TF_DEFINE_CHECK_OP_IMPL(Check_LE, <=)
+ ^

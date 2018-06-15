@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/libstatus_macros.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/status_macros/tensorflow/compiler/xla/status_macros.o

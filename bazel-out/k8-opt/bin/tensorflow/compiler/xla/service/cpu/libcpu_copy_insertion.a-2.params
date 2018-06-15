@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libcpu_copy_insertion.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/cpu_copy_insertion/tensorflow/compiler/xla/service/cpu/cpu_copy_insertion.o

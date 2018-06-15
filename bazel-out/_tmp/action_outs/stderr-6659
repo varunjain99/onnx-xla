@@ -1,0 +1,4 @@
+external/llvm/lib/Target/ARM/ARMISelDAGToDAG.cpp: In function 'void getIntOperandsFromRegisterString(llvm::StringRef, llvm::SelectionDAG*, const llvm::SDLoc&, std::vector<llvm::SDValue, std::allocator<llvm::SDValue> >&)':
+external/llvm/lib/Target/ARM/ARMISelDAGToDAG.cpp:3707:69: warning: 'IntField' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       Ops.push_back(CurDAG->getTargetConstant(IntField, DL, MVT::i32));
+                                                                     ^

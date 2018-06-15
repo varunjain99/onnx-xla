@@ -1,0 +1,5 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libasm_parser.a
+bazel-out/k8-opt/bin/external/llvm/_objs/asm_parser/external/llvm/lib/AsmParser/LLLexer.o
+bazel-out/k8-opt/bin/external/llvm/_objs/asm_parser/external/llvm/lib/AsmParser/LLParser.o
+bazel-out/k8-opt/bin/external/llvm/_objs/asm_parser/external/llvm/lib/AsmParser/Parser.o

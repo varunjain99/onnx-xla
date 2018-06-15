@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/libxla_proto.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/xla_proto/tensorflow/compiler/xla/xla.pb.o

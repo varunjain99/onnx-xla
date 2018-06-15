@@ -1,0 +1,6 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/libdebug_info_msf.a
+bazel-out/k8-opt/bin/external/llvm/_objs/debug_info_msf/external/llvm/lib/DebugInfo/MSF/MSFBuilder.o
+bazel-out/k8-opt/bin/external/llvm/_objs/debug_info_msf/external/llvm/lib/DebugInfo/MSF/MSFCommon.o
+bazel-out/k8-opt/bin/external/llvm/_objs/debug_info_msf/external/llvm/lib/DebugInfo/MSF/MSFError.o
+bazel-out/k8-opt/bin/external/llvm/_objs/debug_info_msf/external/llvm/lib/DebugInfo/MSF/MappedBlockStream.o

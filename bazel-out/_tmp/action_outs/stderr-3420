@@ -1,0 +1,4 @@
+external/llvm/lib/DebugInfo/CodeView/DebugChecksumsSubsection.cpp: In member function 'llvm::Error llvm::VarStreamArrayExtractor<llvm::codeview::FileChecksumEntry>::operator()(llvm::BinaryStreamRef, uint32_t&, llvm::codeview::FileChecksumEntry&)':
+external/llvm/lib/DebugInfo/CodeView/DebugChecksumsSubsection.cpp:45:57: warning: 'Header' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   if (auto EC = Reader.readBytes(Item.Checksum, Header->ChecksumSize))
+                                                         ^

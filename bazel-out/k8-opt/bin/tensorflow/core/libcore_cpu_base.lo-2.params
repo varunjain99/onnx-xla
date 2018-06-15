@@ -1,0 +1,6 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/libcore_cpu_base.lo
+bazel-out/k8-opt/bin/tensorflow/core/_objs/core_cpu_base/tensorflow/core/common_runtime/eval_const_tensor.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/core_cpu_base/tensorflow/core/common_runtime/shape_refiner.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/core_cpu_base/tensorflow/core/graph/graph_constructor.o
+bazel-out/k8-opt/bin/tensorflow/core/_objs/core_cpu_base/tensorflow/core/graph/graph_def_builder_util.o

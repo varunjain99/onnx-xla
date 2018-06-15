@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/com_google_absl/absl/base/libdynamic_annotations.pic.a
+bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/dynamic_annotations/external/com_google_absl/absl/base/dynamic_annotations.pic.o

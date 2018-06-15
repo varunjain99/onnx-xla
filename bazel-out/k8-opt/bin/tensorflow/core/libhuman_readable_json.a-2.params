@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/libhuman_readable_json.a
+bazel-out/k8-opt/bin/tensorflow/core/_objs/human_readable_json/tensorflow/core/platform/default/human_readable_json.o

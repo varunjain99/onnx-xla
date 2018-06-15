@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libcpu_hlo_support_checker.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/cpu_hlo_support_checker/tensorflow/compiler/xla/service/cpu/cpu_hlo_support_checker.o

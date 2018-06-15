@@ -1,0 +1,10 @@
+rcsD
+bazel-out/host/bin/external/double_conversion/libdouble-conversion.a
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/bignum.o
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/bignum-dtoa.o
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/cached-powers.o
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/diy-fp.o
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/double-conversion.o
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/fast-dtoa.o
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/fixed-dtoa.o
+bazel-out/host/bin/external/double_conversion/_objs/double-conversion/external/double_conversion/double-conversion/strtod.o

@@ -1,0 +1,12 @@
+external/llvm/lib/Analysis/ScalarEvolution.cpp: In function 'llvm::ScalarEvolution::getRangeViaFactoring(const llvm::SCEV*, const llvm::SCEV*, const llvm::SCEV*, unsigned int)::SelectPattern::SelectPattern(llvm::ScalarEvolution&, unsigned int, const llvm::SCEV*)':
+external/llvm/lib/Analysis/ScalarEvolution.cpp:5747:9: warning: 'CastOp' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         switch (*CastOp) {
+         ^
+external/llvm/lib/Analysis/ScalarEvolution.cpp: In member function 'llvm::ScalarEvolution::ExitLimit llvm::ScalarEvolution::computeShiftCompareExitLimit(llvm::Value*, llvm::Value*, const llvm::Loop*, llvm::CmpInst::Predicate)':
+external/llvm/lib/Analysis/ScalarEvolution.cpp:7444:38: warning: 'PostShiftOpCode' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         (!PostShiftOpCode.hasValue() || *PostShiftOpCode == OpCodeOut);
+                                      ^
+external/llvm/lib/Analysis/ScalarEvolution.cpp: In member function 'llvm::Optional<std::pair<const llvm::SCEV*, llvm::SmallVector<const llvm::SCEVPredicate*, 3u> > > llvm::ScalarEvolution::createAddRecFromPHIWithCastsImpl(const llvm::SCEVUnknown*)':
+external/llvm/lib/Analysis/ScalarEvolution.cpp:4689:37: warning: 'Signed' may be used uninitialized in this function [-Wmaybe-uninitialized]
+                : SCEVWrapPredicate::IncrementNUSW;
+                                     ^

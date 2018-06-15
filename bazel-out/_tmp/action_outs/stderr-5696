@@ -1,0 +1,7 @@
+tensorflow/compiler/xla/service/cpu/disassembler.cc: In member function 'xla::StatusOr<xla::cpu::DisassemblerResult> xla::cpu::Disassembler::DisassembleObjectFile(const llvm::object::ObjectFile&) const':
+tensorflow/compiler/xla/service/cpu/disassembler.cc:109:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int i = 0; i < symbols.size(); ++i) {
+                       ^
+tensorflow/compiler/xla/service/cpu/disassembler.cc:118:13: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       if (i < symbols.size() - 1) {
+             ^

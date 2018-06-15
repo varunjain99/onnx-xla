@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/fft2d/libfft2d.pic.a
+bazel-out/k8-opt/bin/external/fft2d/_objs/fft2d/external/fft2d/fft/fftsg.pic.o

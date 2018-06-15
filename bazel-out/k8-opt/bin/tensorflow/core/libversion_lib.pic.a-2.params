@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/core/libversion_lib.pic.a
+bazel-out/k8-opt/bin/tensorflow/core/_objs/version_lib/tensorflow/core/util/version_info.pic.o

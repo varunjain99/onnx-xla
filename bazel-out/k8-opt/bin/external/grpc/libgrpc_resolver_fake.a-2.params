@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_resolver_fake.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_resolver_fake/external/grpc/src/core/ext/filters/client_channel/resolver/fake/fake_resolver.o

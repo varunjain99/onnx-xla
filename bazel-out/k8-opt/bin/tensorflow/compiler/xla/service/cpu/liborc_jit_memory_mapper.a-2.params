@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/liborc_jit_memory_mapper.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/orc_jit_memory_mapper/tensorflow/compiler/xla/service/cpu/orc_jit_memory_mapper.o

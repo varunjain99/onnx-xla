@@ -1,0 +1,18 @@
+external/llvm/lib/Transforms/Utils/SimplifyCFG.cpp:1687:3: warning: multi-line comment [-Wcomment]
+   //      /    \
+   ^
+external/llvm/lib/Transforms/Utils/SimplifyCFG.cpp:1689:3: warning: multi-line comment [-Wcomment]
+   //      |     | \
+   ^
+external/llvm/lib/Transforms/Utils/SimplifyCFG.cpp:1705:3: warning: multi-line comment [-Wcomment]
+   //      /    \
+   ^
+external/llvm/lib/Transforms/Utils/SimplifyCFG.cpp:1707:3: warning: multi-line comment [-Wcomment]
+   //      |     | \
+   ^
+external/llvm/lib/Transforms/Utils/SimplifyCFG.cpp:3074:3: warning: multi-line comment [-Wcomment]
+   //    /   \               | \
+   ^
+external/llvm/lib/Transforms/Utils/SimplifyCFG.cpp:3078:3: warning: multi-line comment [-Wcomment]
+   //    /  \                | \
+   ^

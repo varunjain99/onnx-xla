@@ -1,0 +1,13 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libtsi.a
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/alts/handshaker/alts_handshaker_client.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/alts/handshaker/alts_tsi_event.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/alts/handshaker/alts_tsi_handshaker.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/alts/handshaker/alts_tsi_utils.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/alts_transport_security.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/fake_transport_security.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/ssl/session_cache/ssl_session_boringssl.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/ssl/session_cache/ssl_session_cache.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/ssl/session_cache/ssl_session_openssl.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/ssl_transport_security.o
+bazel-out/k8-opt/bin/external/grpc/_objs/tsi/external/grpc/src/core/tsi/transport_security_grpc.o

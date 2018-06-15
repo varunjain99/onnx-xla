@@ -1,0 +1,3 @@
+tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:177:15: warning: 'std::__cxx11::string stream_executor::cuda::GetBinaryDir(bool)' defined but not used [-Wunused-function]
+ static string GetBinaryDir(bool strip_exe) {
+               ^

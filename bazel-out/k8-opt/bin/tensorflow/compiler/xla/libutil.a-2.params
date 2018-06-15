@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/libutil.a
+bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/util/tensorflow/compiler/xla/util.o

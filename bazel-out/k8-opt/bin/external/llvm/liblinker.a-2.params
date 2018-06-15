@@ -1,0 +1,4 @@
+rcsD
+bazel-out/k8-opt/bin/external/llvm/liblinker.a
+bazel-out/k8-opt/bin/external/llvm/_objs/linker/external/llvm/lib/Linker/IRMover.o
+bazel-out/k8-opt/bin/external/llvm/_objs/linker/external/llvm/lib/Linker/LinkModules.o

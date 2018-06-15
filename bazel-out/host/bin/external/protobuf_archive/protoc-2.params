@@ -1,0 +1,13 @@
+bazel-out/host/bin/external/protobuf_archive/_objs/protoc/external/protobuf_archive/src/google/protobuf/compiler/main.o
+bazel-out/host/bin/external/protobuf_archive/libprotoc_lib.a
+bazel-out/host/bin/external/protobuf_archive/libprotobuf.a
+bazel-out/host/bin/external/protobuf_archive/libprotobuf_lite.a
+-lpthread
+-lm
+-lpthread
+-lm
+-lpthread
+-lm
+-lpthread
+-lm
+-lstdc++

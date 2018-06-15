@@ -1,0 +1,7 @@
+external/llvm/lib/CodeGen/InterleavedAccessPass.cpp: In member function 'virtual bool {anonymous}::InterleavedAccess::runOnFunction(llvm::Function&)':
+external/llvm/lib/CodeGen/InterleavedAccessPass.cpp:240:30: warning: 'SavedLaneValue' may be used uninitialized in this function [-Wmaybe-uninitialized]
+               SavedLaneValue + SavedNoUndefs != (unsigned)NextLaneValue)
+                              ^
+external/llvm/lib/CodeGen/InterleavedAccessPass.cpp:210:16: note: 'SavedLaneValue' was declared here
+       unsigned SavedLaneValue;
+                ^

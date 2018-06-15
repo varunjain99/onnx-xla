@@ -1,0 +1,8 @@
+external/llvm/lib/Support/BinaryStreamReader.cpp: In member function 'llvm::Error llvm::BinaryStreamReader::readWideString(llvm::ArrayRef<short unsigned int>&)':
+external/llvm/lib/Support/BinaryStreamReader.cpp:79:12: warning: 'C' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     if (*C == 0x0000)
+            ^
+external/llvm/lib/Support/BinaryStreamReader.cpp: In member function 'std::pair<llvm::BinaryStreamReader, llvm::BinaryStreamReader> llvm::BinaryStreamReader::split(uint32_t) const':
+external/llvm/lib/Support/BinaryStreamReader.cpp:146:22: warning: '*((void*)& W1 +36)' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   BinaryStreamReader W1{First};
+                      ^

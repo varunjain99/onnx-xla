@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_lb_policy_pick_first.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_policy_pick_first/external/grpc/src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.o

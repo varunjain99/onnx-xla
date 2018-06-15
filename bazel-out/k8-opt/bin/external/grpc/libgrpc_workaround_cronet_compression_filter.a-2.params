@@ -1,0 +1,3 @@
+rcsD
+bazel-out/k8-opt/bin/external/grpc/libgrpc_workaround_cronet_compression_filter.a
+bazel-out/k8-opt/bin/external/grpc/_objs/grpc_workaround_cronet_compression_filter/external/grpc/src/core/ext/filters/workarounds/workaround_cronet_compression_filter.o

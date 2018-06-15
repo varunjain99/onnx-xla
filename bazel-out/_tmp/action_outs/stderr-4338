@@ -1,0 +1,59 @@
+In file included from ./tensorflow/core/framework/common_shape_fns.h:22:0,
+                 from ./tensorflow/core/framework/resource_mgr.h:24,
+                 from ./tensorflow/core/common_runtime/device.h:43,
+                 from ./tensorflow/core/common_runtime/device_set.h:23,
+                 from ./tensorflow/core/grappler/clusters/cluster.h:24,
+                 from ./tensorflow/core/grappler/costs/graph_properties.h:22,
+                 from ./tensorflow/core/grappler/costs/virtual_scheduler.h:27,
+                 from tensorflow/core/grappler/costs/virtual_scheduler.cc:16:
+./tensorflow/core/util/tensor_format.h: In function 'tensorflow::TensorShape tensorflow::ShapeFromFormat(tensorflow::TensorFormat, tensorflow::int64, tensorflow::gtl::ArraySlice<long long int>, tensorflow::int64)':
+./tensorflow/core/util/tensor_format.h:457:45: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     if (format == FORMAT_NHWC_VECT_W && dim == spatial.size() - 1) {
+                                             ^
+tensorflow/core/grappler/costs/virtual_scheduler.cc: In member function 'tensorflow::Status tensorflow::grappler::VirtualScheduler::Init()':
+tensorflow/core/grappler/costs/virtual_scheduler.cc:454:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+            port_num < curr_node_state.output_properties.size(); ++port_num) {
+                     ^
+tensorflow/core/grappler/costs/virtual_scheduler.cc: In member function 'tensorflow::int64 tensorflow::grappler::VirtualScheduler::CalculateOutputSize(const std::vector<tensorflow::OpInfo_TensorProperties>&, int) const':
+tensorflow/core/grappler/costs/virtual_scheduler.cc:698:16: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   if (port_num >= output_properties.size()) {
+                ^
+tensorflow/core/grappler/costs/virtual_scheduler.cc: In member function 'bool tensorflow::grappler::VirtualScheduler::MarkCurrNodeExecuted(const tensorflow::grappler::Costs&)':
+tensorflow/core/grappler/costs/virtual_scheduler.cc:799:41: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       if (output_state.num_inputs_ready == output_state.inputs.size() ||
+                                         ^
+tensorflow/core/grappler/costs/virtual_scheduler.cc:814:48: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     if (input_state.num_outputs_executed[port] ==
+                                                ^
+tensorflow/core/grappler/costs/virtual_scheduler.cc: In member function 'tensorflow::grappler::Costs tensorflow::grappler::VirtualScheduler::Summary(tensorflow::RunMetadata*)':
+tensorflow/core/grappler/costs/virtual_scheduler.cc:987:33: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for (int slot = 0; slot < nodestate.output_properties.size(); slot++) {
+                                 ^
+In file included from ./tensorflow/core/platform/default/logging.h:24:0,
+                 from ./tensorflow/core/platform/logging.h:25,
+                 from ./tensorflow/core/lib/core/status.h:25,
+                 from ./tensorflow/core/grappler/costs/cost_estimator.h:21,
+                 from ./tensorflow/core/grappler/costs/virtual_scheduler.h:26,
+                 from tensorflow/core/grappler/costs/virtual_scheduler.cc:16:
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetTensorDim(tensorflow::gtl::ArraySlice<T>, tensorflow::TensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:409:47:   required from here
+./tensorflow/core/util/tensor_format.h:377:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attributes.size())
+                             ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:377:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attributes.size())
+   ^
+./tensorflow/core/util/tensor_format.h: In instantiation of 'T tensorflow::GetFilterDim(tensorflow::gtl::ArraySlice<T>, tensorflow::FilterTensorFormat, char) [with T = long long int]':
+./tensorflow/core/util/tensor_format.h:418:54:   required from here
+./tensorflow/core/util/tensor_format.h:392:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   CHECK(index >= 0 && index < dimension_attribute.size())
+                             ^
+./tensorflow/core/platform/macros.h:87:47: note: in definition of macro 'TF_PREDICT_FALSE'
+ #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+                                               ^
+./tensorflow/core/util/tensor_format.h:392:3: note: in expansion of macro 'CHECK'
+   CHECK(index >= 0 && index < dimension_attribute.size())
+   ^

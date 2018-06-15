@@ -1,0 +1,4 @@
+external/llvm/lib/DebugInfo/CodeView/TypeIndexDiscovery.cpp: In function 'void resolveTypeIndexReferences(llvm::ArrayRef<unsigned char>, llvm::ArrayRef<llvm::codeview::TiReference>, llvm::SmallVectorImpl<llvm::codeview::TypeIndex>&)':
+external/llvm/lib/DebugInfo/CodeView/TypeIndexDiscovery.cpp:472:33: warning: '*((void*)& Run +28)' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     FixedStreamArray<TypeIndex> Run;
+                                 ^

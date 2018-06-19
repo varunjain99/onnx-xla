@@ -169,10 +169,10 @@ PROTOBUF_LITE_LIBRARY_DEBUG:FILEPATH=/usr/lib/x86_64-linux-gnu/libprotobuf-lite.
 PROTOBUF_PROTOC_EXECUTABLE:FILEPATH=/usr/bin/protoc
 
 //Path to a library.
-PROTOBUF_PROTOC_LIBRARY:FILEPATH=PROTOBUF_PROTOC_LIBRARY-NOTFOUND
+PROTOBUF_PROTOC_LIBRARY:FILEPATH=/usr/local/lib/libprotoc.so
 
 //Path to a library.
-PROTOBUF_PROTOC_LIBRARY_DEBUG:FILEPATH=PROTOBUF_PROTOC_LIBRARY_DEBUG-NOTFOUND
+PROTOBUF_PROTOC_LIBRARY_DEBUG:FILEPATH=/usr/local/lib/libprotoc.so
 
 //Path to a file.
 Protobuf_INCLUDE_DIR:PATH=/usr/include
@@ -196,7 +196,7 @@ onnx-xla_BINARY_DIR:STATIC=/private/home/jainv/onnx-xla
 onnx-xla_SOURCE_DIR:STATIC=/private/home/jainv/onnx-xla
 
 //Dependencies for the target
-xla_pb_LIB_DEPENDS:STATIC=optimized;/usr/lib/x86_64-linux-gnu/libprotobuf.so;debug;/usr/lib/x86_64-linux-gnu/libprotobuf.so;
+xla_pb_LIB_DEPENDS:STATIC=optimized;/usr/lib/x86_64-linux-gnu/libprotobuf.so;debug;/usr/lib/x86_64-linux-gnu/libprotobuf.so;general;-lpthread;
 
 
 ########################
@@ -259,8 +259,14 @@ CMAKE_GENERATOR:INTERNAL=Unix Makefiles
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Have symbol pthread_create
+CMAKE_HAVE_LIBC_CREATE:INTERNAL=
+//Have library pthreads
+CMAKE_HAVE_PTHREADS_CREATE:INTERNAL=
+//Have library pthread
+CMAKE_HAVE_PTHREAD_CREATE:INTERNAL=1
 //Have include pthread.h
-CMAKE_HAVE_PTHREAD_H:INTERNAL=
+CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/private/home/jainv/onnx-xla
@@ -310,6 +316,8 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Protobuf
 FIND_PACKAGE_MESSAGE_DETAILS_Protobuf:INTERNAL=[/usr/lib/x86_64-linux-gnu/libprotobuf.so][/usr/include][v()]
+//Details about finding Threads
+FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //ADVANCED property for variable: PROTOBUF_INCLUDE_DIR
 PROTOBUF_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PROTOBUF_LIBRARY

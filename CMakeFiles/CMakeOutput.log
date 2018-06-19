@@ -1150,3 +1150,31 @@ Linking C executable cmTC_7b1b6
 make[1]: Leaving directory '/onnx-xla/CMakeFiles/CMakeTmp'
 
 
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /private/home/jainv/onnx-xla/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1d2ac/fast"
+/usr/bin/make -f CMakeFiles/cmTC_1d2ac.dir/build.make CMakeFiles/cmTC_1d2ac.dir/build
+make[1]: Entering directory '/private/home/jainv/onnx-xla/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1d2ac.dir/CheckIncludeFile.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_1d2ac.dir/CheckIncludeFile.c.o   -c /private/home/jainv/onnx-xla/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_1d2ac
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1d2ac.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_1d2ac.dir/CheckIncludeFile.c.o  -o cmTC_1d2ac -rdynamic 
+make[1]: Leaving directory '/private/home/jainv/onnx-xla/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /private/home/jainv/onnx-xla/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1bbe6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_1bbe6.dir/build.make CMakeFiles/cmTC_1bbe6.dir/build
+make[1]: Entering directory '/private/home/jainv/onnx-xla/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1bbe6.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_1bbe6.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_1bbe6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1bbe6.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_1bbe6.dir/CheckFunctionExists.c.o  -o cmTC_1bbe6 -rdynamic -lpthread 
+make[1]: Leaving directory '/private/home/jainv/onnx-xla/CMakeFiles/CMakeTmp'
+
+

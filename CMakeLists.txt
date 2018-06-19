@@ -132,5 +132,7 @@ endif()
 # target_include_directories(onnxifi INTERFACE onnx)
 
 
-install(TARGETS xla_pb
-    DESTINATION "${ONNX_XLA_ROOT}/lib/")
+add_executable(xla_client "${ONNX_XLA_ROOT}/test_client.cc")
+target_include_directories(xla_client PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
+                                         "${PROTOBUF_INCLUDE_DIRS}"
+                                         "${gRPC_INSTALL_INCLUDEDIR}")

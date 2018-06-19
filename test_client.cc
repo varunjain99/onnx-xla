@@ -22,6 +22,7 @@ class XlaClient {
 
     // Context for the client. It could be used to convey extra information to
     // the server and/or tweak certain RPC behaviors.
+
     ::grpc::ServerContext context;
 
     // The actual RPC.
@@ -48,7 +49,7 @@ int main(int argc, char** argv) {
   // (use of InsecureChannelCredentials()).
   XlaClient client(grpc::CreateChannel(
       "localhost:50051", grpc::InsecureChannelCredentials()));
-  std::string reply = greeter.getDevice();
+  std::string reply = client.getDevice();
   std::cout << "Client received: " << reply << std::endl;
 
   return 0;

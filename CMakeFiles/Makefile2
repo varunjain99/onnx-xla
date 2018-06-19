@@ -60,39 +60,39 @@ CMAKE_SOURCE_DIR = /private/home/jainv/onnx-xla
 CMAKE_BINARY_DIR = /private/home/jainv/onnx-xla
 
 #=============================================================================
-# Target rules for target CMakeFiles/xla_pb.dir
+# Target rules for target CMakeFiles/xla_o.dir
 
 # All Build rule for target.
-CMakeFiles/xla_pb.dir/all:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/depend
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/private/home/jainv/onnx-xla/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target xla_pb"
-.PHONY : CMakeFiles/xla_pb.dir/all
+CMakeFiles/xla_o.dir/all:
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/depend
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/private/home/jainv/onnx-xla/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target xla_o"
+.PHONY : CMakeFiles/xla_o.dir/all
 
 # Include target in all.
-all: CMakeFiles/xla_pb.dir/all
+all: CMakeFiles/xla_o.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/xla_pb.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /private/home/jainv/onnx-xla/CMakeFiles 7
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/xla_pb.dir/all
+CMakeFiles/xla_o.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /private/home/jainv/onnx-xla/CMakeFiles 8
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/xla_o.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /private/home/jainv/onnx-xla/CMakeFiles 0
-.PHONY : CMakeFiles/xla_pb.dir/rule
+.PHONY : CMakeFiles/xla_o.dir/rule
 
 # Convenience name for target.
-xla_pb: CMakeFiles/xla_pb.dir/rule
+xla_o: CMakeFiles/xla_o.dir/rule
 
-.PHONY : xla_pb
-
-# clean rule for target.
-CMakeFiles/xla_pb.dir/clean:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/clean
-.PHONY : CMakeFiles/xla_pb.dir/clean
+.PHONY : xla_o
 
 # clean rule for target.
-clean: CMakeFiles/xla_pb.dir/clean
+CMakeFiles/xla_o.dir/clean:
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/clean
+.PHONY : CMakeFiles/xla_o.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/xla_o.dir/clean
 
 .PHONY : clean
 

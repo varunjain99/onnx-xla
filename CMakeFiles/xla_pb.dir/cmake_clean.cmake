@@ -5,8 +5,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o"
   "CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.o"
   "CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.o"
-  "libxla_pb.pdb"
-  "libxla_pb.a"
+  "CMakeFiles/xla_pb.dir/test_client.cc.o"
+  "xla_pb.pdb"
+  "xla_pb"
 )
 
 # Per-language clean rules from dependency scanning.

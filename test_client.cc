@@ -8,7 +8,7 @@ using grpc::Status;
 class XlaClient {
  public:
   XlaClient(std::shared_ptr<Channel> channel)
-      : stub_(xla::grpc::XlaService::Stub::NewStub(channel)) {}
+      : stub_(::xla::grpc::XlaService::NewStub(channel)) {}
 
   // Assembles the client's payload, sends it and presents the response back
   // from the server.
@@ -23,14 +23,14 @@ class XlaClient {
     // Context for the client. It could be used to convey extra information to
     // the server and/or tweak certain RPC behaviors.
 
-    ::grpc::ServerContext context;
+    ::grpc::ClientContext context;
 
     // The actual RPC.
-    Status status = stub_->GetDeviceHandles(&context, &request, &reply);
+    ::grpc::Status status = stub_->GetDeviceHandles(&context, request, &response);
 
     // Act upon its status.
     if (status.ok()) {
-      return response.message();
+      return "RPC successful";
     } else {
       std::cout << status.error_code() << ": " << status.error_message()
                 << std::endl;
@@ -39,7 +39,7 @@ class XlaClient {
   }
 
  private:
-  std::unique_ptr<Greeter::Stub> stub_;
+  std::unique_ptr<xla::grpc::XlaService::Stub> stub_;
 };
 
 int main(int argc, char** argv) {

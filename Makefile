@@ -56,39 +56,6 @@ CMAKE_BINARY_DIR = /private/home/jainv/onnx-xla
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: install/local
-
-.PHONY : install/local/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -144,17 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named xla_pb
+# Target rules for targets named xla_o
 
 # Build rule for target.
-xla_pb: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 xla_pb
-.PHONY : xla_pb
+xla_o: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 xla_o
+.PHONY : xla_o
 
 # fast build rule for target.
-xla_pb/fast:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/build
-.PHONY : xla_pb/fast
+xla_o/fast:
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/build
+.PHONY : xla_o/fast
+
+test_client.o: test_client.cc.o
+
+.PHONY : test_client.o
+
+# target to build an object file
+test_client.cc.o:
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/test_client.cc.o
+.PHONY : test_client.cc.o
+
+test_client.i: test_client.cc.i
+
+.PHONY : test_client.i
+
+# target to preprocess a source file
+test_client.cc.i:
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/test_client.cc.i
+.PHONY : test_client.cc.i
+
+test_client.s: test_client.cc.s
+
+.PHONY : test_client.s
+
+# target to generate assembly for a file
+test_client.cc.s:
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/test_client.cc.s
+.PHONY : test_client.cc.s
 
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.o: xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
 
@@ -162,7 +156,7 @@ xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.o: xla_pb/tensorflow/comp
 
 # target to build an object file
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
 .PHONY : xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
 
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.i: xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i
@@ -171,7 +165,7 @@ xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.i: xla_pb/tensorflow/comp
 
 # target to preprocess a source file
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i
 .PHONY : xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i
 
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.s: xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s
@@ -180,7 +174,7 @@ xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.s: xla_pb/tensorflow/comp
 
 # target to generate assembly for a file
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s
 .PHONY : xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s
 
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.o: xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o
@@ -189,7 +183,7 @@ xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.o: xla_pb/tensorflow/compiler/
 
 # target to build an object file
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o
 .PHONY : xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o
 
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.i: xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.i
@@ -198,7 +192,7 @@ xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.i: xla_pb/tensorflow/compiler/
 
 # target to preprocess a source file
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.i:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.i
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.i
 .PHONY : xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.i
 
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.s: xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.s
@@ -207,7 +201,7 @@ xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.s: xla_pb/tensorflow/compiler/
 
 # target to generate assembly for a file
 xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.s:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.s
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.s
 .PHONY : xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.s
 
 xla_pb/tensorflow/compiler/xla/service/hlo.pb.o: xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o
@@ -216,7 +210,7 @@ xla_pb/tensorflow/compiler/xla/service/hlo.pb.o: xla_pb/tensorflow/compiler/xla/
 
 # target to build an object file
 xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o
 .PHONY : xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o
 
 xla_pb/tensorflow/compiler/xla/service/hlo.pb.i: xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.i
@@ -225,7 +219,7 @@ xla_pb/tensorflow/compiler/xla/service/hlo.pb.i: xla_pb/tensorflow/compiler/xla/
 
 # target to preprocess a source file
 xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.i:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.i
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.i
 .PHONY : xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.i
 
 xla_pb/tensorflow/compiler/xla/service/hlo.pb.s: xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.s
@@ -234,7 +228,7 @@ xla_pb/tensorflow/compiler/xla/service/hlo.pb.s: xla_pb/tensorflow/compiler/xla/
 
 # target to generate assembly for a file
 xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.s:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.s
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.s
 .PHONY : xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.s
 
 xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.o: xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o
@@ -243,7 +237,7 @@ xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.o: xla_pb/ten
 
 # target to build an object file
 xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o
 .PHONY : xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o
 
 xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.i: xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.i
@@ -252,7 +246,7 @@ xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.i: xla_pb/ten
 
 # target to preprocess a source file
 xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.i:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.i
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.i
 .PHONY : xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.i
 
 xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.s: xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.s
@@ -261,7 +255,7 @@ xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.s: xla_pb/ten
 
 # target to generate assembly for a file
 xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.s:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.s
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.s
 .PHONY : xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.s
 
 xla_pb/tensorflow/compiler/xla/xla.pb.o: xla_pb/tensorflow/compiler/xla/xla.pb.cc.o
@@ -270,7 +264,7 @@ xla_pb/tensorflow/compiler/xla/xla.pb.o: xla_pb/tensorflow/compiler/xla/xla.pb.c
 
 # target to build an object file
 xla_pb/tensorflow/compiler/xla/xla.pb.cc.o:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.o
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.o
 .PHONY : xla_pb/tensorflow/compiler/xla/xla.pb.cc.o
 
 xla_pb/tensorflow/compiler/xla/xla.pb.i: xla_pb/tensorflow/compiler/xla/xla.pb.cc.i
@@ -279,7 +273,7 @@ xla_pb/tensorflow/compiler/xla/xla.pb.i: xla_pb/tensorflow/compiler/xla/xla.pb.c
 
 # target to preprocess a source file
 xla_pb/tensorflow/compiler/xla/xla.pb.cc.i:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.i
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.i
 .PHONY : xla_pb/tensorflow/compiler/xla/xla.pb.cc.i
 
 xla_pb/tensorflow/compiler/xla/xla.pb.s: xla_pb/tensorflow/compiler/xla/xla.pb.cc.s
@@ -288,7 +282,7 @@ xla_pb/tensorflow/compiler/xla/xla.pb.s: xla_pb/tensorflow/compiler/xla/xla.pb.c
 
 # target to generate assembly for a file
 xla_pb/tensorflow/compiler/xla/xla.pb.cc.s:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.s
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.s
 .PHONY : xla_pb/tensorflow/compiler/xla/xla.pb.cc.s
 
 xla_pb/tensorflow/compiler/xla/xla_data.pb.o: xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.o
@@ -297,7 +291,7 @@ xla_pb/tensorflow/compiler/xla/xla_data.pb.o: xla_pb/tensorflow/compiler/xla/xla
 
 # target to build an object file
 xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.o:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.o
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.o
 .PHONY : xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.o
 
 xla_pb/tensorflow/compiler/xla/xla_data.pb.i: xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.i
@@ -306,7 +300,7 @@ xla_pb/tensorflow/compiler/xla/xla_data.pb.i: xla_pb/tensorflow/compiler/xla/xla
 
 # target to preprocess a source file
 xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.i:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.i
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.i
 .PHONY : xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.i
 
 xla_pb/tensorflow/compiler/xla/xla_data.pb.s: xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.s
@@ -315,7 +309,7 @@ xla_pb/tensorflow/compiler/xla/xla_data.pb.s: xla_pb/tensorflow/compiler/xla/xla
 
 # target to generate assembly for a file
 xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.s:
-	$(MAKE) -f CMakeFiles/xla_pb.dir/build.make CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.s
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.s
 .PHONY : xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.s
 
 # Help Target
@@ -324,12 +318,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install"
-	@echo "... list_install_components"
-	@echo "... xla_pb"
-	@echo "... install/local"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... xla_o"
+	@echo "... test_client.o"
+	@echo "... test_client.i"
+	@echo "... test_client.s"
 	@echo "... xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.o"
 	@echo "... xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.i"
 	@echo "... xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.s"

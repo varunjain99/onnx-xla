@@ -103,21 +103,23 @@ if(ONNX_XLA_ML)
   add_definitions("-DONNX_XLA_ML=1")
 endif()
 
+
 file(GLOB_RECURSE xla_src
     "${ONNX_XLA_ROOT}/xla_pb/*.h"
     "${ONNX_XLA_ROOT}/xla_pb/*.cc"
+    "${ONNX_XLA_ROOT}/test_client.cc"
 )
-add_library(xla_pb ${xla_src})
-target_include_directories(xla_pb PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
+add_executable(xla_o ${xla_src})
+target_include_directories(xla_o PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
                                          "${PROTOBUF_INCLUDE_DIRS}"
-                                         "${gRPC_INSTALL_INCLUDEDIR}")
+                                         "/usr/local/include/grpc")
 
-message("${gRPC_INSTALL_INCLUDEDIR}")
 if(TARGET protobuf::libprotobuf)
-  target_link_libraries(xla_pb PUBLIC protobuf::libprotobuf
-                                      "${gRPC_INSTALL_LIBDIR}")
+  target_link_libraries(xla_o PUBLIC protobuf::libprotobuf
+                                      "/usr/local/lib/libgrpc.a")
 else()
-  target_link_libraries(xla_pb PUBLIC ${PROTOBUF_LIBRARIES})
+  target_link_libraries(xla_o PUBLIC ${PROTOBUF_LIBRARIES}
+				      "/usr/local/lib/libgrpc.a")
 endif()
 
 # Export include directories
@@ -132,7 +134,18 @@ endif()
 # target_include_directories(onnxifi INTERFACE onnx)
 
 
-add_executable(xla_client "${ONNX_XLA_ROOT}/test_client.cc")
-target_include_directories(xla_client PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
-                                         "${PROTOBUF_INCLUDE_DIRS}"
-                                         "${gRPC_INSTALL_INCLUDEDIR}")
+#add_executable(xla_client "${ONNX_XLA_ROOT}/test_client.cc")
+#target_include_directories(xla_client PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
+#                                         "${PROTOBUF_INCLUDE_DIRS}"
+#                                         "${gRPC_INSTALL_INCLUDEDIR}")
+
+
+#if(TARGET protobuf::libprotobuf)
+#  target_link_libraries(xla_client PUBLIC protobuf::libprotobuf
+#                                         "${gRPC_INSTALL_LIBDIR}"
+#					 xla_pb)
+#else()
+#  target_link_libraries(xla_client PUBLIC ${PROTOBUF_LIBRARIES}
+#                                      "${gRPC_INSTALL_LIBDIR}"
+#				      xla_pb)
+#endif()

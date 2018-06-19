@@ -151,22 +151,22 @@ ONNX_XLA_COVERAGE:BOOL=OFF
 ONNX_XLA_WERROR:BOOL=OFF
 
 //Path to a file.
-PROTOBUF_INCLUDE_DIR:PATH=/usr/include
+PROTOBUF_INCLUDE_DIR:PATH=/usr/local/include
 
 //Path to a library.
-PROTOBUF_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libprotobuf.so
+PROTOBUF_LIBRARY:FILEPATH=/usr/local/lib/libprotobuf.so
 
 //Path to a library.
-PROTOBUF_LIBRARY_DEBUG:FILEPATH=/usr/lib/x86_64-linux-gnu/libprotobuf.so
+PROTOBUF_LIBRARY_DEBUG:FILEPATH=/usr/local/lib/libprotobuf.so
 
 //Path to a library.
-PROTOBUF_LITE_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libprotobuf-lite.so
+PROTOBUF_LITE_LIBRARY:FILEPATH=/usr/local/lib/libprotobuf-lite.so
 
 //Path to a library.
-PROTOBUF_LITE_LIBRARY_DEBUG:FILEPATH=/usr/lib/x86_64-linux-gnu/libprotobuf-lite.so
+PROTOBUF_LITE_LIBRARY_DEBUG:FILEPATH=/usr/local/lib/libprotobuf-lite.so
 
 //The Google Protocol Buffers Compiler
-PROTOBUF_PROTOC_EXECUTABLE:FILEPATH=/usr/bin/protoc
+PROTOBUF_PROTOC_EXECUTABLE:FILEPATH=/usr/local/bin/protoc
 
 //Path to a library.
 PROTOBUF_PROTOC_LIBRARY:FILEPATH=/usr/local/lib/libprotoc.so
@@ -175,28 +175,25 @@ PROTOBUF_PROTOC_LIBRARY:FILEPATH=/usr/local/lib/libprotoc.so
 PROTOBUF_PROTOC_LIBRARY_DEBUG:FILEPATH=/usr/local/lib/libprotoc.so
 
 //Path to a file.
-Protobuf_INCLUDE_DIR:PATH=/usr/include
+Protobuf_INCLUDE_DIR:PATH=/usr/local/include
 
 //Path to a library.
-Protobuf_LIBRARY:FILEPATH=Protobuf_LIBRARY-NOTFOUND
+Protobuf_LIBRARY:FILEPATH=/usr/local/lib/libprotobuf.so
 
 //Path to a library.
-Protobuf_LITE_LIBRARY:FILEPATH=Protobuf_LITE_LIBRARY-NOTFOUND
+Protobuf_LITE_LIBRARY:FILEPATH=/usr/local/lib/libprotobuf-lite.so
 
 //The Google Protocol Buffers Compiler
-Protobuf_PROTOC_EXECUTABLE:FILEPATH=/usr/bin/protoc
+Protobuf_PROTOC_EXECUTABLE:FILEPATH=/usr/local/bin/protoc
 
 //Path to a library.
-Protobuf_PROTOC_LIBRARY:FILEPATH=Protobuf_PROTOC_LIBRARY-NOTFOUND
+Protobuf_PROTOC_LIBRARY:FILEPATH=/usr/local/lib/libprotoc.so
 
 //Value Computed by CMake
 onnx-xla_BINARY_DIR:STATIC=/private/home/jainv/onnx-xla
 
 //Value Computed by CMake
 onnx-xla_SOURCE_DIR:STATIC=/private/home/jainv/onnx-xla
-
-//Dependencies for the target
-xla_pb_LIB_DEPENDS:STATIC=optimized;/usr/lib/x86_64-linux-gnu/libprotobuf.so;debug;/usr/lib/x86_64-linux-gnu/libprotobuf.so;general;-lpthread;
 
 
 ########################
@@ -315,7 +312,7 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Protobuf
-FIND_PACKAGE_MESSAGE_DETAILS_Protobuf:INTERNAL=[/usr/lib/x86_64-linux-gnu/libprotobuf.so][/usr/include][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_Protobuf:INTERNAL=[/usr/local/lib/libprotobuf.so][/usr/local/include][v()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //ADVANCED property for variable: PROTOBUF_INCLUDE_DIR

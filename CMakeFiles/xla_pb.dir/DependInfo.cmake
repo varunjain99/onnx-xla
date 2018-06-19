@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/private/home/jainv/onnx-xla/test_client.cc" "/private/home/jainv/onnx-xla/CMakeFiles/xla_pb.dir/test_client.cc.o"
   "/private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc" "/private/home/jainv/onnx-xla/CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o"
   "/private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc" "/private/home/jainv/onnx-xla/CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o"
   "/private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc" "/private/home/jainv/onnx-xla/CMakeFiles/xla_pb.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o"
@@ -21,6 +22,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "xla_pb"
+  "/usr/local/include"
   "."
   )
 

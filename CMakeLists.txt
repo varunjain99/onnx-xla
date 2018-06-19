@@ -112,6 +112,7 @@ target_include_directories(xla_pb PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
                                          "${PROTOBUF_INCLUDE_DIRS}"
                                          "${gRPC_INSTALL_INCLUDEDIR}")
 
+message("${gRPC_INSTALL_INCLUDEDIR}")
 if(TARGET protobuf::libprotobuf)
   target_link_libraries(xla_pb PUBLIC protobuf::libprotobuf
                                       "${gRPC_INSTALL_LIBDIR}")

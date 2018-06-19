@@ -1,4 +1,4 @@
-# Install script for directory: /Users/jainv/onnx-xla
+# Install script for directory: /private/home/jainv/onnx-xla
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -27,25 +27,21 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   endif()
 endif()
 
-# Is this installation the result of a crosscompile?
-if(NOT DEFINED CMAKE_CROSSCOMPILING)
-  set(CMAKE_CROSSCOMPILING "FALSE")
+# Install shared libraries without execute permission?
+if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/Users/jainv/onnx-xla/lib/libxla_pb.a")
+   "/private/home/jainv/onnx-xla/lib/libxla_pb.a")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/Users/jainv/onnx-xla/lib" TYPE STATIC_LIBRARY FILES "/Users/jainv/onnx-xla/libxla_pb.a")
-  if(EXISTS "$ENV{DESTDIR}/Users/jainv/onnx-xla/lib/libxla_pb.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/Users/jainv/onnx-xla/lib/libxla_pb.a")
-    execute_process(COMMAND "/Applications/Xcode_9.4.0_fb.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}/Users/jainv/onnx-xla/lib/libxla_pb.a")
-  endif()
+file(INSTALL DESTINATION "/private/home/jainv/onnx-xla/lib" TYPE STATIC_LIBRARY FILES "/private/home/jainv/onnx-xla/libxla_pb.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -56,5 +52,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/jainv/onnx-xla/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/private/home/jainv/onnx-xla/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -6,5 +6,5 @@ CXX_FLAGS = -O3 -DNDEBUG -fPIE   -std=gnu++11
 
 CXX_DEFINES = -DONNX_XLA_NAMESPACE=onnx-xla
 
-CXX_INCLUDES = -I/private/home/jainv/onnx-xla/xla_pb -I/usr/local/include -I/usr/local/include/grpc 
+CXX_INCLUDES = -I/private/home/jainv/onnx-xla/xla_pb -I/usr/local/include -I/private/home/jainv/onnx-xla/usr/local/include/grpc -I/private/home/jainv/onnx-xla/usr/local/include/grpc++ -I/private/home/jainv/onnx-xla/usr/local/include/grpcpp 
 

@@ -103,6 +103,7 @@ if(ONNX_XLA_ML)
   add_definitions("-DONNX_XLA_ML=1")
 endif()
 
+find_package(Threads)
 
 file(GLOB_RECURSE xla_src
     "${ONNX_XLA_ROOT}/xla_pb/*.h"
@@ -112,14 +113,19 @@ file(GLOB_RECURSE xla_src
 add_executable(xla_o ${xla_src})
 target_include_directories(xla_o PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
                                          "${PROTOBUF_INCLUDE_DIRS}"
-                                         "/usr/local/include/grpc")
-
+                                         "usr/local/include/grpc"
+				 	 "usr/local/include/grpc++"
+					 "usr/local/include/grpcpp")
 if(TARGET protobuf::libprotobuf)
   target_link_libraries(xla_o PUBLIC protobuf::libprotobuf
-                                      "/usr/local/lib/libgrpc.a")
+                                    "/usr/local/lib/libgrpc.so"
+				    "/usr/local/lib/libgrpc++.so"
+				    ${CMAKE_THREAD_LIBS_INIT})
 else()
   target_link_libraries(xla_o PUBLIC ${PROTOBUF_LIBRARIES}
-				      "/usr/local/lib/libgrpc.a")
+				      "/usr/local/lib/libgrpc.so"
+				      "/usr/local/lib/libgrpc++.so"
+				      ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
 # Export include directories

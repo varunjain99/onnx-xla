@@ -25,6 +25,7 @@ class XlaClient {
 
     ::grpc::ClientContext context;
 
+    std::cout << request.ShortDebugString() << std::endl;
     // The actual RPC.
     ::grpc::Status status = stub_->GetDeviceHandles(&context, request, &response);
 
@@ -48,7 +49,8 @@ int main(int argc, char** argv) {
   // localhost at port 50051). We indicate that the channel isn't authenticated
   // (use of InsecureChannelCredentials()).
   XlaClient client(grpc::CreateChannel(
-      "localhost:50051", grpc::InsecureChannelCredentials()));
+      "0.0.0.0:1685", grpc::InsecureChannelCredentials()));
+  std::cout << "before function call" << std::endl;
   std::string reply = client.getDevice();
   std::cout << "Client received: " << reply << std::endl;
 

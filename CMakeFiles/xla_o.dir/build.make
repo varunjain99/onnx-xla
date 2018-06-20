@@ -57,33 +57,9 @@ include CMakeFiles/xla_o.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/xla_o.dir/flags.make
 
-CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o: CMakeFiles/xla_o.dir/flags.make
-CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o: xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/private/home/jainv/onnx-xla/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o -c /private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc
-
-CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc > CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i
-
-CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc -o CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s
-
-CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires:
-
-.PHONY : CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires
-
-CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires
-	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides.build
-.PHONY : CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides
-
-CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides.build: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
-
-
 CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o: CMakeFiles/xla_o.dir/flags.make
 CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o: xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/private/home/jainv/onnx-xla/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/private/home/jainv/onnx-xla/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o -c /private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc
 
 CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.i: cmake_force
@@ -103,6 +79,30 @@ CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o.prov
 .PHONY : CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o.provides
 
 CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o.provides.build: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o
+
+
+CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o: CMakeFiles/xla_o.dir/flags.make
+CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o: xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/private/home/jainv/onnx-xla/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o -c /private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc
+
+CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc > CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.i
+
+CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /private/home/jainv/onnx-xla/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc -o CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.s
+
+CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires:
+
+.PHONY : CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires
+
+CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires
+	$(MAKE) -f CMakeFiles/xla_o.dir/build.make CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides.build
+.PHONY : CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides
+
+CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.provides.build: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
 
 
 CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o: CMakeFiles/xla_o.dir/flags.make
@@ -227,8 +227,8 @@ CMakeFiles/xla_o.dir/test_client.cc.o.provides.build: CMakeFiles/xla_o.dir/test_
 
 # Object files for target xla_o
 xla_o_OBJECTS = \
-"CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o" \
 "CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o" \
+"CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o" \
 "CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o" \
 "CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o" \
 "CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.o" \
@@ -238,8 +238,8 @@ xla_o_OBJECTS = \
 # External object files for target xla_o
 xla_o_EXTERNAL_OBJECTS =
 
-xla_o: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
 xla_o: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o
+xla_o: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o
 xla_o: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o
 xla_o: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o
 xla_o: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.o
@@ -247,7 +247,10 @@ xla_o: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla_data.pb.cc.o
 xla_o: CMakeFiles/xla_o.dir/test_client.cc.o
 xla_o: CMakeFiles/xla_o.dir/build.make
 xla_o: /usr/local/lib/libprotobuf.so
-xla_o: /usr/local/lib/libgrpc.a
+xla_o: /usr/local/lib/libgrpc.so
+xla_o: /usr/local/lib/libgrpc++.so
+xla_o: /usr/local/lib/libgrpc.so
+xla_o: /usr/local/lib/libgrpc++.so
 xla_o: CMakeFiles/xla_o.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/private/home/jainv/onnx-xla/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable xla_o"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/xla_o.dir/link.txt --verbose=$(VERBOSE)
@@ -257,8 +260,8 @@ CMakeFiles/xla_o.dir/build: xla_o
 
 .PHONY : CMakeFiles/xla_o.dir/build
 
-CMakeFiles/xla_o.dir/requires: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires
 CMakeFiles/xla_o.dir/requires: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.pb.cc.o.requires
+CMakeFiles/xla_o.dir/requires: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/rpc/xla_service.grpc.pb.cc.o.requires
 CMakeFiles/xla_o.dir/requires: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo.pb.cc.o.requires
 CMakeFiles/xla_o.dir/requires: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/service/hlo_profile_printer_data.pb.cc.o.requires
 CMakeFiles/xla_o.dir/requires: CMakeFiles/xla_o.dir/xla_pb/tensorflow/compiler/xla/xla.pb.cc.o.requires

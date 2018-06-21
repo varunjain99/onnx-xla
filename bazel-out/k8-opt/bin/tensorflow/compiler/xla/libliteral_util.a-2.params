@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/libliteral_util.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/literal_util/tensorflow/compiler/xla/literal_util.o

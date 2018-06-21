@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/kernels/libops_util.pic.a
-bazel-out/k8-opt/bin/tensorflow/core/kernels/_objs/ops_util/tensorflow/core/kernels/ops_util.pic.o

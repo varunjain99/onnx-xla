@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_transport_chttp2_server_secure.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_chttp2_server_secure/external/grpc/src/core/ext/transport/chttp2/server/secure/server_secure_chttp2.o

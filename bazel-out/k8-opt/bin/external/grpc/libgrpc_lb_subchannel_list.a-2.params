@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_lb_subchannel_list.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_subchannel_list/external/grpc/src/core/ext/filters/client_channel/lb_policy/subchannel_list.o

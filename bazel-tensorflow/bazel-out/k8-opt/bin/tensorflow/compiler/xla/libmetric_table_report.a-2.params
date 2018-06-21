@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/libmetric_table_report.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/metric_table_report/tensorflow/compiler/xla/metric_table_report.o

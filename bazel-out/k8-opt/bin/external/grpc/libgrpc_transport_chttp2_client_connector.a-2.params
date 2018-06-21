@@ -1,4 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_transport_chttp2_client_connector.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_chttp2_client_connector/external/grpc/src/core/ext/transport/chttp2/client/authority.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_chttp2_client_connector/external/grpc/src/core/ext/transport/chttp2/client/chttp2_connector.o

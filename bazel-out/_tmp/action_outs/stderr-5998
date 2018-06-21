@@ -1,4 +1,0 @@
-external/llvm/lib/CodeGen/CodeGenPrepare.cpp: In function 'llvm::Value* getTrueOrFalseValue(llvm::SelectInst*, bool, const llvm::SmallPtrSet<const llvm::Instruction*, 2u>&)':
-external/llvm/lib/CodeGen/CodeGenPrepare.cpp:5534:10: warning: 'V' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   return V;
-          ^

@@ -1,8 +1,0 @@
-external/llvm/utils/TableGen/CodeGenRegisters.cpp: In function 'void computeUberWeights(std::vector<{anonymous}::UberRegSet>&, llvm::CodeGenRegBank&)':
-external/llvm/utils/TableGen/CodeGenRegisters.cpp:1586:26: warning: '*((void*)& UnitI +16)' may be used uninitialized in this function [-Wmaybe-uninitialized]
-     for (RegUnitIterator UnitI(I->Regs); UnitI.isValid(); ++UnitI) {
-                          ^
-external/llvm/utils/TableGen/CodeGenRegisters.cpp: In member function 'void llvm::CodeGenRegisterClass::buildRegUnitSet(const llvm::CodeGenRegBank&, std::vector<unsigned int>&) const':
-external/llvm/utils/TableGen/CodeGenRegisters.cpp:1067:24: warning: '*((void*)& UnitI +16)' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   for (RegUnitIterator UnitI(Members); UnitI.isValid(); ++UnitI) {
-                        ^

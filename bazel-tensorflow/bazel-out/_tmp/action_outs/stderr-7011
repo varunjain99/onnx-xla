@@ -1,8 +1,0 @@
-tensorflow/core/grappler/utils.cc: In function 'void tensorflow::grappler::PermuteNodesInPlace(tensorflow::GraphDef*, std::vector<int>*, bool)':
-tensorflow/core/grappler/utils.cc:334:14: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-     while (n != (*permutation)[n]) {
-              ^
-tensorflow/core/grappler/utils.cc: In member function 'std::__cxx11::string tensorflow::grappler::SimpleGraphView::PrintToString() const':
-tensorflow/core/grappler/utils.cc:469:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-     for (int j = 0; j < outputs(i).size(); ++j) {
-                       ^

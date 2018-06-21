@@ -1,3 +1,0 @@
-rcsD
-bazel-out/host/bin/tensorflow/core/liblib_proto_parsing.a
-bazel-out/host/bin/tensorflow/core/_objs/lib_proto_parsing/tensorflow/core/platform/default/protobuf.o

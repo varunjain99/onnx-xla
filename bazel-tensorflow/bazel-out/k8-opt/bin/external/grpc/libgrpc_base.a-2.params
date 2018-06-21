@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_base.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_base/external/grpc/src/core/lib/surface/lame_client.o

@@ -1,5 +1,0 @@
-rcsD
-bazel-out/host/bin/external/llvm/libbinary_format.a
-bazel-out/host/bin/external/llvm/_objs/binary_format/external/llvm/lib/BinaryFormat/Dwarf.o
-bazel-out/host/bin/external/llvm/_objs/binary_format/external/llvm/lib/BinaryFormat/Magic.o
-bazel-out/host/bin/external/llvm/_objs/binary_format/external/llvm/lib/BinaryFormat/Wasm.o

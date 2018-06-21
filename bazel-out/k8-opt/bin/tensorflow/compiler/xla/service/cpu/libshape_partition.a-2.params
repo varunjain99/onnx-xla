@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libshape_partition.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/shape_partition/tensorflow/compiler/xla/service/cpu/shape_partition.o

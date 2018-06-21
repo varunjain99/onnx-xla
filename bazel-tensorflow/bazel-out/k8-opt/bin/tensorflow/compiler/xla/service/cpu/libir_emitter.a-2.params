@@ -1,4 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libir_emitter.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/ir_emitter/tensorflow/compiler/xla/service/cpu/elemental_ir_emitter.o
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/ir_emitter/tensorflow/compiler/xla/service/cpu/ir_emitter.o

@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libarm_info.a
-bazel-out/k8-opt/bin/external/llvm/_objs/arm_info/external/llvm/lib/Target/ARM/TargetInfo/ARMTargetInfo.o

@@ -1,4 +1,0 @@
-external/llvm/lib/CodeGen/ImplicitNullChecks.cpp: In function '{anonymous}::ImplicitNullChecks::DependenceResult {anonymous}::ImplicitNullChecks::computeDependence(const llvm::MachineInstr*, llvm::ArrayRef<llvm::MachineInstr*>)':
-external/llvm/lib/CodeGen/ImplicitNullChecks.cpp:249:48: warning: 'Dep' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   Optional<ArrayRef<MachineInstr *>::iterator> Dep;
-                                                ^

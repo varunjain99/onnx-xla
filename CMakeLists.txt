@@ -1,41 +1,16 @@
 # Minimum CMake required
 cmake_minimum_required(VERSION 3.1)
 
-# Set default build type
-if(NOT CMAKE_BUILD_TYPE)
-    message(STATUS "Build type not set - defaulting to Release")
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build from: Debug Release RelWithDebInfo MinSizeRel Coverage." FORCE)
-endif()
-
 # Project
 project(onnx-xla C CXX)
-option(ONNX_XLA_BUILD_BENCHMARKS "Build ONNX_XLA micro-benchmarks" OFF)
-
-option(ONNX_XLA_WERROR "Build with Werror" OFF)
-option(ONNX_XLA_COVERAGE "Build with coverage instrumentation" OFF)
-option(ONNX_XLA_BUILD_TESTS "Build ONNX_XLA C++ APIs Tests" OFF)
 
 # Set C++11 as standard for the whole project
 set(CMAKE_CXX_STANDARD 11)
 
-set(ONNX_XLA_ROOT ${PROJECT_SOURCE_DIR})
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 
-set(CMAKE_MODULE_PATH "")
-list(APPEND CMAKE_MODULE_PATH ${ONNX_XLA_ROOT}/cmake/Modules)
-
-if(NOT MSVC)
-  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-  if(ONNX_XLA_COVERAGE)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-  endif()
-endif()
-
-if(ONNX_XLA_BUILD_TESTS)
-	list(APPEND CMAKE_MODULE_PATH ${ONNX_XLA_ROOT}/cmake/external)
-	include(googletest)
-endif()
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb")
 
 if(TARGET protobuf::libprotobuf)
   # Sometimes we need to use protoc compiled for host architecture while
@@ -88,70 +63,53 @@ else()
   endif()
 endif()
 
+include_directories(
+  "${PROJECT_SOURCE_DIR}")
+
 # Build the libraries with -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-if(ONNX_XLA_NAMESPACE)
-  SET(MY_ONNX_XLA_NAMESPACE "-DONNX_XLA_NAMESPACE=${ONNX_XLA_NAMESPACE}")
-else()
-  SET(ONNX_XLA_NAMESPACE "onnx-xla")
-  SET(MY_ONNX_XLA_NAMESPACE "-DONNX_XLA_NAMESPACE=onnx-xla")
+if(NOT DEFINED ONNX_NAMESPACE)
+  set(ONNX_NAMESPACE onnx_xla)
 endif()
-add_definitions(${MY_ONNX_XLA_NAMESPACE})
+add_definitions("-DONNX_NAMESPACE=${ONNX_NAMESPACE}")
 
-if(ONNX_XLA_ML)
-  add_definitions("-DONNX_XLA_ML=1")
-endif()
+# onnx library
+add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/onnx)
 
-find_package(Threads)
+# xla library
+SET(XLA_INCLUDE_DIRS
+  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-tensorflow"
+  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-genfiles"
+  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-tensorflow/external/protobuf_archive/src"
+  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-tensorflow/external/eigen_archive")
+SET(XLA_LIBRARIES
+  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-bin/tensorflow/compiler/xla/rpc/libxla_computation_client.so"
+  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-bin/tensorflow/libtensorflow_framework.so")
+add_custom_command(
+  OUTPUT ${XLA_LIBRARIES}
+  COMMAND ${PROJECT_SOURCE_DIR}/scripts/build_xla.sh)
+add_custom_target(xla
+  SOURCES ${XLA_LIBRARIES})
 
-file(GLOB_RECURSE xla_src
-    "${ONNX_XLA_ROOT}/xla_pb/*.h"
-    "${ONNX_XLA_ROOT}/xla_pb/*.cc"
-    "${ONNX_XLA_ROOT}/test_client.cc"
-)
-add_executable(xla_o ${xla_src})
-target_include_directories(xla_o PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
-                                         "${PROTOBUF_INCLUDE_DIRS}"
-                                         "usr/local/include/grpc"
-				 	 "usr/local/include/grpc++"
-					 "usr/local/include/grpcpp")
-if(TARGET protobuf::libprotobuf)
-  target_link_libraries(xla_o PUBLIC protobuf::libprotobuf
-                                    "/usr/local/lib/libgrpc.so"
-				    "/usr/local/lib/libgrpc++.so"
-				    ${CMAKE_THREAD_LIBS_INIT})
-else()
-  target_link_libraries(xla_o PUBLIC ${PROTOBUF_LIBRARIES}
-				      "/usr/local/lib/libgrpc.so"
-				      "/usr/local/lib/libgrpc++.so"
-				      ${CMAKE_THREAD_LIBS_INIT})
-endif()
+# TODO: Get this from grpc CMake files
+SET(GRPC_LIBRARIES
+  "/usr/local/lib/libgrpc.so"
+  "/usr/local/lib/libgrpc++.so")
 
-# Export include directories
-# set(ONNX_XLA_INCLUDE_DIRS "${ONNX_ROOT}" "${CMAKE_CURRENT_BINARY_DIR}")
-# get_directory_property(hasParent PARENT_DIRECTORY)
-# if(hasParent)
-    # set(ONNX_XLA_INCLUDE_DIRS ${ONNX_XLA_INCLUDE_DIRS} PARENT_SCOPE)
-# endif()
+# onnx_xla library
+file(GLOB_RECURSE onnx_xla_src
+  onnx_xla/*.cc)
+add_library(onnx_xla ${onnx_xla_src})
+add_dependencies(onnx_xla xla)
+target_link_libraries(onnx_xla onnx ${XLA_LIBRARIES} ${GRPC_LIBRARIES})
+target_include_directories(onnx_xla PUBLIC ${XLA_INCLUDE_DIRS})
 
-# ---[ ONNX Interface for Framework Integratin (ONNXIFI)
-# add_library(onnxifi INTERFACE)
-# target_include_directories(onnxifi INTERFACE onnx)
-
-
-#add_executable(xla_client "${ONNX_XLA_ROOT}/test_client.cc")
-#target_include_directories(xla_client PUBLIC "${ONNX_XLA_ROOT}/xla_pb/"
-#                                         "${PROTOBUF_INCLUDE_DIRS}"
-#                                         "${gRPC_INSTALL_INCLUDEDIR}")
-
-
-#if(TARGET protobuf::libprotobuf)
-#  target_link_libraries(xla_client PUBLIC protobuf::libprotobuf
-#                                         "${gRPC_INSTALL_LIBDIR}"
-#					 xla_pb)
-#else()
-#  target_link_libraries(xla_client PUBLIC ${PROTOBUF_LIBRARIES}
-#                                      "${gRPC_INSTALL_LIBDIR}"
-#				      xla_pb)
-#endif()
+# binaries
+file(GLOB_RECURSE binaries
+  bin/*.cc)
+foreach(bin ${binaries})
+  get_filename_component(name ${bin} NAME_WE)
+  add_executable(${name} ${bin})
+  target_link_libraries(${name} onnx_xla)
+endforeach()

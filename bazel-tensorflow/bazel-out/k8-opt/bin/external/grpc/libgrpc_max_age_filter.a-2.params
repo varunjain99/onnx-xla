@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_max_age_filter.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_max_age_filter/external/grpc/src/core/ext/filters/max_age/max_age_filter.o

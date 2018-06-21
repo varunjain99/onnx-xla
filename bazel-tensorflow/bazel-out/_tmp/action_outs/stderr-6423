@@ -1,3 +1,0 @@
-external/llvm/lib/Transforms/Scalar/LoopRerollPass.cpp:355:5: warning: multi-line comment [-Wcomment]
-     //                   /    |     \
-     ^

@@ -1,2 +1,0 @@
-cc1plus: warning: command line option '-Wno-implicit-function-declaration' is valid for C/ObjC but not for C++
-cc1plus: warning: unrecognized command line option '-Wno-shift-negative-value'

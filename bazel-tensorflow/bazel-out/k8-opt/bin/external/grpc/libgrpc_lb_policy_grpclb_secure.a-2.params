@@ -1,8 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_lb_policy_grpclb_secure.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_policy_grpclb_secure/external/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/client_load_reporting_filter.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_policy_grpclb_secure/external/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_policy_grpclb_secure/external/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb_channel_secure.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_policy_grpclb_secure/external/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb_client_stats.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_policy_grpclb_secure/external/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/load_balancer_api.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_lb_policy_grpclb_secure/external/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/proto/grpc/lb/v1/load_balancer.pb.o

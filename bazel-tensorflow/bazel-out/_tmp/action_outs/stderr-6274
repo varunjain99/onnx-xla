@@ -1,4 +1,0 @@
-external/llvm/lib/CodeGen/SelectionDAG/StatepointLowering.cpp: In function 'llvm::Optional<int> findPreviousSpillSlot(const llvm::Value*, llvm::SelectionDAGBuilder&, int)':
-external/llvm/lib/CodeGen/SelectionDAG/StatepointLowering.cpp:180:35: warning: 'MergedResult' may be used uninitialized in this function [-Wmaybe-uninitialized]
-       if (MergedResult.hasValue() && *MergedResult != *SpillSlot)
-                                   ^

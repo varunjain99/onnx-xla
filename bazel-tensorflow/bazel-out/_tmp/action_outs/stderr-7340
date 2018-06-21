@@ -1,4 +1,0 @@
-tensorflow/stream_executor/cuda/cuda_blas.cc: In function 'cudaDataType_t stream_executor::cuda::{anonymous}::CUDAComputationType(stream_executor::blas::ComputationType)':
-tensorflow/stream_executor/cuda/cuda_blas.cc:618:1: warning: control reaches end of non-void function [-Wreturn-type]
- }
- ^

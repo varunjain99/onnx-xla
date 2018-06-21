@@ -1,8 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/com_google_absl/absl/base/libbase.pic.a
-bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/base/external/com_google_absl/absl/base/internal/cycleclock.pic.o
-bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/base/external/com_google_absl/absl/base/internal/raw_logging.pic.o
-bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/base/external/com_google_absl/absl/base/internal/spinlock.pic.o
-bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/base/external/com_google_absl/absl/base/internal/sysinfo.pic.o
-bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/base/external/com_google_absl/absl/base/internal/thread_identity.pic.o
-bazel-out/k8-opt/bin/external/com_google_absl/absl/base/_objs/base/external/com_google_absl/absl/base/internal/unscaledcycleclock.pic.o

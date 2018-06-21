@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/costs/libvirtual_placer.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/costs/_objs/virtual_placer/tensorflow/core/grappler/costs/virtual_placer.o

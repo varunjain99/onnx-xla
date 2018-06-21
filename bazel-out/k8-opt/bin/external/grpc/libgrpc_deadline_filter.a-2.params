@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_deadline_filter.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_deadline_filter/external/grpc/src/core/ext/filters/deadline/deadline_filter.o

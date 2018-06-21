@@ -1,6 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_resolver_dns_ares.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_resolver_dns_ares/external/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/dns_resolver_ares.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_resolver_dns_ares/external/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_ev_driver_posix.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_resolver_dns_ares/external/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_resolver_dns_ares/external/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper_fallback.o

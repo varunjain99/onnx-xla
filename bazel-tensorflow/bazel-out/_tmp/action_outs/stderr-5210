@@ -1,4 +1,0 @@
-external/llvm/lib/IR/Core.cpp: In function 'LLVMOpaqueValue* LLVMGetInlineAsm(LLVMTypeRef, char*, size_t, char*, size_t, LLVMBool, LLVMBool, LLVMInlineAsmDialect)':
-external/llvm/lib/IR/Core.cpp:444:29: warning: 'AD' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   return wrap(InlineAsm::get(unwrap<FunctionType>(Ty),
-                             ^

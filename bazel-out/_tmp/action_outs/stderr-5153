@@ -1,7 +1,0 @@
-external/llvm/lib/IR/Verifier.cpp: In function 'void {anonymous}::Verifier::visitMDNode(const llvm::MDNode&)':
-external/llvm/lib/IR/Verifier.cpp:531:8: warning: 'Size' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   do { if (!(C)) { DebugInfoCheckFailed(__VA_ARGS__); return; } } while (false)
-        ^
-external/llvm/lib/IR/Verifier.cpp:1004:12: note: 'Size' was declared here
-     size_t Size;
-            ^

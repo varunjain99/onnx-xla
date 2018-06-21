@@ -1,7 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libmc_disassembler.a
-bazel-out/k8-opt/bin/external/llvm/_objs/mc_disassembler/external/llvm/lib/MC/MCDisassembler/Disassembler.o
-bazel-out/k8-opt/bin/external/llvm/_objs/mc_disassembler/external/llvm/lib/MC/MCDisassembler/MCDisassembler.o
-bazel-out/k8-opt/bin/external/llvm/_objs/mc_disassembler/external/llvm/lib/MC/MCDisassembler/MCExternalSymbolizer.o
-bazel-out/k8-opt/bin/external/llvm/_objs/mc_disassembler/external/llvm/lib/MC/MCDisassembler/MCRelocationInfo.o
-bazel-out/k8-opt/bin/external/llvm/_objs/mc_disassembler/external/llvm/lib/MC/MCDisassembler/MCSymbolizer.o

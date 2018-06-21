@@ -1,7 +1,0 @@
-external/llvm/lib/Transforms/InstCombine/InstCombineVectorOps.cpp: In member function 'llvm::Instruction* llvm::InstCombiner::visitInsertElementInst(llvm::InsertElementInst&)':
-external/llvm/lib/Transforms/InstCombine/InstCombineVectorOps.cpp:724:42: warning: 'InsEltIndex' may be used uninitialized in this function [-Wmaybe-uninitialized]
-         NewMaskElts[I] = ConstantInt::get(Int32Ty, InsEltIndex + NumElts);
-                                          ^
-external/llvm/lib/Transforms/InstCombine/InstCombineVectorOps.cpp:694:14: note: 'InsEltIndex' was declared here
-     uint64_t InsEltIndex;
-              ^

@@ -1,4 +1,0 @@
-external/llvm/lib/Object/WindowsResource.cpp: In function 'llvm::Error llvm::object::readStringOrId(llvm::BinaryStreamReader&, uint16_t&, llvm::ArrayRef<short unsigned int>&, bool&)':
-external/llvm/lib/Object/WindowsResource.cpp:95:3: warning: 'IDFlag' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   if (IsString) {
-   ^

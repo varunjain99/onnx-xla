@@ -1,9 +1,0 @@
-rcsD
-bazel-out/host/bin/external/grpc/libgrpc_plugin_support.a
-bazel-out/host/bin/external/grpc/_objs/grpc_plugin_support/external/grpc/src/compiler/cpp_generator.o
-bazel-out/host/bin/external/grpc/_objs/grpc_plugin_support/external/grpc/src/compiler/csharp_generator.o
-bazel-out/host/bin/external/grpc/_objs/grpc_plugin_support/external/grpc/src/compiler/node_generator.o
-bazel-out/host/bin/external/grpc/_objs/grpc_plugin_support/external/grpc/src/compiler/objective_c_generator.o
-bazel-out/host/bin/external/grpc/_objs/grpc_plugin_support/external/grpc/src/compiler/php_generator.o
-bazel-out/host/bin/external/grpc/_objs/grpc_plugin_support/external/grpc/src/compiler/python_generator.o
-bazel-out/host/bin/external/grpc/_objs/grpc_plugin_support/external/grpc/src/compiler/ruby_generator.o

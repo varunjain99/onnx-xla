@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/libhuman_readable_profile_builder.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/_objs/human_readable_profile_builder/tensorflow/compiler/xla/service/human_readable_profile_builder.o

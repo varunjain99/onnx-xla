@@ -1,1 +1,0 @@
-/usr/local/cuda-9.0/include/curand_discrete2.h

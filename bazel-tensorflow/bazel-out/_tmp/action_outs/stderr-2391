@@ -1,4 +1,0 @@
-external/llvm/lib/DebugInfo/CodeView/CodeViewRecordIO.cpp: In member function 'llvm::Error llvm::codeview::CodeViewRecordIO::beginRecord(llvm::Optional<unsigned int>)':
-external/llvm/lib/DebugInfo/CodeView/CodeViewRecordIO.cpp:20:15: warning: '*((void*)& Limit +4)' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   RecordLimit Limit;
-               ^

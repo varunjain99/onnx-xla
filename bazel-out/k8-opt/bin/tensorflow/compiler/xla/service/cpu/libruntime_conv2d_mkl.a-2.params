@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libruntime_conv2d_mkl.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/runtime_conv2d_mkl/tensorflow/compiler/xla/service/cpu/runtime_conv2d_mkl.o

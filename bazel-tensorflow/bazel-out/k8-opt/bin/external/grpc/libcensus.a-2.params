@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libcensus.a
-bazel-out/k8-opt/bin/external/grpc/_objs/census/external/grpc/src/core/ext/census/grpc_context.o

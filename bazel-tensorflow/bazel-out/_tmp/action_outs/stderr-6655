@@ -1,4 +1,0 @@
-external/llvm/lib/Target/ARM/ARMAsmPrinter.cpp: In member function 'virtual bool llvm::ARMAsmPrinter::PrintAsmOperand(const llvm::MachineInstr*, unsigned int, unsigned int, const char*, llvm::raw_ostream&)':
-external/llvm/lib/Target/ARM/ARMAsmPrinter.cpp:362:7: warning: 'RC' may be used uninitialized in this function [-Wmaybe-uninitialized]
-       if (RC == ARM::GPRPairRegClassID) {
-       ^

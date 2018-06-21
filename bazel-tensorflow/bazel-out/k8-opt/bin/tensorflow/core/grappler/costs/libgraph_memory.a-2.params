@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/costs/libgraph_memory.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/costs/_objs/graph_memory/tensorflow/core/grappler/costs/graph_memory.o

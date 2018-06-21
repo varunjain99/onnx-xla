@@ -1,5 +1,0 @@
-In member function 'llvm::Error llvm::MetadataLoader::MetadataLoaderImpl::parseOneMetadata(llvm::SmallVectorImpl<long unsigned int>&, unsigned int, {anonymous}::{anonymous}::PlaceholderQueue&, llvm::StringRef, unsigned int&)':
-cc1plus: warning: 'DWARFAddressSpace' may be used uninitialized in this function [-Wmaybe-uninitialized]
-external/llvm/lib/Bitcode/Reader/MetadataLoader.cpp:1232:24: note: 'DWARFAddressSpace' was declared here
-     Optional<unsigned> DWARFAddressSpace;
-                        ^

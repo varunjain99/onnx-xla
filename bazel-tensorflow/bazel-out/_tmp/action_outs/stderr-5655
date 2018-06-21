@@ -1,4 +1,0 @@
-external/llvm/lib/Transforms/InstCombine/InstCombineAndOrXor.cpp: In member function 'llvm::Instruction* llvm::InstCombiner::narrowMaskedBinOp(llvm::BinaryOperator&)':
-external/llvm/lib/Transforms/InstCombine/InstCombineAndOrXor.cpp:1394:55: warning: 'C' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   Value *NewC = ConstantExpr::getTrunc(C, X->getType());
-                                                       ^

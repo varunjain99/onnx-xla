@@ -1,9 +1,0 @@
-external/llvm/lib/DebugInfo/CodeView/DebugInlineeLinesSubsection.cpp: In member function 'llvm::Error llvm::codeview::DebugInlineeLinesSubsectionRef::initialize(llvm::BinaryStreamReader)':
-external/llvm/lib/DebugInfo/CodeView/DebugInlineeLinesSubsection.cpp:59:46: warning: 'N' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   return Signature == InlineeLinesSignature::ExtraFiles;
-                                              ^
-In file included from external/llvm/include/llvm/DebugInfo/CodeView/DebugInlineeLinesSubsection.h:19:0,
-                 from external/llvm/lib/DebugInfo/CodeView/DebugInlineeLinesSubsection.cpp:10:
-external/llvm/include/llvm/Support/BinaryStreamReader.h:93:44: note: 'N' was declared here
-     typename std::underlying_type<T>::type N;
-                                            ^

@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libfunction_optimizer.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/function_optimizer/tensorflow/core/grappler/optimizers/function_optimizer.o

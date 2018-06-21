@@ -1,4 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_transport_inproc.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_inproc/external/grpc/src/core/ext/transport/inproc/inproc_plugin.o
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_transport_inproc/external/grpc/src/core/ext/transport/inproc/inproc_transport.o

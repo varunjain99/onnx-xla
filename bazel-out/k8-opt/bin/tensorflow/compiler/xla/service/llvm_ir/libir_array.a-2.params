@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/llvm_ir/libir_array.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/llvm_ir/_objs/ir_array/tensorflow/compiler/xla/service/llvm_ir/ir_array.o

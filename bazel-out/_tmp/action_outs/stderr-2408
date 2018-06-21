@@ -1,7 +1,0 @@
-external/llvm/lib/DebugInfo/CodeView/TypeRecordMapping.cpp: In member function 'virtual llvm::Error llvm::codeview::TypeRecordMapping::visitKnownRecord(llvm::codeview::CVType&, llvm::codeview::VFTableShapeRecord&)':
-external/llvm/lib/DebugInfo/CodeView/TypeRecordMapping.cpp:281:29: warning: 'Byte' may be used uninitialized in this function [-Wmaybe-uninitialized]
-       Record.Slots.push_back(static_cast<VFTableSlotKind>(Byte & 0xF));
-                             ^
-external/llvm/lib/DebugInfo/CodeView/TypeRecordMapping.cpp:278:28: warning: 'Size' may be used uninitialized in this function [-Wmaybe-uninitialized]
-     for (uint16_t I = 0; I < Size; I += 2) {
-                            ^

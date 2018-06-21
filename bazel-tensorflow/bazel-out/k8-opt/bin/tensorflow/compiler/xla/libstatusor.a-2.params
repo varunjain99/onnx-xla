@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/libstatusor.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/_objs/statusor/tensorflow/compiler/xla/statusor.o

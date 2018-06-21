@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_message_size_filter.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_message_size_filter/external/grpc/src/core/ext/filters/message_size/message_size_filter.o

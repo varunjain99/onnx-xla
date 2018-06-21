@@ -1,4 +1,0 @@
-external/llvm/lib/Linker/LinkModules.cpp: In function 'bool {anonymous}::ModuleLinker::run()':
-external/llvm/lib/Linker/LinkModules.cpp:471:5: warning: 'LinkFromSrc' may be used uninitialized in this function [-Wmaybe-uninitialized]
-     if (!LinkFromSrc)
-     ^

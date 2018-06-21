@@ -1,3 +1,0 @@
-/private/home/jainv/onnx-xla/CMakeFiles/rebuild_cache.dir
-/private/home/jainv/onnx-xla/CMakeFiles/edit_cache.dir
-/private/home/jainv/onnx-xla/CMakeFiles/xla_o.dir

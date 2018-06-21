@@ -1,4 +1,0 @@
-external/llvm/lib/Bitcode/Reader/BitcodeReader.cpp: In member function 'llvm::Error {anonymous}::BitcodeReader::parseConstants()':
-external/llvm/lib/Bitcode/Reader/BitcodeReader.cpp:2372:26: warning: 'InRangeIndex' may be used uninitialized in this function [-Wmaybe-uninitialized]
-       Optional<unsigned> InRangeIndex;
-                          ^

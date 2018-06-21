@@ -1,4 +1,0 @@
-external/llvm/lib/Support/BinaryStreamWriter.cpp: In member function 'std::pair<llvm::BinaryStreamWriter, llvm::BinaryStreamWriter> llvm::BinaryStreamWriter::split(uint32_t) const':
-external/llvm/lib/Support/BinaryStreamWriter.cpp:78:22: warning: '*((void*)& W1 +36)' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   BinaryStreamWriter W1{First};
-                      ^

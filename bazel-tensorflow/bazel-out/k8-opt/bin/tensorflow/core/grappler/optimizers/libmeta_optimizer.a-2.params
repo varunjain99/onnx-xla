@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libmeta_optimizer.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/meta_optimizer/tensorflow/core/grappler/optimizers/meta_optimizer.o

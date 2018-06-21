@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/libno_op_op_lib.lo
-bazel-out/k8-opt/bin/tensorflow/core/_objs/no_op_op_lib/tensorflow/core/ops/no_op.o

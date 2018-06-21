@@ -1,4 +1,0 @@
-external/llvm/lib/Target/ARM/MCTargetDesc/ARMAsmBackend.cpp: In member function 'virtual void llvm::ARMAsmBackend::applyFixup(const llvm::MCAssembler&, const llvm::MCFixup&, const llvm::MCValue&, llvm::MutableArrayRef<char>, uint64_t, bool, const llvm::MCSubtargetInfo*) const':
-external/llvm/lib/Target/ARM/MCTargetDesc/ARMAsmBackend.cpp:917:12: warning: 'FullSizeBytes' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   unsigned FullSizeBytes;
-            ^

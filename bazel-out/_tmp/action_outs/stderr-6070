@@ -1,4 +1,0 @@
-external/llvm/lib/CodeGen/LiveRangeEdit.cpp: In member function 'void llvm::LiveRangeEdit::eliminateDeadDef(llvm::MachineInstr*, llvm::LiveRangeEdit::ToShrinkSet&, llvm::AliasAnalysis*)':
-external/llvm/lib/CodeGen/LiveRangeEdit.cpp:369:54: warning: 'Dest' may be used uninitialized in this function [-Wmaybe-uninitialized]
-       MI->substituteRegister(Dest, NewLI.reg, 0, TRI);
-                                                      ^

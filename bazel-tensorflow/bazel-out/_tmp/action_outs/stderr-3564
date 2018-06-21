@@ -1,8 +1,0 @@
-tensorflow/core/grappler/utils/topological_sort.cc: In function 'tensorflow::Status tensorflow::grappler::ComputeTopologicalOrder(const tensorflow::GraphDef&, std::vector<int>*, const std::vector<std::pair<const tensorflow::NodeDef*, const tensorflow::NodeDef*> >*)':
-tensorflow/core/grappler/utils/topological_sort.cc:59:36: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-       if (num_ready_inputs[fanout] == graph_view.inputs(fanout).size()) {
-                                    ^
-tensorflow/core/grappler/utils/topological_sort.cc: In function 'tensorflow::Status tensorflow::grappler::ComputeTopologicalOrder(const tensorflow::GraphDef&, std::unordered_map<const tensorflow::NodeDef*, int>*, const std::vector<std::pair<const tensorflow::NodeDef*, const tensorflow::NodeDef*> >*)':
-tensorflow/core/grappler/utils/topological_sort.cc:82:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-   for (int i = 0; i < ready_nodes.size(); ++i) {
-                     ^

@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libaarch64_info.a
-bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_info/external/llvm/lib/Target/AArch64/TargetInfo/AArch64TargetInfo.o

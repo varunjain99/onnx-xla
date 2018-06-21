@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libarm_asm_printer.a
-bazel-out/k8-opt/bin/external/llvm/_objs/arm_asm_printer/external/llvm/lib/Target/ARM/InstPrinter/ARMInstPrinter.o

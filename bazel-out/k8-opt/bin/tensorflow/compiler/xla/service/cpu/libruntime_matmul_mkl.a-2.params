@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libruntime_matmul_mkl.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/runtime_matmul_mkl/tensorflow/compiler/xla/service/cpu/runtime_matmul_mkl.o

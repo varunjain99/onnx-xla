@@ -1,5 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/libplatform_base.pic.a
-bazel-out/k8-opt/bin/tensorflow/core/_objs/platform_base/tensorflow/core/platform/default/logging.pic.o
-bazel-out/k8-opt/bin/tensorflow/core/_objs/platform_base/tensorflow/core/platform/posix/env_time.pic.o
-bazel-out/k8-opt/bin/tensorflow/core/_objs/platform_base/tensorflow/core/platform/env_time.pic.o

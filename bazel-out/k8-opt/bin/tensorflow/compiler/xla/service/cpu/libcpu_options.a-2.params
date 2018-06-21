@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libcpu_options.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/cpu_options/tensorflow/compiler/xla/service/cpu/cpu_options.o

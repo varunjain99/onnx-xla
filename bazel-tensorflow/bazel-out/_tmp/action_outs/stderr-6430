@@ -1,6 +1,0 @@
-external/llvm/lib/Transforms/Scalar/MergeICmps.cpp:419:7: warning: multi-line comment [-Wcomment]
-       //  \            \           \               \
-       ^
-external/llvm/lib/Transforms/Scalar/MergeICmps.cpp:677:3: warning: multi-line comment [-Wcomment]
-   //     \            \           \               \
-   ^

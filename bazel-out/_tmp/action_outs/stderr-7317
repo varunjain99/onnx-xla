@@ -1,4 +1,0 @@
-tensorflow/stream_executor/stream.cc: In function 'std::__cxx11::string stream_executor::{anonymous}::ToVlogString(stream_executor::dnn::DataType)':
-tensorflow/stream_executor/stream.cc:195:1: warning: control reaches end of non-void function [-Wreturn-type]
- }
- ^

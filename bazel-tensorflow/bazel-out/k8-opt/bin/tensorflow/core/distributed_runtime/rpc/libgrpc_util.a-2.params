@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/distributed_runtime/rpc/libgrpc_util.a
-bazel-out/k8-opt/bin/tensorflow/core/distributed_runtime/rpc/_objs/grpc_util/tensorflow/core/distributed_runtime/rpc/grpc_util.o

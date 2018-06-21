@@ -1,5 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libalts_proto.a
-bazel-out/k8-opt/bin/external/grpc/_objs/alts_proto/external/grpc/src/core/tsi/alts/handshaker/altscontext.pb.o
-bazel-out/k8-opt/bin/external/grpc/_objs/alts_proto/external/grpc/src/core/tsi/alts/handshaker/handshaker.pb.o
-bazel-out/k8-opt/bin/external/grpc/_objs/alts_proto/external/grpc/src/core/tsi/alts/handshaker/transport_security_common.pb.o

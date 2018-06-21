@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libtarget_machine_features.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/target_machine_features/tensorflow/compiler/xla/service/cpu/target_machine_features.o

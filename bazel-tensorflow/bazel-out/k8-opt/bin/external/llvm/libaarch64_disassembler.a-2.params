@@ -1,4 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libaarch64_disassembler.a
-bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_disassembler/external/llvm/lib/Target/AArch64/Disassembler/AArch64Disassembler.o
-bazel-out/k8-opt/bin/external/llvm/_objs/aarch64_disassembler/external/llvm/lib/Target/AArch64/Disassembler/AArch64ExternalSymbolizer.o

@@ -1,7 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libtarget.a
-bazel-out/k8-opt/bin/external/llvm/_objs/target/external/llvm/lib/Target/Target.o
-bazel-out/k8-opt/bin/external/llvm/_objs/target/external/llvm/lib/Target/TargetIntrinsicInfo.o
-bazel-out/k8-opt/bin/external/llvm/_objs/target/external/llvm/lib/Target/TargetLoweringObjectFile.o
-bazel-out/k8-opt/bin/external/llvm/_objs/target/external/llvm/lib/Target/TargetMachine.o
-bazel-out/k8-opt/bin/external/llvm/_objs/target/external/llvm/lib/Target/TargetMachineC.o

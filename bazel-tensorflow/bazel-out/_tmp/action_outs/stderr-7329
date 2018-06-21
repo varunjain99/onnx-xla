@@ -1,4 +1,0 @@
-tensorflow/stream_executor/cuda/cuda_driver.cc: In static member function 'static stream_executor::port::Status stream_executor::cuda::CUDADriver::CreateContext(CUdevice, const stream_executor::DeviceOptions&, stream_executor::cuda::CudaContext**)':
-tensorflow/stream_executor/cuda/cuda_driver.cc:491:36: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-   if (former_primary_context_flags != flags) {
-                                    ^

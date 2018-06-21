@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libarithmetic_optimizer.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/arithmetic_optimizer/tensorflow/core/grappler/optimizers/arithmetic_optimizer.o

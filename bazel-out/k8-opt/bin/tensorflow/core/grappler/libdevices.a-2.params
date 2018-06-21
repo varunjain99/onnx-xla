@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/libdevices.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/_objs/devices/tensorflow/core/grappler/devices.o

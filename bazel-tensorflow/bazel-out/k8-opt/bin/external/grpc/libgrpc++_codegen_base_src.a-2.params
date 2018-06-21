@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc++_codegen_base_src.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc++_codegen_base_src/external/grpc/src/cpp/codegen/codegen_init.o

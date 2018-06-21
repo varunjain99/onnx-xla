@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/libutils.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/_objs/utils/tensorflow/core/grappler/utils.o

@@ -1,8 +1,0 @@
-In file included from tensorflow/compiler/xla/legacy_flags/debug_options_flags.cc:20:0:
-./tensorflow/compiler/xla/legacy_flags/debug_options_parsers.h: In function 'bool xla::legacy_flags::impl::parse_xla_reduce_precision_option(xla::HloReducePrecisionOptions*, std::__cxx11::string)':
-./tensorflow/compiler/xla/legacy_flags/debug_options_parsers.h:112:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-     for (int i = 0; i < HloOpcodeCount(); i++) {
-                       ^
-./tensorflow/compiler/xla/legacy_flags/debug_options_parsers.h:120:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-       for (int i = 0; i < HloOpcodeCount(); i++) {
-                         ^

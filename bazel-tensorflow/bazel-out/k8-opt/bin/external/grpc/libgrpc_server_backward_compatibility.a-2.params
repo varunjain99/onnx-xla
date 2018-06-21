@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_server_backward_compatibility.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_server_backward_compatibility/external/grpc/src/core/ext/filters/workarounds/workaround_utils.o

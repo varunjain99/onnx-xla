@@ -1,7 +1,0 @@
-external/llvm/lib/Transforms/IPO/Inliner.cpp: In member function 'bool llvm::LegacyInlinerBase::inlineCalls(llvm::CallGraphSCC&)':
-external/llvm/lib/Transforms/IPO/Inliner.cpp:644:49: warning: 'InlineHistoryID' may be used uninitialized in this function [-Wmaybe-uninitialized]
-           InlineHistory.push_back(std::make_pair(Callee, InlineHistoryID));
-                                                 ^
-external/llvm/lib/Transforms/IPO/Inliner.cpp:567:11: note: 'InlineHistoryID' was declared here
-       int InlineHistoryID;
-           ^

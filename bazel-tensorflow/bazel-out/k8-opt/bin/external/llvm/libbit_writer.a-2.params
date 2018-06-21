@@ -1,6 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libbit_writer.a
-bazel-out/k8-opt/bin/external/llvm/_objs/bit_writer/external/llvm/lib/Bitcode/Writer/BitWriter.o
-bazel-out/k8-opt/bin/external/llvm/_objs/bit_writer/external/llvm/lib/Bitcode/Writer/BitcodeWriter.o
-bazel-out/k8-opt/bin/external/llvm/_objs/bit_writer/external/llvm/lib/Bitcode/Writer/BitcodeWriterPass.o
-bazel-out/k8-opt/bin/external/llvm/_objs/bit_writer/external/llvm/lib/Bitcode/Writer/ValueEnumerator.o

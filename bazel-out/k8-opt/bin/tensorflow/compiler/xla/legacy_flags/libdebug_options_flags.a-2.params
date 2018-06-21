@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/legacy_flags/libdebug_options_flags.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/legacy_flags/_objs/debug_options_flags/tensorflow/compiler/xla/legacy_flags/debug_options_flags.o

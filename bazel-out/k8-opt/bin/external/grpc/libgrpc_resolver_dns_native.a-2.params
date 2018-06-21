@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/grpc/libgrpc_resolver_dns_native.a
-bazel-out/k8-opt/bin/external/grpc/_objs/grpc_resolver_dns_native/external/grpc/src/core/ext/filters/client_channel/resolver/dns/native/dns_resolver.o

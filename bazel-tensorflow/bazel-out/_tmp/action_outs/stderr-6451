@@ -1,4 +1,0 @@
-external/llvm/lib/Transforms/Scalar/LoopUnswitch.cpp: In function 'llvm::Value* FindLIVLoopCondition(llvm::Value*, llvm::Loop*, bool&, OperatorChain&, llvm::DenseMap<llvm::Value*, llvm::Value*>&)':
-external/llvm/lib/Transforms/Scalar/LoopUnswitch.cpp:466:7: warning: 'NewChain' may be used uninitialized in this function [-Wmaybe-uninitialized]
-       if (NewChain != OC_OpChainMixed) {
-       ^

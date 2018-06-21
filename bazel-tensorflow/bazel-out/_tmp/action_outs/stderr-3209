@@ -1,4 +1,0 @@
-external/llvm/lib/Support/YAMLParser.cpp: In member function 'bool llvm::yaml::Scanner::findBlockScalarIndent(unsigned int&, unsigned int, unsigned int&, bool&)':
-external/llvm/lib/Support/YAMLParser.cpp:1520:33: warning: 'LongestAllSpaceLine' may be used uninitialized in this function [-Wmaybe-uninitialized]
-             LongestAllSpaceLine);
-                                 ^

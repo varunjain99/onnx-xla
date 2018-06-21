@@ -1,5 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/external/llvm/libbinary_format.a
-bazel-out/k8-opt/bin/external/llvm/_objs/binary_format/external/llvm/lib/BinaryFormat/Dwarf.o
-bazel-out/k8-opt/bin/external/llvm/_objs/binary_format/external/llvm/lib/BinaryFormat/Magic.o
-bazel-out/k8-opt/bin/external/llvm/_objs/binary_format/external/llvm/lib/BinaryFormat/Wasm.o

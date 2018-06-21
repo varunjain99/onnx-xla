@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/libcore_cpu_internal.lo
-bazel-out/k8-opt/bin/tensorflow/core/_objs/core_cpu_internal/tensorflow/core/common_runtime/graph_execution_state.o

@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/utils/libcolocation.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/utils/_objs/colocation/tensorflow/core/grappler/utils/colocation.o

@@ -1,4 +1,0 @@
-external/llvm/lib/CodeGen/AtomicExpandPass.cpp: In function 'bool {anonymous}::AtomicExpand::expandAtomicCmpXchg(llvm::AtomicCmpXchgInst*)':
-external/llvm/lib/CodeGen/AtomicExpandPass.cpp:1140:59: warning: 'SecondLoad' may be used uninitialized in this function [-Wmaybe-uninitialized]
-     NoStoreLoaded->addIncoming(SecondLoad, ReleasedLoadBB);
-                                                           ^

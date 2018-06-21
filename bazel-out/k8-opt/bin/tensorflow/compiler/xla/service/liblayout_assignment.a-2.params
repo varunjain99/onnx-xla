@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/liblayout_assignment.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/_objs/layout_assignment/tensorflow/compiler/xla/service/layout_assignment.o

@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/libexternal_constant_pool.a
-bazel-out/k8-opt/bin/tensorflow/compiler/xla/service/cpu/_objs/external_constant_pool/tensorflow/compiler/xla/service/cpu/external_constant_pool.o

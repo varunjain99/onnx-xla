@@ -1,7 +1,0 @@
-external/llvm/lib/AsmParser/LLParser.cpp: In function 'bool llvm::LLParser::ParseMDField(llvm::StringRef, FieldTy&) [with FieldTy = {anonymous}::DIFlagField]':
-external/llvm/lib/AsmParser/LLParser.cpp:3903:51: warning: 'Val' may be used uninitialized in this function [-Wmaybe-uninitialized]
-       uint32_t TempVal = static_cast<uint32_t>(Val);
-                                                   ^
-external/llvm/lib/AsmParser/LLParser.cpp:3923:21: note: 'Val' was declared here
-     DINode::DIFlags Val;
-                     ^

@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/costs/libop_performance_data_cc_impl.pic.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/costs/_objs/op_performance_data_cc_impl/tensorflow/core/grappler/costs/op_performance_data.pb.pic.o

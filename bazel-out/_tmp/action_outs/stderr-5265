@@ -1,4 +1,0 @@
-external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp: In member function 'llvm::Expected<std::map<llvm::object::SectionRef, unsigned int> > llvm::RuntimeDyldImpl::loadObjectImpl(const llvm::object::ObjectFile&)':
-external/llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp:332:63: warning: 'SectOffset' may be used uninitialized in this function [-Wmaybe-uninitialized]
-           SymbolTableEntry(SectionID, SectOffset, JITSymFlags);
-                                                               ^

@@ -1,3 +1,0 @@
-rcsD
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/libmodel_pruner.a
-bazel-out/k8-opt/bin/tensorflow/core/grappler/optimizers/_objs/model_pruner/tensorflow/core/grappler/optimizers/model_pruner.o

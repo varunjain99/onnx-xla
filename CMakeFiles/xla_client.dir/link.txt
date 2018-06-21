@@ -1,1 +1,0 @@
-/usr/bin/c++   -O3 -DNDEBUG   CMakeFiles/xla_client.dir/test_client.cc.o  -o xla_client -rdynamic /usr/local/lib/libprotobuf.so -lpthread libxla_pb.a -Wl,-rpath,/usr/local/lib 

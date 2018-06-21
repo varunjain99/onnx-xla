@@ -1,8 +1,0 @@
-external/llvm/lib/Transforms/Vectorize/LoadStoreVectorizer.cpp: In member function 'bool {anonymous}::Vectorizer::vectorizeLoadChain(llvm::ArrayRef<llvm::Instruction*>, llvm::SmallPtrSet<llvm::Instruction*, 16u>*)':
-external/llvm/lib/Transforms/Vectorize/LoadStoreVectorizer.cpp:984:9: warning: 'LoadTy' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   Type *LoadTy;
-         ^
-external/llvm/lib/Transforms/Vectorize/LoadStoreVectorizer.cpp: In member function 'bool {anonymous}::Vectorizer::vectorizeStoreChain(llvm::ArrayRef<llvm::Instruction*>, llvm::SmallPtrSet<llvm::Instruction*, 16u>*)':
-external/llvm/lib/Transforms/Vectorize/LoadStoreVectorizer.cpp:836:9: warning: 'StoreTy' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   Type *StoreTy;
-         ^

@@ -23,17 +23,26 @@ std::string XlaClient::TryRun() {
   const auto y_param = builder.Parameter(
       1, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "y");
   builder.Add(x_param, y_param);
+    const auto a_param = builder.Parameter(
+      2, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "a");
+  const auto b_param = builder.Parameter(
+      3, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "b");
+  builder.Add(x_param, y_param);
   auto computation = builder.Build().ConsumeValueOrDie();
 
   // feed the inputs
   auto x_literal = xla::Literal::CreateR1<float>({1., 2.});
   auto y_literal = xla::Literal::CreateR1<float>({3., 4.});
+  auto a_literal = xla::Literal::CreateR1<float>({1., 2.});
+  auto b_literal = xla::Literal::CreateR1<float>({3., 4.});
+
   auto x_data = xla::TransferParameterToServer(*x_literal.release());
   auto y_data = xla::TransferParameterToServer(*y_literal.release());
-
+  auto a_data = xla::TransferParameterToServer(*a_literal.release());
+  auto b_data = xla::TransferParameterToServer(*b_literal.release());
   // execute
   auto result_literal = xla::ExecuteComputation(
-      computation, {x_data.release(), y_data.release()});
+      computation, {x_data.release(), y_data.release(), a_data.release(), b_data.release()});
 
   // print result
   ONNX_NAMESPACE::TensorProto result;

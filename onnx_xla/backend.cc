@@ -64,23 +64,12 @@ namespace onnx-xla {
       case ONNX_NAMESPACE::TensorProto_DataType_DOUBLE:  {
         GET_LITERAL(double, double, doubles)
       }
-      case ONNX_NAMESPACE::TensorProto_DataType_COMPLEX128:  {
-        GET_LITERAL(complex128, complex128, doubles)
-      }
+      case ONNX_NAMESPACE::TensorProto_DataType_COMPLEX128:
       case ONNX_NAMESPACE::TensorProto_DataType_STRING:
       case ONNX_NAMESPACE::TensorProto_DataType_UNDEFINED:  {
         return NULL;
       }
     }
-  }
-
-  inline void XlaTransform::registerOutputWithOp(const Value* v, XlaOp* op)  {
-    value_to_op_[v] = op;
-  }
-
-
-  inline void XlaTransform::registerOutputWithOp(const Value* v, XlaOp* op, int index)  {
-    value_to_op_[v] = &(builder_.getTupleElement(*op, index));
   }
 
   bool XlaTransform::intializersToLiterals()  {
@@ -95,13 +84,47 @@ namespace onnx-xla {
     return true;
   }
 
-  void computeBuild() {
-    for (auto it = ir_.begin(); it != ir_.end(); ++it) {
+  inline void XlaTransform::registerValueTypeAndShape(const Value* v)  {
+    value_to_primitive_type_[v] = onnxToPrimitive(v->elem_type());
+    vector<int64> sizes;
+    for (const Dimension& d : v->sizes()) {
+      if (d.is_int) {
+        sizes.push_back(d.dim());
+      } else {
+        //error
+      }
+    }
+    value_to_shape_[v] = ShapeUtil::MakeShape(value_to_primitive_type_[v], sizes);
+  }
+
+  inline void XlaTransform::registerValueOp(const Value* v, XlaOp* op)  {
+    value_to_op_[v] = op;
+  }
+
+  inline void XlaTransform::registerValueOp(const Value* v, XlaOp* op, int index)  {
+    value_to_op_[v] = &(builder_.getTupleElement(*op, index));
+  }
+
+  void XlaTransform::computeBuild() {
+    for (const auto it = ir_.cbegin(); it != ir_.cend(); ++it) {
       switch(it->kind())  {
         case kParam:  {
-
+          for (const Value* v : it->outputs())  {
+            registerValueTypeAndShape(v);
+            auto param = builder_.Parameter(global_param_number++, value_to_shape_[v],
+                                            it->inputs()[0]->uniqueName()));
+            registerValueOp(v, &param);
+          }
         }
         case "Relu": {
+          auto input_ptr = value_to_op_[it->inputs()[0]];
+          auto zero = builder_.ConstantLiteral(LiteralBase::CreateFromShape(
+                                               value_to_shape_[it->inputs()[0]]));
+          auto maximum = builder.Max(*input_ptr, zero);
+          registerValue(it->outputs()[0], maximum);
+          registerValueTypeAndShape(it->outputs()[0]);
+        }
+        case kReturn: {
 
         }
         default:
@@ -110,4 +133,8 @@ namespace onnx-xla {
 
 
     }
+
+    auto computation_status = builder.Build();
+    TF_CHECK_OK(computation_status.status());
+    return computation_status.ConsumeValueOrDie();
 }

@@ -28,13 +28,14 @@ std::string XlaClient::TryRun() {
   const auto b_param = builder.Parameter(
       3, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "b");
   builder.Add(x_param, y_param);
+  builder.Add(a_param, b_param);
   auto computation = builder.Build().ConsumeValueOrDie();
 
   // feed the inputs
   auto x_literal = xla::Literal::CreateR1<float>({1., 2.});
   auto y_literal = xla::Literal::CreateR1<float>({3., 4.});
-  auto a_literal = xla::Literal::CreateR1<float>({1., 2.});
-  auto b_literal = xla::Literal::CreateR1<float>({3., 4.});
+  auto a_literal = xla::Literal::CreateR1<float>({4., 5.});
+  auto b_literal = xla::Literal::CreateR1<float>({6., 7.});
 
   auto x_data = xla::TransferParameterToServer(*x_literal.release());
   auto y_data = xla::TransferParameterToServer(*y_literal.release());

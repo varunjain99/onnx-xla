@@ -2,6 +2,7 @@
 #include "onnx/onnx.pb.h"
 #include "onnx/proto_utils.h"
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
+#include <vector>
 
 namespace onnx_xla {
 
@@ -27,8 +28,10 @@ std::string XlaClient::TryRun() {
       2, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "a");
   const auto b_param = builder.Parameter(
       3, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "b");
-  builder.Add(x_param, y_param);
-  builder.Add(a_param, b_param);
+  std::vector<xla::XlaOp> retValues;
+  retValues.push_back(builder.Add(x_param, y_param));
+  retValues.push_back(builder.Add(a_param, b_param));
+  builder.Tuple(retValues);
   auto computation = builder.Build().ConsumeValueOrDie();
 
   // feed the inputs
@@ -42,16 +45,17 @@ std::string XlaClient::TryRun() {
   auto a_data = xla::TransferParameterToServer(*a_literal.release());
   auto b_data = xla::TransferParameterToServer(*b_literal.release());
   // execute
-  auto result_literal = xla::ExecuteComputation(
+  std::unique_ptr<xla::Literal> result_comp = xla::ExecuteComputation(
       computation, {x_data.release(), y_data.release(), a_data.release(), b_data.release()});
-
+//  std::cout << result_comp->DecomposeTuple().size() << std::endl;
+  std::vector<xla::Literal> result_literals = result_comp->DecomposeTuple();
   // print result
   ONNX_NAMESPACE::TensorProto result;
   result.set_data_type(ONNX_NAMESPACE::TensorProto::FLOAT);
-  for (const auto dim : result_literal->shape().dimensions()) {
+  for (const auto dim : result_literals[1].shape().dimensions()) {
     result.add_dims(dim);
   }
-  for (const auto v : result_literal->data<float>()) {
+  for (const auto v : result_literals[1].data<float>()) {
     result.add_float_data(v);
   }
   return ONNX_NAMESPACE::ProtoDebugString(result);

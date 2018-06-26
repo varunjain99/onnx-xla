@@ -98,9 +98,8 @@ SET(GRPC_LIBRARIES
   "/usr/local/lib/libgrpc++.so")
 
 # onnx_xla library
-# file(GLOB_RECURSE onnx_xla_src
-#  onnx_xla/*.cc)
-SET (onnx_xla_src onnx_xla/xla_client.cc)
+ file(GLOB_RECURSE onnx_xla_src
+  onnx_xla/*.cc)
 add_library(onnx_xla ${onnx_xla_src})
 add_dependencies(onnx_xla xla)
 target_link_libraries(onnx_xla onnx ${XLA_LIBRARIES} ${GRPC_LIBRARIES})

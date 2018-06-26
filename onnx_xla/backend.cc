@@ -4,7 +4,7 @@
 #include "tensorflow/compiler/xla/types.h"
 
 namespace onnx-xla {
-  Literal* XlaTransform::initializerToLiteral(const Tensor& t)  {
+  std::unique_ptr<Literal> XlaTransform::initializerToLiteral(const Tensor& t) {
 
     #define GET_LITERAL(type_from, type_to, vec)                               \
       type_from* t_data;                                                       \
@@ -14,8 +14,8 @@ namespace onnx-xla {
         t_data = (typeofstorage*) t.vec().data();                              \
       }                                                                        \
                                                                                \
-      Literal* l = new Literal(ShapeUtil::MakeShape(                           \
-                               NativeToPrimitiveType<type_to>, t.sizes()));    \
+      auto l = make_unique<Literal>(                                           \
+              ShapeUtil::MakeShape(NativeToPrimitiveType<type_to>, t.sizes()));\
       int64_t num_elements = std::accumulate(t.begin(), t.end(), (int64_t) 1,  \
                                              std::multiplies<int64_t>());      \
       tensorflow::gtl::MutableArraySlice<type_to> l_data = l->data<type_to>(); \
@@ -66,35 +66,27 @@ namespace onnx-xla {
       }
       case ONNX_NAMESPACE::TensorProto_DataType_COMPLEX128:
       case ONNX_NAMESPACE::TensorProto_DataType_STRING:
-      case ONNX_NAMESPACE::TensorProto_DataType_UNDEFINED:  {
-        return NULL;
+      case ONNX_NAMESPACE::TensorProto_DataType_UNDEFINED:
+      default:  {
+        throw conversion_error("Tensor not of a data type that can be converted.")
       }
     }
   }
 
-  bool XlaTransform::intializersToLiterals()  {
+  void XlaTransform::intializersToLiterals()  {
     for (const& Tensor t : ir_.initializers())  {
       auto l_ptr = initializerToLiteral(t);
-      if (l_ptr != NULL)  {
-        literals.push_back(l_ptr);
-      } else {
-        return false;
-      }
+      literals.push_back(std::move(l_ptr));
     }
-    return true;
   }
 
-  inline void XlaTransform::registerValueTypeAndShape(const Value* v)  {
-    value_to_primitive_type_[v] = onnxToPrimitive(v->elem_type());
+  inline Shape XlaTransform::shapeOfValue(const Value* v)  {
     vector<int64> sizes;
     for (const Dimension& d : v->sizes()) {
-      if (d.is_int) {
-        sizes.push_back(d.dim());
-      } else {
-        //error
-      }
+      ONNX_ASSERT(d.is_int);
+      sizes.push_back(d.dim());
     }
-    value_to_shape_[v] = ShapeUtil::MakeShape(value_to_primitive_type_[v], sizes);
+    return ShapeUtil::MakeShape(onnxToPrimitive(v->elem_type()), sizes);
   }
 
   inline void XlaTransform::registerValueOp(const Value* v, XlaOp* op)  {
@@ -105,36 +97,47 @@ namespace onnx-xla {
     value_to_op_[v] = &(builder_.getTupleElement(*op, index));
   }
 
-  void XlaTransform::computeBuild() {
+  void XlaTransform::buildComputation() {
     for (const auto it = ir_.cbegin(); it != ir_.cend(); ++it) {
       switch(it->kind())  {
         case kParam:  {
           for (const Value* v : it->outputs())  {
-            registerValueTypeAndShape(v);
-            auto param = builder_.Parameter(global_param_number++, value_to_shape_[v],
+            auto param = builder_.Parameter(global_param_number++, shapeOfValue(v),
                                             it->inputs()[0]->uniqueName()));
             registerValueOp(v, &param);
           }
         }
         case "Relu": {
           auto input_ptr = value_to_op_[it->inputs()[0]];
+          auto shape = builder.GetShape(*input_ptr);
+          TF_CHECK_OK(shape.status());
           auto zero = builder_.ConstantLiteral(LiteralBase::CreateFromShape(
-                                               value_to_shape_[it->inputs()[0]]));
+                                               shape.ValueOrDie());
           auto maximum = builder.Max(*input_ptr, zero);
-          registerValue(it->outputs()[0], maximum);
-          registerValueTypeAndShape(it->outputs()[0]);
+          registerValueOp(it->outputs()[0], maximum);
         }
         case kReturn: {
-
+          std::vector<XlaOp> retValues;
+          for(const Value* v : it->inputs())  {
+            retValues.push_back(value_to_op_[v]);
+          }
+          builder_.Tuple(retValues);
         }
         default:
-          throw("Onnx operation not yet supported");
+          throw conversion_error("Conversion of node type not supported.");
       }
-
-
     }
-
-    auto computation_status = builder.Build();
+    auto computation_status = builder_.Build();
     TF_CHECK_OK(computation_status.status());
-    return computation_status.ConsumeValueOrDie();
+    computation_ = computation_status.ConsumeValueOrDie();
+}
+
+std::vector<Literal> executeComputation() {
+  ONNX_ASSERT(computation_ != NULL);
+  std::vector<GlobalData*> arguments;
+  for (auto l : literals_)  {
+    data_vector.push_back(*TransferParameterToServer(*l.release()).release());
+  }
+  auto result = ExecuteComputation(computation_, arguments);
+  return result->DecomposeTuple();
 }

@@ -3,14 +3,14 @@
 #include "onnx/onnx.pb.h"
 #include "onnx/proto_utils.h"
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
-#include "onnx/onnx/common/ir.h"
-#include "onnx-xla/onnx_xla/type_conversion.h"
+#include "onnx/common/ir.h"
+#include "onnx_xla/type_conversion.h"
+#include "tensorflow/compiler/xla/rpc/computation_client.h"
+#include "tensorflow/compiler/xla/rpc/xla_service.grpc.pb.h"
+#include <grpcpp/grpcpp.h>
+#include <memory>
 
-
-using ONNX_NAMESPACE;
-using xla;
-
-namespace onnx-xla {
+namespace onnx_xla {
 
   struct conversion_error final : public std::exception {
   private:
@@ -22,29 +22,23 @@ namespace onnx-xla {
 
   class XlaTransform final  {
   public:
-    XlaTransform(const Graph& ir_, const string name) :
-      ir_(ir), builder_(XlaBuilder(name)), computation_(NULL),
-      global_param_number(0) {}
+    XlaTransform(ONNX_NAMESPACE::Graph& ir, const std::string name) :
+      ir_(ir), builder_(name), global_param_number(0) {}
 
-    ~XlaTransform() {
-      for (const auto& l : literals_) {
-        delete l;
-      }
-    }
+    ~XlaTransform() {}
   private:
-    const Graph& ir_;
-    XlaBuilder builder_;
-    XlaComputation* computation_;
-    vector<std::unique_ptr<Literal>> literals_;
-    std::unordered_map<const Value*, XlaOp*> value_to_op_;
-    int64 global_param_number;
+    ONNX_NAMESPACE::Graph& ir_;
+    xla::XlaBuilder builder_;
+    std::vector<std::unique_ptr<xla::Literal>> literals_;
+    std::unordered_map<const ONNX_NAMESPACE::Value*, xla::XlaOp> value_to_op_;
+    xla::int64 global_param_number;
 
-    Literal* initializerToLiteral(const Tensor& t);
+    std::unique_ptr<xla::Literal> initializerToLiteral(const ONNX_NAMESPACE::Tensor& t);
     void intializersToLiterals();
-    Shape shapeOfValue(const Value* v);
-    void registerOutputWithOp(const Value* v, XlaOp* op);
-    void registerOutputWithOp(const Value* v, XlaOp* op, int index);
-    void buildComputation();
-
-  }
+    xla::Shape shapeOfValue(const ONNX_NAMESPACE::Value* v);
+    void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op);
+    void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op, int index);
+    void translateGraph();
+    std::vector<xla::Literal> executeComputation();
+  };
 }

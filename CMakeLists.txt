@@ -70,7 +70,7 @@ include_directories(
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 if(NOT DEFINED ONNX_NAMESPACE)
-  set(ONNX_NAMESPACE onnx_xla)
+  set(ONNX_NAMESPACE onnx)
 endif()
 add_definitions("-DONNX_NAMESPACE=${ONNX_NAMESPACE}")
 

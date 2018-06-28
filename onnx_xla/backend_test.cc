@@ -35,10 +35,10 @@ namespace onnx_xla  {
 
     //Execute using XLA backend
     XlaTransform runner(relu_graph, "relu");
-    runner.initializersToLiterals();
-    runner.sendLiterals();
     runner.translateGraph();
-    auto results = runner.executeComputation();
+    auto executor = runner.executor();
+    executor->sendLiterals();
+    auto results = executor->executeComputation();
     
     //Check correctness
     for (int i = 0; i < 24; ++i)  {

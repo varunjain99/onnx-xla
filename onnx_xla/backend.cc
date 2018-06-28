@@ -2,10 +2,7 @@
 
 namespace onnx_xla {
   
-  XlaTransform::XlaTransform(Graph& ir, const std::string& build_name) :
-    ir_(ir), builder_(build_name), global_param_number_(0) {}
- 
-  std::unique_ptr<Literal> XlaTransform::initializerToLiteral(const Tensor& t) {
+  std::unique_ptr<Literal> XlaExecutor::initializerToLiteral(const Tensor& t) {
 
     #define GET_LITERAL(type_from, type_to, vec)                               \
       type_from* t_data;                                                       \
@@ -78,20 +75,26 @@ namespace onnx_xla {
     }
   }
 
-  void XlaTransform::initializersToLiterals()  {
-    for (const Tensor& t : ir_.initializers())  {
-      auto l_ptr = initializerToLiteral(t);
-      literals_.push_back(std::move(l_ptr));
-    }
-  }
-
-  void XlaTransform::sendLiterals()  {
+  void XlaExecutor::sendLiterals()  {
     for (auto& l : literals_)  {
       auto l_ptr = l.release();
       auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
       delete l_ptr; 
       arguments_.push_back(l_data_ptr.release());
     }
+  } 
+
+  std::vector<Literal> XlaExecutor::executeComputation() {
+    auto result = xla::ExecuteComputation(computation_, arguments_);
+    return result->DecomposeTuple();
+  }
+
+  XlaTransform::XlaTransform(Graph& ir, const std::string& build_name) :
+    ir_(ir), builder_(build_name),
+    executor_(new XlaExecutor()), global_param_number_(0) {}
+
+  XlaTransform::~XlaTransform()  {
+    delete executor_;
   }
 
   inline Shape XlaTransform::shapeOfValue(const Value* v)  {
@@ -112,6 +115,11 @@ namespace onnx_xla {
   }
 
   void XlaTransform::translateGraph() {
+    for (const Tensor& t : ir_.initializers())  {
+      auto l_ptr = executor_->initializerToLiteral(t);
+      executor_->literals_.push_back(std::move(l_ptr));
+    }
+
     for (const Value* v : ir_.inputs())  {
       auto param = builder_.Parameter(global_param_number_++, shapeOfValue(v),
                                       v->uniqueName());
@@ -134,14 +142,13 @@ namespace onnx_xla {
       retValues.push_back(value_to_op_[v]);
     }
     builder_.Tuple(retValues);
-  }
-
-  std::vector<Literal> XlaTransform::executeComputation() {
+  
     auto computation_status = builder_.Build();
     TF_CHECK_OK(computation_status.status());
-    auto computation = computation_status.ConsumeValueOrDie();
+    executor_->computation_ = computation_status.ConsumeValueOrDie();
+  }
 
-    auto result = xla::ExecuteComputation(computation, arguments_);
-    return result->DecomposeTuple();
-  }  
+  XlaExecutor* XlaTransform::executor()  {
+    return executor_;
+  }
 }

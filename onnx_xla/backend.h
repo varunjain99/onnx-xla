@@ -38,27 +38,41 @@ namespace onnx_xla {
     const char* what() const noexcept override { return msg_.c_str(); }
   };
 
+  class XlaTransform;
+  class XlaExecution;
+
+  class XlaExecutor final  {
+  public:
+    void sendLiterals();
+    std::vector<xla::Literal> executeComputation();
+  private:
+    xla::XlaComputation computation_;
+    std::vector<std::unique_ptr<xla::Literal>> literals_;
+    std::vector<GlobalData*> arguments_;
+
+    std::unique_ptr<xla::Literal> initializerToLiteral(const ONNX_NAMESPACE::Tensor& t);
+
+    friend class XlaTransform;
+  };
+
   class XlaTransform final  {
   public:
     XlaTransform(ONNX_NAMESPACE::Graph& ir,
                  const std::string& build_name); 
-    ~XlaTransform() {}
-    void initializersToLiterals();
-    void sendLiterals();
+    ~XlaTransform();
     void translateGraph();
-    std::vector<xla::Literal> executeComputation();
-  
+    XlaExecutor* executor();
+
   private:
     ONNX_NAMESPACE::Graph& ir_;
     xla::XlaBuilder builder_;
-    std::vector<std::unique_ptr<xla::Literal>> literals_;
-    std::vector<GlobalData*> arguments_;
+    XlaExecutor* executor_;
     std::unordered_map<const ONNX_NAMESPACE::Value*, xla::XlaOp> value_to_op_;
     xla::int64 global_param_number_;
 
-    std::unique_ptr<xla::Literal> initializerToLiteral(const ONNX_NAMESPACE::Tensor& t);
     xla::Shape shapeOfValue(const ONNX_NAMESPACE::Value* v);
     void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op);
     void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op, int index);
   };
+
 }

@@ -49,4 +49,38 @@ namespace onnx_xla  {
       }
     }
   }
+
+  ONNX_NAMESPACE::TensorProto_DataType onnxifiToOnnx(onnxEnum data_type)  {
+    switch(data_type)  {
+      case ONNXIFI_DATATYPE_FLOAT16:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_FLOAT16;
+      }
+      case ONNXIFI_DATATYPE_FLOAT32:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_FLOAT;
+      }
+      case ONNXIFI_DATATYPE_INT8:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_INT8;      
+      }
+      case ONNXIFI_DATATYPE_INT16:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_INT16;
+      }
+      case ONNXIFI_DATATYPE_INT32:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_INT32;      
+      }
+      case ONNXIFI_DATATYPE_UINT8:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_UINT8;
+      }
+      case ONNXIFI_DATATYPE_UINT16:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_UINT16;    
+      }
+      case ONNXIFI_DATATYPE_UINT32:  {
+        return ONNX_NAMESPACE::TensorProto_DataType_UINT32;     
+      }
+      default:  {
+        throw("Not supported);
+      }
+
+    }
+  }
+
 }

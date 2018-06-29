@@ -4,6 +4,7 @@
 #include "onnx/proto_utils.h"
 #include "onnx_xla/types.h"
 #include "onnx/common/ir.h" 
+#include "onnx/onnxifi.h"
 
 #include "tensorflow/compiler/xla/rpc/computation_client.h"
 #include "tensorflow/compiler/xla/client/client.h"
@@ -47,11 +48,19 @@ namespace onnx_xla {
     std::vector<xla::Literal> executeComputation();
   private:
     xla::XlaComputation computation_;
-    std::vector<std::unique_ptr<xla::Literal>> literals_;
+    std::vector<std::unique_ptr<xla::Literal>> static_literals_;
     std::vector<GlobalData*> arguments_;
+    uint32_t num_inputs_;
+    uint32_t num_outputs_;
+    std::unordered_map<std::string, ONNX_NAMESPACE::TensorProto_DataType> io_data_type_;
+    std::unordered_map<std::string, vector<Dimension>> io_shape_;
+    std::unordered_map<std::string, onnxPointer> input_buffers_;
+    std::unordered_map<std::string, onnxPointer> output_buffers_;
+    std::vector<std::string> output_names_;
 
-    std::unique_ptr<xla::Literal> initializerToLiteral(const ONNX_NAMESPACE::Tensor& t);
-
+    std::unique_ptr<xla::Literal> tensorToLiteral(const ONNX_NAMESPACE::Tensor& t);
+    std::unique_ptr<xla::Literal> inputToLiteral(const std::string& name);
+    void initIO();
     friend class XlaTransform;
   };
 
@@ -73,6 +82,7 @@ namespace onnx_xla {
     xla::Shape shapeOfValue(const ONNX_NAMESPACE::Value* v);
     void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op);
     void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op, int index);
+    void fillIOMetadata();
   };
 
 }

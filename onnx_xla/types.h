@@ -8,6 +8,9 @@
 #include "tensorflow/core/platform/types.h"
 
 #include <Eigen/Core>
+#include "onnx/onnxifi.h"
+#include <unordered_map>
+
 namespace onnx_xla  {
 
    using ::tensorflow::string;
@@ -29,5 +32,7 @@ namespace onnx_xla  {
    using ::Eigen::half;
 
    xla::PrimitiveType onnxToPrimitive(ONNX_NAMESPACE::TensorProto_DataType data_type);
-
+   
+   ONNX_NAMESPACE::TensorProto_DataType onnxifiToOnnx(onnxEnum data_type);
+   
 }

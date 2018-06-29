@@ -1,6 +1,15 @@
 #include "onnx/onnxifi.h"
 #include "onnx_xla/backend.h"
 
+#define ONNXIFI_CATCH_EXCPETION()                                              \
+  catch (const std::exception &e) {                                            \
+    std::cerr << "Internal Error: " << e.what() << std::endl;                  \
+    return ONNXIFI_STATUS_INTERNAL_ERROR;                                      \
+  }                                                                            \
+  catch (...) {                                                                \
+    return ONNXIFI_STATUS_INTERNAL_ERROR;                                      \
+  }
+
 struct OnnxXlaBackendID {
   int device_id{0};
 };
@@ -13,7 +22,7 @@ public:
   }
 
   onnx_xla::XlaExecutor* executor() {
-    return transformer_.executor();
+    return transformer_->executor();
   }
 
 private:
@@ -130,7 +139,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
 
-    return ONNIXIFI_STATUS_SUCCESS; //later we should implement this error analysis
+    return ONNXIFI_STATUS_SUCCESS; //later we should implement this error analysis
 
     // NB: not ideal case. We CHECK model by actually trying to run the
     // conversion. However, this might be the case for other vendors
@@ -199,7 +208,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     // return XlaExecutor which has the XlaComputation and literals to send to
     // the server
     //TODO: error handling
-    *graph = (*onnxGraph)(backendcontroller->executor());
+    *graph = (onnxGraph)(backendcontroller->executor());
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -212,7 +221,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                     uint32_t outputsCount,
                     const onnxTensorDescriptor *outputDescriptors) {
   try {
-    auto *exector = reinterpret_cast<onnx_xla::XlaExecutor*>(graph);
+    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor*>(graph);
     if (!executor) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
@@ -220,8 +229,8 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
 
-    return executor->initIO(inputsCount, inputDescriptors, outputsCount,
-                             outputDescriptors);
+    executor->initIO(inputsCount, inputDescriptors, outputsCount, outputDescriptors);
+    return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
 }
@@ -231,7 +240,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxRunGraph)(onnxGraph graph, const onnxMemoryFence *inputFence,
                   onnxMemoryFence *outputFence) {
   try {
-    auto *executor = reinterpret_cast<XlaExecutor *>(graph);
+    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
     if (!executor) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
@@ -246,11 +255,11 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseGraph)(onnxGraph graph) {
   try {
-    auto *executor = reinterpret_cast<XlaExecutor *>(graph);
+    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
     if (!executor) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
-    delete exeuctor;
+    delete executor;
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();

@@ -14,7 +14,7 @@ namespace onnx_xla  {
     Graph relu_graph;
     relu_graph.setName("relu_graph");
     Tensor initializer;
-    initializer.elem_type() = ONNX_NAMESPACE::TensorProto_DataType_DOUBLE;
+    initializer.elem_type() = ONNX_NAMESPACE::TensorProto_DataType_FLOAT;
     std::uniform_real_distribution<float> unif(-0.5, 0.5);
     for (int i = 0; i < 24; ++i)  {
       std::random_device rand_dev;
@@ -24,37 +24,40 @@ namespace onnx_xla  {
     initializer.sizes().push_back(2);
     initializer.sizes().push_back(3);
     initializer.sizes().push_back(4);
+    std::vector<Dimension> sizes;
+    sizes.push_back(2);
+    sizes.push_back(3);
+    sizes.push_back(4);
     relu_graph.addInitializerAndInput(initializer, "relu_input");
     auto relu_node = relu_graph.create(Symbol("Relu"), relu_graph.inputs());
     relu_graph.appendNode(relu_node);
-    relu_graph.return_node()->addInput(relu_node->output());
-
+    auto relu_output = relu_node->output();
+    relu_output->setElemType(ONNX_NAMESPACE::TensorProto_DataType_FLOAT);
+    relu_output->setSizes(sizes);
+    relu_output->setUniqueName("relu_output");
+    relu_graph.return_node()->addInput(relu_output);
+    
     //Set up IO information
-    uint64_t* shape = new uint64_t[3];
-    shape[0] = 2;
-    shape[1] = 3;
-    shape[2] = 4;
+    uint64_t shape[3] = {2, 3, 4};
     onnxTensorDescriptor output;
-    output.name = new char[5];
-    output.name = "relu";
+    output.name = "relu_output";
     output.dataType = ONNXIFI_DATATYPE_FLOAT32;
     output.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
     output.dimensions = 3;
     output.shape = shape;
     output.buffer = (onnxPointer) new float[24];
-
-    //Execute using XLA backend
+   
+     //Execute using XLA backend
     XlaTransform runner(relu_graph, "relu");
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(0, nullptr, 1, &output);
-    delete [] output.name;
-    delete [] shape;
     executor->sendLiterals();
     executor->executeComputation();
 
+    std::cout << "returned from execution" << std::endl;    
+    //Check correctness    
     float* output_ptr = (float*) output.buffer;
-    //Check correctness
     for (int i = 0; i < 24; ++i)  {
       if (initializer.floats()[i] > 0.0f)  {
         ONNX_ASSERT(almost_equal(initializer.floats()[i], output_ptr[i]));
@@ -69,35 +72,33 @@ namespace onnx_xla  {
     //Set up IR graph
     Graph relu_graph;
     relu_graph.setName("relu_graph");
-
     Value* relu_input = relu_graph.addInput();
-    relu_input->setElemType(ONNX_NAMESPACE::TensorProto_DataType_DOUBLE);
     std::vector<Dimension> sizes;
     sizes.push_back(2);
     sizes.push_back(3);
-    sizes.push_back(4);
+    sizes.push_back(4);    
+    relu_input->setElemType(ONNX_NAMESPACE::TensorProto_DataType_FLOAT);
     relu_input->setSizes(sizes);
     relu_input->setUniqueName("relu_input");
     auto relu_node = relu_graph.create(Symbol("Relu"), relu_graph.inputs());
     relu_graph.appendNode(relu_node);
-    relu_graph.return_node()->addInput(relu_node->output());
-
+    auto relu_output = relu_node->output();
+    relu_output->setElemType(ONNX_NAMESPACE::TensorProto_DataType_FLOAT);
+    relu_output->setSizes(sizes);
+    relu_output->setUniqueName("relu_output");
+    relu_graph.return_node()->addInput(relu_output);
+    
     //Set up IO information
-    uint64_t* shape = new uint64_t[3];
-    shape[0] = 2;
-    shape[1] = 3;
-    shape[2] = 4;
+    uint64_t shape[3] = {2, 3, 4};
     onnxTensorDescriptor output;
     onnxTensorDescriptor input;
-    output.name = new char[12];
     output.name = "relu_output";
     output.dataType = ONNXIFI_DATATYPE_FLOAT32;
     output.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
     output.dimensions = 3;
     output.shape = shape;
     output.buffer = (onnxPointer) new float[24];
-    input.name = new char[12];
-    output.name = "relu_input";
+    input.name = "relu_input";
     input.dataType = ONNXIFI_DATATYPE_FLOAT32;
     input.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
     input.dimensions = 3;
@@ -109,8 +110,6 @@ namespace onnx_xla  {
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(1, &input, 1, &output);
-    delete [] output.name;
-    delete [] shape;
     float* input_ptr = (float*) input.buffer;
     std::uniform_real_distribution<float> unif(-0.5, 0.5);
     for (int i = 0; i < 24; ++i)  {
@@ -125,7 +124,7 @@ namespace onnx_xla  {
     //Check correctness
     for (int i = 0; i < 24; ++i)  {
       if (input_ptr[i] > 0.0f)  {
-        ONNX_ASSERT(almost_equal(initializer.floats()[i], output_ptr[i]));
+        ONNX_ASSERT(almost_equal(input_ptr[i], output_ptr[i]));
       } else {
         ONNX_ASSERT(almost_equal(0.0f, output_ptr[i]));
       }

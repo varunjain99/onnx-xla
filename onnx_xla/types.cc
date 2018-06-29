@@ -1,7 +1,7 @@
 #include "onnx_xla/types.h"
 
 namespace onnx_xla  {
-   xla::PrimitiveType onnxToPrimitive(ONNX_NAMESPACE::TensorProto_DataType data_type)  {
+   xla::PrimitiveType onnxToPrimitive(const ONNX_NAMESPACE::TensorProto_DataType& data_type)  {
       switch(data_type) {
       case ONNX_NAMESPACE::TensorProto_DataType_FLOAT:  {
         return xla::F32;
@@ -50,7 +50,7 @@ namespace onnx_xla  {
     }
   }
 
-  ONNX_NAMESPACE::TensorProto_DataType onnxifiToOnnx(onnxEnum data_type)  {
+  ONNX_NAMESPACE::TensorProto_DataType onnxifiToOnnx(const onnxEnum& data_type)  {
     switch(data_type)  {
       case ONNXIFI_DATATYPE_FLOAT16:  {
         return ONNX_NAMESPACE::TensorProto_DataType_FLOAT16;

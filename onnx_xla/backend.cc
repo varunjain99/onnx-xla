@@ -71,7 +71,7 @@ namespace onnx_xla {
       tensorflow::gtl::MutableArraySlice<type_to> l_data = l->data<type_to>(); \
       for (auto i = 0; i < num_elements; ++i) {                                \
         l_data[i] = (type_to) t_data[i];                                       \
-      }                                                                        \
+      }									       \
       return l;                                                                \
     
     SWITCH(t.elem_type())
@@ -100,39 +100,39 @@ namespace onnx_xla {
     SWITCH(io_data_type_[name])
     #undef OPERATION
   }
-  #undef SWITCH
 
-  void XlaExecutor::initIO(uint32_t inputsCount, onnxTensorDescriptor* inputDescriptors,
-                           uint32_t  outputsCount, onnxTensorDescriptor* outputDescriptors) {
+  void XlaExecutor::initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
+                           uint32_t  outputsCount, const onnxTensorDescriptor* outputDescriptors) {
     ONNX_ASSERT(num_inputs_ == inputsCount);
     ONNX_ASSERT(num_outputs_ == outputsCount);
     
     #define CHECK_TYPE_AND_SHAPE(VAR)                                         \
-    for (auto i = 0; i < num_##VAR##s_; ++i)  {                               \
-      const std::string name(VAR##Descriptors[i].name);                       \
-      ONNX_ASSERT(io_data_type_.find(name) != io_data_type_.end());           \
-      VAR##_buffers_[name] = VAR##Descriptors[i].buffer;                      \
-      ONNX_ASSERT(onnxifiToOnnx(VAR##Descriptors[i].dataType) == io_data_type_[name]);        \
-      ONNX_ASSERT(VAR##Descriptors[i].dimensions == io_shape_[name].size());  \
-      for (auto j = 0; j < io_shape_[name].size(); ++j)  {                    \
-        ONNX_ASSERT(io_shape_[name][j].is_int &&                              \
-                    io_shape_[name][j].dim == VAR##Descriptors[i].shape[j]);  \
-      }                                                                       \
-    }                                                                         \
+      for (auto i = 0; i < num_##VAR##s_; ++i)  {                               \
+        const std::string name(VAR##Descriptors[i].name);                       \
+        ONNX_ASSERT(io_data_type_.find(name) != io_data_type_.end());           \
+        VAR##_buffers_[name] = VAR##Descriptors[i].buffer;                      \
+        ONNX_ASSERT(onnxifiToOnnx(VAR##Descriptors[i].dataType) == io_data_type_[name]);        \
+        ONNX_ASSERT(VAR##Descriptors[i].dimensions == io_shape_[name].size());  \
+        for (auto j = 0; j < io_shape_[name].size(); ++j)  {                    \
+          ONNX_ASSERT(io_shape_[name][j].is_int &&                              \
+                      io_shape_[name][j].dim == VAR##Descriptors[i].shape[j]);  \
+        }                                                                         \
+      }                                                                         \
 
     CHECK_TYPE_AND_SHAPE(input);
     CHECK_TYPE_AND_SHAPE(output);
+    #undef CHECK_TYPE_AND_SHAPE
   }
 
   void XlaExecutor::sendLiterals()  {
     for (auto& l : static_literals_)  {
       auto l_ptr = l.release();
       auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
-      delete l_ptr; 
+      delete l_ptr;
       arguments_.push_back(l_data_ptr.release());
     }
     //WAIT FOR INPUT SYNCHRONIZATION PRIMITIVE
-    for (auto it = input_buffers_.begin(); it != input_buffers_.end(); ++i)  {
+    for (auto it = input_buffers_.begin(); it != input_buffers_.end(); ++it)  {
       auto l = this->inputToLiteral(it->first);
       auto l_ptr = l.release();
       auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
@@ -143,12 +143,12 @@ namespace onnx_xla {
 
   void XlaExecutor::executeComputation() {
     
-    #define OPERATION(type_to, type_from, vec)                                \
-    type_to* destination = output_buffers_[output_names_[i]];                 \
-    type_from* source = outputLiterals[i].data<type_from>();                  \
-    for (auto j = 0; j < num_elements; ++j)  {                                \
-      destination[j] = (type_from) source[j];                                 \
-    }                                                                         \
+    #define OPERATION(type_to, type_from, vec)                                  \
+      type_to* destination = (type_to*) output_buffers_[output_names_[i]];      \
+      for (auto j = 0; j < num_elements; ++j)  {                                \
+        destination[j] = (type_to) outputLiterals[i].data<type_from>()[j];      \
+      }                                                                         \
+      break; 	 								\
 
     auto result = xla::ExecuteComputation(computation_, arguments_);
     std::vector<Literal> outputLiterals =  result->DecomposeTuple();
@@ -195,14 +195,14 @@ namespace onnx_xla {
     }
     for (auto* v : ir_.inputs())  {
       if (isInitialized.find(v->uniqueName()) == isInitialized.end())  {
-        executor_->io_data_type_ = v->elemType();
-        executor_->io_shape_ = v->sizes();
+        executor_->io_data_type_[v->uniqueName()] = v->elemType();
+        executor_->io_shape_[v->uniqueName()] = v->sizes();
       }
     }
     
     for (auto* v : ir_.outputs())  {
-      executor_->io_data_type_ = v->elemType();
-      executor_->io_shape_ = v->sizes();      
+      executor_->io_data_type_[v->uniqueName()] = v->elemType();
+      executor_->io_shape_[v->uniqueName()] = v->sizes();      
     }
   }
 
@@ -212,7 +212,6 @@ namespace onnx_xla {
       executor_->static_literals_.push_back(std::move(l_ptr));
     }
     this->fillIOMetadata();
-
     for (const Value* v : ir_.inputs())  {
       auto param = builder_.Parameter(global_param_number_++, shapeOfValue(v),
                                       v->uniqueName());
@@ -233,10 +232,9 @@ namespace onnx_xla {
     std::vector<XlaOp> retValues;
     for(const Value* v : ir_.outputs())  {
       retValues.push_back(value_to_op_[v]);
-      output_names_.push_back(v->uniqueName());
+      executor_->output_names_.push_back(v->uniqueName());
     }
     builder_.Tuple(retValues);
-  
     auto computation_status = builder_.Build();
     TF_CHECK_OK(computation_status.status());
     executor_->computation_ = computation_status.ConsumeValueOrDie();
@@ -245,4 +243,5 @@ namespace onnx_xla {
   XlaExecutor* XlaTransform::executor()  {
     return executor_;
   }
+  #undef SWITCH
 }

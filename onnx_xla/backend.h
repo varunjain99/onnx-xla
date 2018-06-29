@@ -44,10 +44,10 @@ namespace onnx_xla {
 
   class XlaExecutor final  {
   public:
-    void initIO(uint32_t inputsCount, onnxTensorDescriptor* inputDescriptors,
-                uint32_t  outputsCount, onnxTensorDescriptor* outputDescriptors);
+    void initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
+                uint32_t  outputsCount, const onnxTensorDescriptor* outputDescriptors);
     void sendLiterals();
-    std::vector<xla::Literal> executeComputation();
+    void executeComputation();
   private:
     xla::XlaComputation computation_;
     std::vector<std::unique_ptr<xla::Literal>> static_literals_;
@@ -87,4 +87,7 @@ namespace onnx_xla {
     void fillIOMetadata();
   };
 
+  class OnnxParser {
+
+  };
 }

@@ -31,8 +31,8 @@ namespace onnx_xla  {
 
    using ::Eigen::half;
 
-   xla::PrimitiveType onnxToPrimitive(ONNX_NAMESPACE::TensorProto_DataType data_type);
+   xla::PrimitiveType onnxToPrimitive(const ONNX_NAMESPACE::TensorProto_DataType& data_type);
    
-   ONNX_NAMESPACE::TensorProto_DataType onnxifiToOnnx(onnxEnum data_type);
+   ONNX_NAMESPACE::TensorProto_DataType onnxifiToOnnx(const onnxEnum& data_type);
    
 }

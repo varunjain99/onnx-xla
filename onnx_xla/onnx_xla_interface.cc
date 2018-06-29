@@ -1,10 +1,29 @@
 #include "onnx/onnxifi.h"
 
+struct OnnxXlaBackendID {
+  int device_id{0};
+};
+
+struct BackendControl {
+public:
+  onnxStatus build(void const *serialized_onnx_model,
+                         size_t serialized_onnx_model_size) {
+    return ONNXIFI_STATUS_SUCCESS;
+  }
+
+  onnx_xla::XlaExecutor* executor() {
+    return transformer_.executor();
+  }
+
+private:
+  onnx_xla::XlaTransfom* transformer_{nullptr};
+  onnx_xla::OnnxParser* parser_{nullptr};
+};
 
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendIDs)(onnxBackendID *backendIDs, size_t *numBackends) {
   try {
-    *backendIDs = (onnxBackendID)(new OnnxTensorRTBackendID());
+    *backendIDs = (onnxBackendID)(new OnnxXlaBackendID());
     *numBackends = 1;
     return ONNXIFI_STATUS_SUCCESS;
   }
@@ -14,7 +33,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
   try {
-    auto *backend_id = reinterpret_cast<OnnxTensorRTBackendID *>(backendID);
+    auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
     if (!backend_id) {
       return ONNXIFI_STATUS_INVALID_ID;
     }
@@ -46,45 +65,45 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     *infoValueSize = sizeof(uint64_t);                                         \
   }
     if (infoType == ONNXIFI_BACKEND_NAME) {
-      SET_STRING("TensorRT");
+      SET_STRING("OnnxXla");
     } else if (infoType == ONNXIFI_BACKEND_VENDOR) {
-      SET_STRING("Nvidia");
+      SET_STRING("Google");
     } else if (infoType == ONNXIFI_BACKEND_VERSION) {
       SET_STRING("1.0.0");
     } else if (infoType == ONNXIFI_BACKEND_EXTENSIONS) {
       *infoValueSize = 0;
     } else if (infoType == ONNXIFI_BACKEND_DEVICE) {
-      SET_STRING("gpu");
+      SET_STRING("cpu (for now in development)");
     } else if (infoType == ONNXIFI_BACKEND_DEVICE_TYPE) {
-      SET_UINT64(ONNXIFI_DEVICE_TYPE_GPU);
+      SET_UINT64(ONNXIFI_DEVICE_TYPE_CPU);
     } else if (infoType == ONNXIFI_BACKEND_CAPABILITIES) {
-      SET_UINT64(0UL);
+      //SET_UINT64(0UL);
     } else if (infoType == ONNXIFI_BACKEND_INIT_PROPERTIES) {
-      SET_UINT64(0UL);
+      //SET_UINT64(0UL);
     } else if (infoType == ONNXIFI_BACKEND_MEMORY_TYPES) {
-      SET_UINT64(ONNXIFI_MEMORY_TYPE_CUDA_BUFFER);
+      SET_UINT64(ONNXIFI_MEMORY_TYPE_CPU);
     } else if (infoType == ONNXIFI_BACKEND_MEMORY_SIZE) {
-      size_t free, total;
+      /*size_t free, total;
       if (cudaMemGetInfo(&free, &total) != cudaSuccess) {
         return ONNXIFI_STATUS_BACKEND_UNAVAILABLE;
       }
-      SET_UINT64(uint64_t(total));
+      SET_UINT64(uint64_t(total));*/
     }
     // Dummy numbers
     else if (infoType == ONNXIFI_BACKEND_MAX_GRAPH_SIZE) {
-      SET_UINT64(1000000UL);
+      //SET_UINT64(1000000UL);
     } else if (infoType == ONNXIFI_BACKEND_MAX_GRAPH_COUNT) {
-      SET_UINT64(1UL);
+      //SET_UINT64(1UL);
     } else if (infoType == ONNXIFI_BACKEND_MACS_FP32) {
-      SET_UINT64(0UL);
+      //SET_UINT64(0UL);
     } else if (infoType == ONNXIFI_BACKEND_MACS_FP16) {
-      SET_UINT64(0UL);
+      //SET_UINT64(0UL);
     } else if (infoType == ONNXIFI_BACKEND_MEMORY_BANDWIDTH) {
-      SET_UINT64(0UL);
+      //SET_UINT64(0UL);
     } else if (infoType == ONNXIFI_BACKEND_CPU_MEMORY_READ_BANDWIDTH) {
-      SET_UINT64(0UL);
+      //SET_UINT64(0UL);
     } else if (infoType == ONNXIFI_BACKEND_CPU_MEMORY_WRITE_BANDWIDTH) {
-      SET_UINT64(0UL);
+      //SET_UINT64(0UL);
     } else {
       return ONNXIFI_STATUS_UNSUPPORTED_PARAMETER;
     }
@@ -110,10 +129,12 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
 
+    return ONNIXIFI_STATUS_SUCCESS; //later we should implement this error analysis
+
     // NB: not ideal case. We CHECK model by actually trying to run the
     // conversion. However, this might be the case for other vendors
-    OnnxTensorRTBackendRep backendrep;
-    return backendrep.ImportModel(onnxModel, onnxModelSize);
+    //OnnxTensorRTBackendRep backendrep;
+    //return backendrep.ImportModel(onnxModel, onnxModelSize);
   }
   ONNXIFI_CATCH_EXCPETION();
 }
@@ -130,7 +151,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitBackend)(onnxBackendID backendID, const uint64_t *auxPropertiesList,
                      onnxBackend *backend) {
   try {
-    *backend = (onnxBackend)(new OnnxTensorRTBackendRep());
+    *backend = (onnxBackend)(new BackendControl());
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -139,11 +160,11 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackend)(onnxBackend backend) {
   try {
-    auto *backendrep = reinterpret_cast<OnnxTensorRTBackendRep *>(backend);
-    if (!backendrep) {
+    auto *backendcontroller = reinterpret_cast<BackendControl *>(backend);
+    if (!backendcontroller) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }
-    delete backendrep;
+    delete backendcontroller;
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -155,8 +176,8 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                    const onnxTensorDescriptor *weightDescriptors,
                    onnxGraph *graph) {
   try {
-    auto *backendrep = reinterpret_cast<OnnxTensorRTBackendRep *>(backend);
-    if (!backendrep) {
+    auto *backendcontroller = reinterpret_cast<BackendControl *>(backend);
+    if (!backendcontroller) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }
     if (!onnxModel) {
@@ -167,53 +188,56 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     }
 
     // Parse the model
-    // TODO: Ignore the weightDescriptors for now and rely on initialization
-    // list
-    auto ret = backendrep->ImportModel(onnxModel, onnxModelSize);
+    // TODO: Ignore the weightDescriptors for now and rely on initialization list
+    // this will take ModelProto -> IR Graph -> XlaComputation
+    auto ret = backendcontroller->build(onnxModel, onnxModelSize);
     if (ret != ONNXIFI_STATUS_SUCCESS) {
       return ret;
     }
 
-    // Create the TRT engine
-    // TODO: error handling
-    *graph = (onnxGraph)(new GraphRep(backendrep));
+    // return XlaExecutor which has the XlaComputation and literals to send to
+    // the server
+    //TODO: error handling
+    *graph = (*onnxGraph)(backendcontroller->executor());
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
 }
 
-// NB: in the context of TRT, this step will setup the input/output bindings for
-// ICudaEngine
+
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxSetGraphIO)(onnxGraph graph, uint32_t inputsCount,
                     const onnxTensorDescriptor *inputDescriptors,
                     uint32_t outputsCount,
                     const onnxTensorDescriptor *outputDescriptors) {
   try {
-    auto *graph_rep = reinterpret_cast<GraphRep *>(graph);
-    if (!graph_rep) {
+    auto *exector = reinterpret_cast<onnx_xla::XlaExecutor*>(graph);
+    if (!executor) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
     if (!inputDescriptors || !outputDescriptors) {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
 
-    return graph_rep->InitIO(inputsCount, inputDescriptors, outputsCount,
+    return executor->initIO(inputsCount, inputDescriptors, outputsCount,
                              outputDescriptors);
   }
   ONNXIFI_CATCH_EXCPETION();
 }
 
+//For now assume, synchronization primitives are always set
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxRunGraph)(onnxGraph graph, const onnxMemoryFence *inputFence,
                   onnxMemoryFence *outputFence) {
   try {
-    auto *graph_rep = reinterpret_cast<GraphRep *>(graph);
-    if (!graph_rep) {
+    auto *executor = reinterpret_cast<XlaExecutor *>(graph);
+    if (!executor) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
 
-    return graph_rep->Run();
+    executor->sendLiterals();
+    executor->executeComputation();
+    return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
 }
@@ -221,11 +245,11 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseGraph)(onnxGraph graph) {
   try {
-    auto *graph_rep = reinterpret_cast<GraphRep *>(graph);
-    if (!graph_rep) {
+    auto *executor = reinterpret_cast<XlaExecutor *>(graph);
+    if (!executor) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
-    delete graph_rep;
+    delete exeuctor;
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();

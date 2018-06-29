@@ -3,7 +3,7 @@
 #include "onnx/onnx.pb.h"
 #include "onnx/proto_utils.h"
 #include "onnx_xla/types.h"
-#include "onnx/common/ir.h" 
+#include "onnx/common/ir.h"
 #include "onnx/onnxifi.h"
 
 #include "tensorflow/compiler/xla/rpc/computation_client.h"
@@ -60,14 +60,15 @@ namespace onnx_xla {
 
     std::unique_ptr<xla::Literal> tensorToLiteral(const ONNX_NAMESPACE::Tensor& t);
     std::unique_ptr<xla::Literal> inputToLiteral(const std::string& name);
-    void initIO();
+    void initIO(uint32_t inputsCount, onnxTensorDescriptor* inputDescriptors,
+                uint32_t  outputsCount, onnxTensorDescriptor* outputDescriptors);
     friend class XlaTransform;
   };
 
   class XlaTransform final  {
   public:
     XlaTransform(ONNX_NAMESPACE::Graph& ir,
-                 const std::string& build_name); 
+                 const std::string& build_name);
     ~XlaTransform();
     void translateGraph();
     XlaExecutor* executor();

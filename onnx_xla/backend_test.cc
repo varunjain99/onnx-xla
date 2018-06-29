@@ -47,22 +47,22 @@ namespace onnx_xla  {
     XlaTransform runner(relu_graph, "relu");
     runner.translateGraph();
     auto executor = runner.executor();
-    exector->initIO(0, NULL, 1, output);
+    executor->initIO(0, nullptr, 1, &output);
     delete [] output.name;
     delete [] shape;
     executor->sendLiterals();
     executor->executeComputation();
 
-    float* answer = (float*) output.buffer;
+    float* output_ptr = (float*) output.buffer;
     //Check correctness
     for (int i = 0; i < 24; ++i)  {
-      if (initializer.doubles()[i] > 0.0f)  {
-        ONNX_ASSERT(almost_equal(initializer.floats()[i], answer[i]));
+      if (initializer.floats()[i] > 0.0f)  {
+        ONNX_ASSERT(almost_equal(initializer.floats()[i], output_ptr[i]));
       } else {
-        ONNX_ASSERT(almost_equal(0.0f, answer[i]));
+        ONNX_ASSERT(almost_equal(0.0f, output_ptr[i]));
       }
     }
-    delete [] output.buffer;
+    delete [] output_ptr;
   }
 
   void dynamic_relu_test()  {
@@ -72,10 +72,10 @@ namespace onnx_xla  {
 
     Value* relu_input = relu_graph.addInput();
     relu_input->setElemType(ONNX_NAMESPACE::TensorProto_DataType_DOUBLE);
-    vector<Dimension> sizes;
-    sizes().push_back(2);
-    sizes().push_back(3);
-    sizes().push_back(4);
+    std::vector<Dimension> sizes;
+    sizes.push_back(2);
+    sizes.push_back(3);
+    sizes.push_back(4);
     relu_input->setSizes(sizes);
     relu_input->setUniqueName("relu_input");
     auto relu_node = relu_graph.create(Symbol("Relu"), relu_graph.inputs());
@@ -88,6 +88,7 @@ namespace onnx_xla  {
     shape[1] = 3;
     shape[2] = 4;
     onnxTensorDescriptor output;
+    onnxTensorDescriptor input;
     output.name = new char[12];
     output.name = "relu_output";
     output.dataType = ONNXIFI_DATATYPE_FLOAT32;
@@ -107,7 +108,7 @@ namespace onnx_xla  {
     XlaTransform runner(relu_graph, "relu");
     runner.translateGraph();
     auto executor = runner.executor();
-    exector->initIO(0, NULL, 1, output);
+    executor->initIO(1, &input, 1, &output);
     delete [] output.name;
     delete [] shape;
     float* input_ptr = (float*) input.buffer;
@@ -115,21 +116,21 @@ namespace onnx_xla  {
     for (int i = 0; i < 24; ++i)  {
       std::random_device rand_dev;
       std::mt19937 rand_engine(rand_dev());
-      input_ptr[i] = unif(rand_engine));
+      input_ptr[i] = unif(rand_engine);
     }
     executor->sendLiterals();
     executor->executeComputation();
-    delete [] input.buffer;
 
     float* output_ptr = (float*) output.buffer;
     //Check correctness
     for (int i = 0; i < 24; ++i)  {
-      if (initializer.doubles()[i] > 0.0f)  {
+      if (input_ptr[i] > 0.0f)  {
         ONNX_ASSERT(almost_equal(initializer.floats()[i], output_ptr[i]));
       } else {
         ONNX_ASSERT(almost_equal(0.0f, output_ptr[i]));
       }
     }
-    delete [] output.buffer;
+    delete [] input_ptr;
+    delete [] output_ptr;
   }
 }

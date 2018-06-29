@@ -77,7 +77,7 @@ namespace onnx_xla  {
         return ONNX_NAMESPACE::TensorProto_DataType_UINT32;     
       }
       default:  {
-        throw("Not supported);
+        throw("Not supported");
       }
 
     }

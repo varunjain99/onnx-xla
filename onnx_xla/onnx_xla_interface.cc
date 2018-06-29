@@ -1,4 +1,5 @@
 #include "onnx/onnxifi.h"
+#include "onnx_xla/backend.h"
 
 struct OnnxXlaBackendID {
   int device_id{0};
@@ -16,7 +17,7 @@ public:
   }
 
 private:
-  onnx_xla::XlaTransfom* transformer_{nullptr};
+  onnx_xla::XlaTransform* transformer_{nullptr};
   onnx_xla::OnnxParser* parser_{nullptr};
 };
 

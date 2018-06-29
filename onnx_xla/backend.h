@@ -40,10 +40,12 @@ namespace onnx_xla {
   };
 
   class XlaTransform;
-  class XlaExecution;
+  class XlaExecutor;
 
   class XlaExecutor final  {
   public:
+    void initIO(uint32_t inputsCount, onnxTensorDescriptor* inputDescriptors,
+                uint32_t  outputsCount, onnxTensorDescriptor* outputDescriptors);
     void sendLiterals();
     std::vector<xla::Literal> executeComputation();
   private:
@@ -53,15 +55,14 @@ namespace onnx_xla {
     uint32_t num_inputs_;
     uint32_t num_outputs_;
     std::unordered_map<std::string, ONNX_NAMESPACE::TensorProto_DataType> io_data_type_;
-    std::unordered_map<std::string, vector<Dimension>> io_shape_;
+    std::unordered_map<std::string, std::vector<Dimension>> io_shape_;
     std::unordered_map<std::string, onnxPointer> input_buffers_;
     std::unordered_map<std::string, onnxPointer> output_buffers_;
     std::vector<std::string> output_names_;
 
     std::unique_ptr<xla::Literal> tensorToLiteral(const ONNX_NAMESPACE::Tensor& t);
     std::unique_ptr<xla::Literal> inputToLiteral(const std::string& name);
-    void initIO(uint32_t inputsCount, onnxTensorDescriptor* inputDescriptors,
-                uint32_t  outputsCount, onnxTensorDescriptor* outputDescriptors);
+    
     friend class XlaTransform;
   };
 

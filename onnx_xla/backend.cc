@@ -110,11 +110,10 @@ namespace onnx_xla {
     #define CHECK_TYPE_AND_SHAPE(VAR)                                         \
     for (auto i = 0; i < num_##VAR##s_; ++i)  {                               \
       const std::string name(VAR##Descriptors[i].name);                       \
-      ONNX_ASSERT(io_data_type_.find(name) != io_data_type_.end())            \
+      ONNX_ASSERT(io_data_type_.find(name) != io_data_type_.end());           \
       VAR##_buffers_[name] = VAR##Descriptors[i].buffer;                      \
-      ONNX_ASSERT(onnxifiToOnnx(VAR##Descriptors[i].dataType)                 \
-                            == io_data_type_[name]);                          \
-      ONNX_ASSERT(VAR##Descriptors[i].dimensions == io_shape_[name].size();   \
+      ONNX_ASSERT(onnxifiToOnnx(VAR##Descriptors[i].dataType) == io_data_type_[name]);        \
+      ONNX_ASSERT(VAR##Descriptors[i].dimensions == io_shape_[name].size());  \
       for (auto j = 0; j < io_shape_[name].size(); ++j)  {                    \
         ONNX_ASSERT(io_shape_[name][j].is_int &&                              \
                     io_shape_[name][j].dim == VAR##Descriptors[i].shape[j]);  \

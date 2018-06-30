@@ -163,9 +163,10 @@ namespace onnx_xla {
     #undef OPERATION
   }
 
-  XlaTransform::XlaTransform(Graph& ir, const std::string& build_name) :
-    ir_(ir), builder_(build_name),
-    executor_(new XlaExecutor()), global_param_number_(0) {}
+  XlaTransform::XlaTransform(std::unique_ptr<Graph> ir, const std::string& build_name) :
+    builder_(build_name), executor_(new XlaExecutor()), global_param_number_(0) {
+    ir_ = std::move(ir);
+  }
 
   XlaTransform::~XlaTransform() {}
 
@@ -187,37 +188,37 @@ namespace onnx_xla {
   }
 
   void XlaTransform::fillIOMetadata()  {
-    executor_->num_inputs_ = ir_.inputs().size() - ir_.initializers().size();
-    executor_->num_outputs_ = ir_.outputs().size();
+    executor_->num_inputs_ = ir_->inputs().size() - ir_->initializers().size();
+    executor_->num_outputs_ = ir_->outputs().size();
     std::unordered_map<std::string, bool> isInitialized;
-    for (const std::string& s : ir_.initializer_names())  {
+    for (const std::string& s : ir_->initializer_names())  {
       isInitialized[s] = true;
     }
-    for (auto* v : ir_.inputs())  {
+    for (auto* v : ir_->inputs())  {
       if (isInitialized.find(v->uniqueName()) == isInitialized.end())  {
         executor_->io_data_type_[v->uniqueName()] = v->elemType();
         executor_->io_shape_[v->uniqueName()] = v->sizes();
       }
     }
     
-    for (auto* v : ir_.outputs())  {
+    for (auto* v : ir_->outputs())  {
       executor_->io_data_type_[v->uniqueName()] = v->elemType();
       executor_->io_shape_[v->uniqueName()] = v->sizes();      
     }
   }
 
   void XlaTransform::translateGraph() {
-    for (const Tensor& t : ir_.initializers())  {
+    for (const Tensor& t : ir_->initializers())  {
       auto l_ptr = executor_->tensorToLiteral(t);
       executor_->static_literals_.push_back(std::move(l_ptr));
     }
     this->fillIOMetadata();
-    for (const Value* v : ir_.inputs())  {
+    for (const Value* v : ir_->inputs())  {
       auto param = builder_.Parameter(global_param_number_++, shapeOfValue(v),
                                       v->uniqueName());
       registerValueOp(v, param);
     }
-    for (auto it = ir_.begin(); it != ir_.end(); ++it) {
+    for (auto it = ir_->begin(); it != ir_->end(); ++it) {
       if (it->kind() == ONNX_NAMESPACE::Symbol("Relu")) {
         auto input = value_to_op_[it->inputs()[0]];
         auto shape = builder_.GetShape(input);
@@ -230,7 +231,7 @@ namespace onnx_xla {
       }
     }
     std::vector<XlaOp> retValues;
-    for(const Value* v : ir_.outputs())  {
+    for(const Value* v : ir_->outputs())  {
       retValues.push_back(value_to_op_[v]);
       executor_->output_names_.push_back(v->uniqueName());
     }
@@ -241,7 +242,16 @@ namespace onnx_xla {
   }
 
   XlaExecutor* XlaTransform::executor()  {
-    return executor_;
+    return executor_.release();
   }
+
+  OnnxParser::OnnxParser(const void* serializedModel, size_t serializedModelSize)  {
+    ONNX_NAMESPACE::ParseProtoFromBytes(&model_, (const char*) serializedModel, serializedModelSize);
+  }
+
+  std::unique_ptr<Graph> OnnxParser::parse()  {
+    ONNX_NAMESPACE::shape_inference::InferShapes(model_);
+    return ONNX_NAMESPACE::ImportModelProto(model_);
+  }  
   #undef SWITCH
 }

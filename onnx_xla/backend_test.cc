@@ -11,8 +11,8 @@ namespace onnx_xla  {
 
   void static_relu_test()  {
     //Set up IR graph
-    Graph relu_graph;
-    relu_graph.setName("relu_graph");
+    std::unique_ptr<Graph> relu_graph(new Graph());
+    relu_graph->setName("relu_graph");
     Tensor initializer;
     initializer.elem_type() = ONNX_NAMESPACE::TensorProto_DataType_FLOAT;
     std::uniform_real_distribution<float> unif(-0.5, 0.5);
@@ -28,14 +28,14 @@ namespace onnx_xla  {
     sizes.push_back(2);
     sizes.push_back(3);
     sizes.push_back(4);
-    relu_graph.addInitializerAndInput(initializer, "relu_input");
-    auto relu_node = relu_graph.create(Symbol("Relu"), relu_graph.inputs());
-    relu_graph.appendNode(relu_node);
+    relu_graph->addInitializerAndInput(initializer, "relu_input");
+    auto relu_node = relu_graph->create(Symbol("Relu"), relu_graph->inputs());
+    relu_graph->appendNode(relu_node);
     auto relu_output = relu_node->output();
     relu_output->setElemType(ONNX_NAMESPACE::TensorProto_DataType_FLOAT);
     relu_output->setSizes(sizes);
     relu_output->setUniqueName("relu_output");
-    relu_graph.return_node()->addInput(relu_output);
+    relu_graph->return_node()->addInput(relu_output);
     
     //Set up IO information
     uint64_t shape[3] = {2, 3, 4};
@@ -48,14 +48,14 @@ namespace onnx_xla  {
     output.buffer = (onnxPointer) new float[24];
    
      //Execute using XLA backend
-    XlaTransform runner(relu_graph, "relu");
+    XlaTransform runner(std::move(relu_graph), "relu");
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(0, nullptr, 1, &output);
     executor->sendLiterals();
     executor->executeComputation();
 
-    std::cout << "returned from execution" << std::endl;    
+    delete executor; 
     //Check correctness    
     float* output_ptr = (float*) output.buffer;
     for (int i = 0; i < 24; ++i)  {
@@ -70,9 +70,9 @@ namespace onnx_xla  {
 
   void dynamic_relu_test()  {
     //Set up IR graph
-    Graph relu_graph;
-    relu_graph.setName("relu_graph");
-    Value* relu_input = relu_graph.addInput();
+    std::unique_ptr<Graph> relu_graph(new Graph());    
+    relu_graph->setName("relu_graph");
+    Value* relu_input = relu_graph->addInput();
     std::vector<Dimension> sizes;
     sizes.push_back(2);
     sizes.push_back(3);
@@ -80,13 +80,13 @@ namespace onnx_xla  {
     relu_input->setElemType(ONNX_NAMESPACE::TensorProto_DataType_FLOAT);
     relu_input->setSizes(sizes);
     relu_input->setUniqueName("relu_input");
-    auto relu_node = relu_graph.create(Symbol("Relu"), relu_graph.inputs());
-    relu_graph.appendNode(relu_node);
+    auto relu_node = relu_graph->create(Symbol("Relu"), relu_graph->inputs());
+    relu_graph->appendNode(relu_node);
     auto relu_output = relu_node->output();
     relu_output->setElemType(ONNX_NAMESPACE::TensorProto_DataType_FLOAT);
     relu_output->setSizes(sizes);
     relu_output->setUniqueName("relu_output");
-    relu_graph.return_node()->addInput(relu_output);
+    relu_graph->return_node()->addInput(relu_output);
     
     //Set up IO information
     uint64_t shape[3] = {2, 3, 4};
@@ -106,7 +106,7 @@ namespace onnx_xla  {
     input.buffer = (onnxPointer) new float[24];
 
     //Execute using XLA backend
-    XlaTransform runner(relu_graph, "relu");
+    XlaTransform runner(std::move(relu_graph), "relu");
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(1, &input, 1, &output);
@@ -120,6 +120,7 @@ namespace onnx_xla  {
     executor->sendLiterals();
     executor->executeComputation();
 
+    delete executor;
     float* output_ptr = (float*) output.buffer;
     //Check correctness
     for (int i = 0; i < 24; ++i)  {

@@ -16,18 +16,18 @@ struct OnnxXlaBackendID {
 
 struct BackendControl {
 public:
-  onnxStatus build(void const *serialized_onnx_model,
-                         size_t serialized_onnx_model_size) {
-    return ONNXIFI_STATUS_SUCCESS;
+  BackendControl(OnnxXlaBackendID* id) : backendID(id) {}
+  XlaExecutor* build(const void* serializedModel, size_t serializedModelSize) {
+   
+    OnnxParser parser(serializedModel, serializedModelSize);
+    std::unique_ptr<Graph> ir = parser.parse();
+    std::string build_name = ir->name();
+    XlaTransform runner(std::move(ir), build_name);
+    runner.translateGraph();
+    return runner.executor();
   }
-
-  onnx_xla::XlaExecutor* executor() {
-    return transformer_->executor();
-  }
-
 private:
-  onnx_xla::XlaTransform* transformer_{nullptr};
-  onnx_xla::OnnxParser* parser_{nullptr};
+  OnnxXlaBackendID* backendID;
 };
 
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
@@ -161,7 +161,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitBackend)(onnxBackendID backendID, const uint64_t *auxPropertiesList,
                      onnxBackend *backend) {
   try {
-    *backend = (onnxBackend)(new BackendControl());
+    *backend = (onnxBackend)(new BackendControl(backendID));
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -197,18 +197,12 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
 
-    // Parse the model
     // TODO: Ignore the weightDescriptors for now and rely on initialization list
     // this will take ModelProto -> IR Graph -> XlaComputation
-    auto ret = backendcontroller->build(onnxModel, onnxModelSize);
-    if (ret != ONNXIFI_STATUS_SUCCESS) {
-      return ret;
-    }
-
     // return XlaExecutor which has the XlaComputation and literals to send to
     // the server
     //TODO: error handling
-    *graph = (onnxGraph)(backendcontroller->executor());
+    *graph = (onnxGraph) backendcontroller->build(onnxModel, onnxModelSize);
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();

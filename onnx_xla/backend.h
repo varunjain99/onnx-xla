@@ -4,7 +4,10 @@
 #include "onnx/proto_utils.h"
 #include "onnx_xla/types.h"
 #include "onnx/common/ir.h"
+#include "onnx/common/ir_pb_converter.h"
 #include "onnx/onnxifi.h"
+#include "onnx/proto_utils.h"
+#include "onnx/shape_inference/implementation.h"
 
 #include "tensorflow/compiler/xla/rpc/computation_client.h"
 #include "tensorflow/compiler/xla/client/client.h"
@@ -16,20 +19,23 @@
 #include <memory>
 
 namespace onnx_xla {
-   using xla::Literal;
-   using xla::ShapeUtil;
-   using xla::Shape;
-   using xla::primitive_util::NativeToPrimitiveType;
-   using xla::XlaOp;
-   using xla::GlobalData;
-   using xla::LiteralBase;
-   using xla::StatusOr;
+  using xla::Literal;
+  using xla::ShapeUtil;
+  using xla::Shape;
+  using xla::primitive_util::NativeToPrimitiveType;
+  using xla::XlaOp;
+  using xla::XlaBuilder;
+  using xla::GlobalData;
+  using xla::LiteralBase;
+  using xla::StatusOr;
+  using xla::XlaComputation;
 
-   using ONNX_NAMESPACE::Tensor;
-   using ONNX_NAMESPACE::Value;
-   using ONNX_NAMESPACE::Dimension;
-   using ONNX_NAMESPACE::Graph;
-   using ONNX_NAMESPACE::Symbol;
+  using ONNX_NAMESPACE::Tensor;
+  using ONNX_NAMESPACE::Value;
+  using ONNX_NAMESPACE::Dimension;
+  using ONNX_NAMESPACE::Graph;
+  using ONNX_NAMESPACE::Symbol;
+  using ONNX_NAMESPACE::ModelProto;
 
   struct conversion_error final : public std::exception {
   private:
@@ -49,8 +55,8 @@ namespace onnx_xla {
     void sendLiterals();
     void executeComputation();
   private:
-    xla::XlaComputation computation_;
-    std::vector<std::unique_ptr<xla::Literal>> static_literals_;
+    XlaComputation computation_;
+    std::vector<std::unique_ptr<Literal>> static_literals_;
     std::vector<GlobalData*> arguments_;
     uint32_t num_inputs_;
     uint32_t num_outputs_;
@@ -60,34 +66,38 @@ namespace onnx_xla {
     std::unordered_map<std::string, onnxPointer> output_buffers_;
     std::vector<std::string> output_names_;
 
-    std::unique_ptr<xla::Literal> tensorToLiteral(const ONNX_NAMESPACE::Tensor& t);
-    std::unique_ptr<xla::Literal> inputToLiteral(const std::string& name);
+    std::unique_ptr<Literal> tensorToLiteral(const Tensor& t);
+    std::unique_ptr<Literal> inputToLiteral(const std::string& name);
     
     friend class XlaTransform;
   };
 
   class XlaTransform final  {
   public:
-    XlaTransform(ONNX_NAMESPACE::Graph& ir,
+    XlaTransform(std::unique_ptr<Graph> ir,
                  const std::string& build_name);
     ~XlaTransform();
     void translateGraph();
     XlaExecutor* executor();
 
   private:
-    ONNX_NAMESPACE::Graph& ir_;
-    xla::XlaBuilder builder_;
-    XlaExecutor* executor_;
-    std::unordered_map<const ONNX_NAMESPACE::Value*, xla::XlaOp> value_to_op_;
-    xla::int64 global_param_number_;
+    std::unique_ptr<Graph> ir_;
+    XlaBuilder builder_;
+    std::unique_ptr<XlaExecutor> executor_;
+    std::unordered_map<const Value*, XlaOp> value_to_op_;
+    int64 global_param_number_;
 
-    xla::Shape shapeOfValue(const ONNX_NAMESPACE::Value* v);
-    void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op);
-    void registerValueOp(const ONNX_NAMESPACE::Value* v, xla::XlaOp& op, int index);
+    Shape shapeOfValue(const Value* v);
+    void registerValueOp(const Value* v, XlaOp& op);
+    void registerValueOp(const Value* v, XlaOp& op, int index);
     void fillIOMetadata();
   };
 
   class OnnxParser {
-
+  public:
+    OnnxParser(const void* serializedModel, size_t serializedModelSize);
+    std::unique_ptr<Graph> parse();
+  private:
+    ModelProto model_;
   };
 }

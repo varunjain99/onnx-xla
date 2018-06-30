@@ -17,12 +17,12 @@ struct OnnxXlaBackendID {
 struct BackendControl {
 public:
   BackendControl(OnnxXlaBackendID* id) : backendID(id) {}
-  XlaExecutor* build(const void* serializedModel, size_t serializedModelSize) {
+  onnx_xla::XlaExecutor* build(const void* serializedModel, size_t serializedModelSize) {
    
-    OnnxParser parser(serializedModel, serializedModelSize);
-    std::unique_ptr<Graph> ir = parser.parse();
+    onnx_xla::OnnxParser parser(serializedModel, serializedModelSize);
+    std::unique_ptr<ONNX_NAMESPACE::Graph> ir = parser.parse();
     std::string build_name = ir->name();
-    XlaTransform runner(std::move(ir), build_name);
+    onnx_xla::XlaTransform runner(std::move(ir), build_name);
     runner.translateGraph();
     return runner.executor();
   }
@@ -161,7 +161,8 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitBackend)(onnxBackendID backendID, const uint64_t *auxPropertiesList,
                      onnxBackend *backend) {
   try {
-    *backend = (onnxBackend)(new BackendControl(backendID));
+    auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
+    *backend = (onnxBackend)(new BackendControl(backend_id));
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();

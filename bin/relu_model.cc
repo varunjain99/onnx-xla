@@ -1,0 +1,108 @@
+#include <iostream>
+#include <stdlib.h>
+#include <cmath>
+#include <sys/stat.h> 
+#include <fcntl.h>
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <google/protobuf/text_format.h>
+#include "onnx/common/assertions.h"
+#include "onnx/onnxifi.h"
+
+
+bool almost_equal(float a, float b, float epsilon = 1e-5)  {
+  return std::abs(a - b) < epsilon;
+}
+
+int main(int argc, char** argv)  {
+  
+  //Initialize backend
+  onnxBackendID backendIDs;
+  size_t numBackends;
+  onnxBackend backend;
+  if (onnxGetBackendIDs(&backendIDs, &numBackends) != ONNXIFI_STATUS_SUCCESS)  {
+    std::cerr << "Error getting backend IDs" << std::endl;
+  }
+  if (onnxInitBackend(backendIDs, nullptr, &backend) != ONNXIFI_STATUS_SUCCESS)  {
+    std::cerr << "Error initializing backend" << std::endl;
+  }
+
+  //Read in model from file
+  const void* buffer;
+  int size = 0;
+  int fd = ::open("../third_party/onnx/onnx/examples/resources/single_relu.onnx", O_RDONLY);
+  google::protobuf::io::FileInputStream raw_input(fd);
+  raw_input.SetCloseOnDelete(true);
+  google::protobuf::io::CodedInputStream coded_input(&raw_input);
+  coded_input.GetDirectBufferPointer(&buffer, &size);
+ 
+ //Fill in I/O information
+  uint64_t shape[2] = {1, 2};
+
+  uint32_t inputsCount = 1;
+  onnxTensorDescriptor input;
+  input.name = "x";
+  input.dataType = ONNXIFI_DATATYPE_FLOAT32;
+  input.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
+  input.dimensions = 2;
+  input.shape = shape;
+  input.buffer = (onnxPointer) new float[24];
+
+  uint32_t outputsCount = 1;
+  onnxTensorDescriptor output;  
+  output.name = "y";
+  output.dataType = ONNXIFI_DATATYPE_FLOAT32;
+  output.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
+  output.dimensions = 2;
+  output.shape = shape;
+  output.buffer = (onnxPointer) new float[24];
+
+  float* input_ptr = (float*) input.buffer;
+  std::uniform_real_distribution<float> unif(-0.5, 0.5);
+  for (int i = 0; i < 2; ++i)  {
+    std::random_device rand_dev;
+    std::mt19937 rand_engine(rand_dev());
+    input_ptr[i] = unif(rand_engine);
+  }
+  float *output_ptr = (float*) output.buffer;
+ 
+ //Run the graph
+  onnxGraph graph;
+  if (onnxInitGraph(backend, (size_t) size, buffer, 0,
+                nullptr, &graph) != ONNXIFI_STATUS_SUCCESS)  {
+    std::cerr << "Error initializing graph" << std::endl;
+  }
+  if (onnxSetGraphIO(graph, inputsCount, &input,
+                 outputsCount, &output) != ONNXIFI_STATUS_SUCCESS)  {
+    std::cerr << "Error setting Graph IO" << std::endl;
+  }
+  if (onnxRunGraph(graph, NULL, NULL) != ONNXIFI_STATUS_SUCCESS)  {
+    std::cerr << "Error running Graph" << std::endl;
+  }
+  
+  //Check correctness
+  for (int i = 0; i < 2; ++i)  {
+    if (input_ptr[i] > 0.0f)  {
+     ONNX_ASSERT(almost_equal(input_ptr[i], output_ptr[i]));
+    } else {
+     ONNX_ASSERT(almost_equal(0.0f, output_ptr[i]));
+    }
+  }
+  delete [] input_ptr;
+  delete [] output_ptr;
+  
+  //Release graph and backend resources
+  if (onnxReleaseGraph(graph) != ONNXIFI_STATUS_SUCCESS)  {
+    std::cerr << "Error releasing graph" << std::endl;
+  }
+  if (onnxReleaseBackend(backend) != ONNXIFI_STATUS_SUCCESS)  {
+    std::cerr << "Error releasing backend" << std::endl;
+  }
+  if (onnxReleaseBackendID(backendIDs) != ONNXIFI_STATUS_SUCCESS)  {  
+    std::cerr << "Error releasing backendID" << std::endl;
+  }
+
+  return 0;
+}
+
+

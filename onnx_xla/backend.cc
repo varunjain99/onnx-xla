@@ -188,8 +188,8 @@ namespace onnx_xla {
   }
 
   void XlaTransform::fillIOMetadata()  {
-    executor_->num_inputs_ = ir_->inputs().size() - ir_->initializers().size();
-    executor_->num_outputs_ = ir_->outputs().size();
+    executor_->num_inputs_ = (uint32_t) ((int64_t) (ir_->inputs().size()) - (int64_t) (ir_->initializers().size()));
+    executor_->num_outputs_ = (uint32_t) ir_->outputs().size();
     std::unordered_map<std::string, bool> isInitialized;
     for (const std::string& s : ir_->initializer_names())  {
       isInitialized[s] = true;
@@ -226,8 +226,11 @@ namespace onnx_xla {
         auto zero = builder_.ConstantLiteral(*LiteralBase::CreateFromShape(shape.ValueOrDie()));
         auto maximum = builder_.Max(input, zero);
         registerValueOp(it->outputs()[0], maximum);
-      }  else {
-         throw conversion_error("Conversion of node type not supported.");
+      } else if (it->kind() == ONNX_NAMESPACE::Symbol("Undefined")) {
+        continue;
+      }
+      else {  
+        throw conversion_error("Conversion of node type not supported.");
       }
     }
     std::vector<XlaOp> retValues;
@@ -239,6 +242,7 @@ namespace onnx_xla {
     auto computation_status = builder_.Build();
     TF_CHECK_OK(computation_status.status());
     executor_->computation_ = computation_status.ConsumeValueOrDie();
+
   }
 
   XlaExecutor* XlaTransform::executor()  {

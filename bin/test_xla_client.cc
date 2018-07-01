@@ -1,3 +1,5 @@
+//Test client written to communicate with server - will be removed.
+
 #include "onnx_xla/xla_client.h"
 #include <iostream>
 

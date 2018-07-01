@@ -9,6 +9,10 @@
 #include "onnx/common/assertions.h"
 #include "onnx/onnxifi.h"
 
+//Basic test case that runs an onnx model of a graph with the relu operator
+//(from the onnx repository) on the XLA backend. The ONNXIFI interface is used
+//to run a ModelProto on the XLA backend.
+
 
 bool almost_equal(float a, float b, float epsilon = 1e-5)  {
   return std::abs(a - b) < epsilon;

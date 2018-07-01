@@ -1,6 +1,11 @@
 #include "onnx/onnxifi.h"
 #include "onnx_xla/backend.h"
 
+//TODO: Robust error handling
+//TODO: Implement Event functions
+//TODO: Figure out how to determine type of device, what information to store
+//      about hardware, and how to modify execution as a result
+
 #define ONNXIFI_CATCH_EXCPETION()                                              \
   catch (const std::exception &e) {                                            \
     std::cerr << "Internal Error: " << e.what() << std::endl;                  \
@@ -10,13 +15,19 @@
     return ONNXIFI_STATUS_INTERNAL_ERROR;                                      \
   }
 
+
+//TODO: More formal representation of backendID - CPU, GPU, TPU?
 struct OnnxXlaBackendID {
   int device_id{0};
 };
 
+
+//Backend engine
+//  backendID will eventually determine translation detail
 struct BackendControl {
 public:
   BackendControl(OnnxXlaBackendID* id) : backendID(id) {}
+  //use OnnxParser and XlaTransform to return executor
   onnx_xla::XlaExecutor* build(const void* serializedModel, size_t serializedModelSize) {
    
     onnx_xla::OnnxParser parser(serializedModel, serializedModelSize);
@@ -30,6 +41,8 @@ private:
   OnnxXlaBackendID* backendID;
 };
 
+//Create 1 backendID
+//TODO: Determining # of CPU, GPU, TPU devices and return
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendIDs)(onnxBackendID *backendIDs, size_t *numBackends) {
   try {
@@ -40,6 +53,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
   ONNXIFI_CATCH_EXCPETION();
 }
 
+//Free memory for given backend ID
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
   try {
@@ -53,6 +67,9 @@ ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
   ONNXIFI_CATCH_EXCPETION();
 }
 
+
+//Returning info for given ID
+//TODO: Expand for different IDs and fill in commented infoType parts
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendInfo)(onnxBackendID backendID, onnxBackendInfo infoType,
                         void *infoValue, size_t *infoValueSize) {
@@ -125,9 +142,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
   ONNXIFI_CATCH_EXCPETION();
 }
 
-// NB: Why not have onnxModel as const char*?  and we should set the name to
-// onnxGraph And we don't have ir_version and opset info here, which are needed
-// for model check
+//TODO: Figure out how to get compatibility e.g. sufficient to run OnnxParser?
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendCompatibility)(onnxBackendID backendID, size_t onnxModelSize,
                                  const void *onnxModel) {
@@ -139,24 +154,14 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
 
-    return ONNXIFI_STATUS_SUCCESS; //later we should implement this error analysis
+    return ONNXIFI_STATUS_SUCCESS;
 
-    // NB: not ideal case. We CHECK model by actually trying to run the
-    // conversion. However, this might be the case for other vendors
-    //OnnxTensorRTBackendRep backendrep;
-    //return backendrep.ImportModel(onnxModel, onnxModelSize);
   }
   ONNXIFI_CATCH_EXCPETION();
 }
 
-// NB: Passing arguments to backend is tricky. And we need more documentation
-// for it I didn't put any arguments here for now.
-// TODO: submit arguments for
-// - setMaxBatchSize (size_t)
-// - setMaxWorkspaceSize (size_t)
-// - setHalf2Mode (bool)
-// - setInt8Mode (bool)
-// - setDebugSync (bool)
+//TODO: any arguments to pass?
+//Create and return a BackendControl object
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitBackend)(onnxBackendID backendID, const uint64_t *auxPropertiesList,
                      onnxBackend *backend) {
@@ -168,6 +173,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
   ONNXIFI_CATCH_EXCPETION();
 }
 
+//Release BackendControl object
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackend)(onnxBackend backend) {
   try {
@@ -181,6 +187,10 @@ ONNXIFI_SYMBOL_NAME(onnxReleaseBackend)(onnxBackend backend) {
   ONNXIFI_CATCH_EXCPETION();
 }
 
+
+//Create and return XlaExecutor object
+// TODO: Ignore the weightDescriptors for now and rely on initialization list
+//TODO: error handling with error status codes passed
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitGraph)(onnxBackend backend, size_t onnxModelSize,
                    const void *onnxModel, uint32_t weightsCount,
@@ -198,18 +208,14 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
 
-    // TODO: Ignore the weightDescriptors for now and rely on initialization list
-    // this will take ModelProto -> IR Graph -> XlaComputation
-    // return XlaExecutor which has the XlaComputation and literals to send to
-    // the server
-    //TODO: error handling
     *graph = (onnxGraph) backendcontroller->build(onnxModel, onnxModelSize);
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
 }
 
-
+//Verify IO metadata and use initIO to store location of IO
+//TODO: memoryType field ignored for now
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxSetGraphIO)(onnxGraph graph, uint32_t inputsCount,
                     const onnxTensorDescriptor *inputDescriptors,
@@ -230,7 +236,8 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
   ONNXIFI_CATCH_EXCPETION();
 }
 
-//For now assume, synchronization primitives are always set
+//Runs the XlaExecutor by sending literals to server and executing computation 
+//TODO: support for synchronization primitives; For now assume, they are always set
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxRunGraph)(onnxGraph graph, const onnxMemoryFence *inputFence,
                   onnxMemoryFence *outputFence) {
@@ -247,6 +254,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
   ONNXIFI_CATCH_EXCPETION();
 }
 
+//Frees executor memory
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseGraph)(onnxGraph graph) {
   try {

@@ -28,12 +28,14 @@ struct BackendControl {
 public:
   BackendControl(OnnxXlaBackendID* id) : backendID(id) {}
   //use OnnxParser and XlaTransform to return executor
-  onnx_xla::XlaExecutor* build(const void* serializedModel, size_t serializedModelSize) {
+  onnx_xla::XlaExecutor* build(const void* serializedModel, size_t serializedModelSize,
+                               uint32_t weightsCount, const onnxTensorDescriptor *weightDescriptors) {
    
     onnx_xla::OnnxParser parser(serializedModel, serializedModelSize);
     std::unique_ptr<ONNX_NAMESPACE::Graph> ir = parser.parse();
     std::string build_name = ir->name();
-    onnx_xla::XlaTransform runner(std::move(ir), build_name);
+    onnx_xla::XlaTransform runner(std::move(ir), build_name,
+                                  weightsCount, weightDescriptors);
     runner.translateGraph();
     return runner.executor();
   }
@@ -208,7 +210,8 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
 
-    *graph = (onnxGraph) backendcontroller->build(onnxModel, onnxModelSize);
+    *graph = (onnxGraph) backendcontroller->build(onnxModel, onnxModelSize,
+                                            weightsCount, weightDescriptors);
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -247,7 +250,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
 
-    executor->sendLiterals();
+    executor->sendInputs();
     executor->executeComputation();
     return ONNXIFI_STATUS_SUCCESS;
   }

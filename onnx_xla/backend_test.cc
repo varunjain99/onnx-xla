@@ -48,11 +48,11 @@ namespace onnx_xla  {
     output.buffer = (onnxPointer) new float[24];
    
      //Execute using XLA backend
-    XlaTransform runner(std::move(relu_graph), "relu");
+    XlaTransform runner(std::move(relu_graph), "relu", 0, NULL);
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(0, nullptr, 1, &output);
-    executor->sendLiterals();
+    executor->sendInputs();
     executor->executeComputation();
 
     delete executor; 
@@ -106,7 +106,7 @@ namespace onnx_xla  {
     input.buffer = (onnxPointer) new float[24];
 
     //Execute using XLA backend
-    XlaTransform runner(std::move(relu_graph), "relu");
+    XlaTransform runner(std::move(relu_graph), "relu", 0, NULL);
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(1, &input, 1, &output);
@@ -117,7 +117,7 @@ namespace onnx_xla  {
       std::mt19937 rand_engine(rand_dev());
       input_ptr[i] = unif(rand_engine);
     }
-    executor->sendLiterals();
+    executor->sendInputs();
     executor->executeComputation();
 
     delete executor;

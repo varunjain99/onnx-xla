@@ -78,7 +78,7 @@ namespace onnx_xla {
     #undef OPERATION
   }
 
-  std::unique_ptr<Literal> XlaExecutor::inputToLiteral(const std::string& name) {
+  std::unique_ptr<Literal> XlaExecutor::inputNameToLiteral(const std::string& name) {
     std::vector<int64> sizes;
     for (auto i = 0; i < io_shape_[name].size(); ++i) {  
       sizes.push_back((int64) io_shape_[name][i].dim);    
@@ -98,6 +98,28 @@ namespace onnx_xla {
       return l;                                                                \
 
     SWITCH(io_data_type_[name])
+    #undef OPERATION
+  }
+
+  std::unique_ptr<Literal> XlaExecutor::descriptorToLiteral(const onnxTensorDescriptor& t) {
+    std::vector<int64> sizes;
+    for (auto i = 0; i < t.dimensions; ++i) {
+      sizes.push_back((int64) t.shape[i]);
+    }
+    int64 num_elements = std::accumulate(sizes.begin(), sizes.end(),
+                                         (int64) 1, std::multiplies<int64>());
+
+    #define OPERATION(type_from, type_to, vec)                                 \
+      auto l = std::unique_ptr<Literal>(new Literal(ShapeUtil::MakeShape(      \
+               NativeToPrimitiveType<type_to>(), sizes)));                     \
+      tensorflow::gtl::MutableArraySlice<type_to> l_data = l->data<type_to>(); \
+      type_from* inputData = (type_from*) t.buffer;                            \
+      for (auto i = 0; i < num_elements; ++i) {                                \
+        l_data[i] = (type_to) inputData[i];                                    \
+      }                                                                        \
+      return l;                                                                \
+
+    SWITCH(onnxifiToOnnx(t.dataType))
     #undef OPERATION
   }
 
@@ -124,19 +146,11 @@ namespace onnx_xla {
     #undef CHECK_TYPE_AND_SHAPE
   }
 
-  void XlaExecutor::sendLiterals()  {
-    for (auto& l : static_literals_)  {
-      auto l_ptr = l.release();
-      auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
-      delete l_ptr;
-      arguments_.push_back(l_data_ptr.release());
-    }
+  void XlaExecutor::sendInputs()  {
     //WAIT FOR INPUT SYNCHRONIZATION PRIMITIVE
-    for (auto it = input_buffers_.begin(); it != input_buffers_.end(); ++it)  {
-      auto l = this->inputToLiteral(it->first);
-      auto l_ptr = l.release();
+    for (const std::string& s : param_input_name_)  {
+      auto l_ptr = this->inputNameToLiteral(s);
       auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
-      delete l_ptr;
       arguments_.push_back(l_data_ptr.release());
     }
   } 
@@ -163,8 +177,10 @@ namespace onnx_xla {
     #undef OPERATION
   }
 
-  XlaTransform::XlaTransform(std::unique_ptr<Graph> ir, const std::string& build_name) :
-    builder_(build_name), executor_(new XlaExecutor()), global_param_number_(0) {
+  XlaTransform::XlaTransform(std::unique_ptr<Graph> ir, const std::string& build_name,
+                             uint32_t weightsCount, const onnxTensorDescriptor *weightDescriptors) :
+                             weights_count_(weightsCount), weight_descriptors_(weightDescriptors),
+                             builder_(build_name), executor_(new XlaExecutor()), global_param_number_(0) {
     ir_ = std::move(ir);
   }
 
@@ -187,37 +203,69 @@ namespace onnx_xla {
     value_to_op_[v] = std::move(builder_.GetTupleElement(op, index));
   }
 
-  void XlaTransform::fillIOMetadata()  {
-    executor_->num_inputs_ = (uint32_t) ((int64_t) (ir_->inputs().size()) - (int64_t) (ir_->initializers().size()));
-    executor_->num_outputs_ = (uint32_t) ir_->outputs().size();
-    std::unordered_map<std::string, bool> isInitialized;
-    for (const std::string& s : ir_->initializer_names())  {
-      isInitialized[s] = true;
+  void XlaTransform::handleInputs()  {
+    ONNX_ASSERT(ir_->initializers().size() == 0 || !weight_descriptors_);
+    std::unordered_map<std::string, const Value*> inputNameToValue;
+    for (const Value* v : ir_->inputs()) {
+      inputNameToValue[v->uniqueName()] = v;
     }
-    for (auto* v : ir_->inputs())  {
+    std::unordered_map<std::string, bool> isInitialized;
+
+    if (weight_descriptors_)  {
+      executor_->num_inputs_ = (uint32_t) ((int64_t) (ir_->inputs().size()) - (int64_t) (weights_count_));
+      for (auto i = 0; i < weights_count_; ++i)  {
+        std::string name(weight_descriptors_[i].name);
+        isInitialized[name] = true;
+        const onnxTensorDescriptor& t = weight_descriptors_[i];
+        const Value* v = inputNameToValue[name];
+        ONNX_ASSERT(onnxifiToOnnx(t.dataType) == v->elemType());
+        ONNX_ASSERT(t.memoryType == ONNXIFI_MEMORY_TYPE_CPU);
+        ONNX_ASSERT(t.dimensions == v->sizes().size());
+        for (auto j = 0; j < t.dimensions; ++j)  {
+          ONNX_ASSERT(v->sizes()[j].is_int && 
+                      t.shape[j] == v->sizes()[j].dim);
+        }   
+        auto l_ptr = executor_->descriptorToLiteral(t);
+        auto constant = builder_.ConstantLiteral(*l_ptr);
+        registerValueOp(v, constant);
+      }
+    } else {
+      executor_->num_inputs_ = (uint32_t) ((int64_t) (ir_->inputs().size()) - (int64_t) (ir_->initializers().size()));
+      for (const Tensor& t : ir_->initializers())  {
+        std::string name(t.name());
+        isInitialized[name] = true;
+        auto l_ptr = executor_->tensorToLiteral(t);
+        auto constant = builder_.ConstantLiteral(*l_ptr);
+        registerValueOp(inputNameToValue[name], constant);
+      }
+    }
+
+    for (const Value* v : ir_->inputs())  {
       if (isInitialized.find(v->uniqueName()) == isInitialized.end())  {
+        executor_->param_input_name_.push_back(v->uniqueName());
+        auto param = builder_.Parameter(global_param_number_++, shapeOfValue(v),
+                                        v->uniqueName());
+        registerValueOp(v, param);
         executor_->io_data_type_[v->uniqueName()] = v->elemType();
         executor_->io_shape_[v->uniqueName()] = v->sizes();
       }
     }
-    
-    for (auto* v : ir_->outputs())  {
+  }
+  
+  void XlaTransform::handleOutputs()  {
+    executor_->num_outputs_ = (uint32_t) ir_->outputs().size();
+    std::vector<XlaOp> retOps;
+    for(const Value* v : ir_->outputs())  {
       executor_->io_data_type_[v->uniqueName()] = v->elemType();
-      executor_->io_shape_[v->uniqueName()] = v->sizes();      
+      executor_->io_shape_[v->uniqueName()] = v->sizes();
+      retOps.push_back(value_to_op_[v]);
+      executor_->output_names_.push_back(v->uniqueName());
     }
+    builder_.Tuple(retOps);
   }
 
   void XlaTransform::translateGraph() {
-    for (const Tensor& t : ir_->initializers())  {
-      auto l_ptr = executor_->tensorToLiteral(t);
-      executor_->static_literals_.push_back(std::move(l_ptr));
-    }
-    this->fillIOMetadata();
-    for (const Value* v : ir_->inputs())  {
-      auto param = builder_.Parameter(global_param_number_++, shapeOfValue(v),
-                                      v->uniqueName());
-      registerValueOp(v, param);
-    }
+    this->handleInputs();
     for (auto it = ir_->begin(); it != ir_->end(); ++it) {
       if (it->kind() == ONNX_NAMESPACE::Symbol("Relu")) {
         auto input = value_to_op_[it->inputs()[0]];
@@ -229,16 +277,12 @@ namespace onnx_xla {
       } else if (it->kind() == ONNX_NAMESPACE::Symbol("Undefined")) {
         continue;
       }
-      else {  
+      else {
         throw conversion_error("Conversion of node type not supported.");
       }
     }
-    std::vector<XlaOp> retValues;
-    for(const Value* v : ir_->outputs())  {
-      retValues.push_back(value_to_op_[v]);
-      executor_->output_names_.push_back(v->uniqueName());
-    }
-    builder_.Tuple(retValues);
+    this->handleOutputs();
+
     auto computation_status = builder_.Build();
     TF_CHECK_OK(computation_status.status());
     executor_->computation_ = computation_status.ConsumeValueOrDie();

@@ -1,5 +1,8 @@
 #include "onnx/onnxifi.h"
 #include "onnx_xla/backend.h"
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 //TODO: Robust error handling
 //TODO: Implement Event functions
@@ -19,6 +22,13 @@
 //TODO: More formal representation of backendID - CPU, GPU, TPU?
 struct OnnxXlaBackendID {
   int device_id{0};
+};
+
+struct EventControl {
+  EventControl() : signalled(false) {}
+  bool signalled;
+  std::mutex m;
+  std::condition_variable cv;
 };
 
 
@@ -266,4 +276,80 @@ ONNXIFI_SYMBOL_NAME(onnxReleaseGraph)(onnxGraph graph) {
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
+}
+
+//Initialize event by creating EventControl object on the heap
+ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
+    onnxInitEvent)(onnxBackend backend, onnxEvent* event) {
+  try {
+    if (!backend)  {
+      return ONNXIFI_STATUS_INVALID_BACKEND;
+    }
+    if (!event)  {
+      return ONNXIFI_STATUS_INVALID_POINTER;
+    }
+
+    *event = (onnxEvent) new EventControl();
+    return ONNXIFI_STATUS_SUCCESS;
+  }
+  ONNXIFI_CATCH_EXCPETION();
+
+
+}
+
+//Signal Event by changing the signalled boolean under mutex hold
+ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
+    onnxSignalEvent)(onnxEvent event)  {
+  try {
+    auto *e = reinterpret_cast<EventControl *>(event);
+    if (!event)  {
+      return ONNXIFI_STATUS_INVALID_EVENT;
+    }
+    {
+       std::lock_guard<std::mutex> lk(e->m);
+       if (e->signalled)  {
+         return ONNXIFI_STATUS_INVALID_STATE;
+       }
+       e->signalled = true;
+    }
+    e->cv.notify_all();
+    return ONNXIFI_STATUS_SUCCESS;
+  }
+  ONNXIFI_CATCH_EXCPETION();
+}
+
+//Wait for signalled to be turned true using conditional variable to coordinate
+ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
+    onnxWaitEvent)(onnxEvent event)  {
+  try {
+    auto *e = reinterpret_cast<EventControl *>(event);
+    if (!event)  {
+      return ONNXIFI_STATUS_INVALID_EVENT;
+    }
+  
+    std::unique_lock<std::mutex> lk(e->m);
+    e->cv.wait(lk, [&e]{return e->signalled;});
+    lk.unlock();
+    e->cv.notify_all();
+        
+    return ONNXIFI_STATUS_SUCCESS;
+  }
+  ONNXIFI_CATCH_EXCPETION();
+
+}
+
+//Free memory that was allocated for the EventControl object
+ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
+    onnxReleaseEvent)(onnxEvent event)  {
+  try {
+    auto *e = reinterpret_cast<EventControl *>(event);
+    if (!event)  {
+      return ONNXIFI_STATUS_INVALID_EVENT;
+    }  
+    
+    delete event;
+    return ONNXIFI_STATUS_SUCCESS;
+  }
+  ONNXIFI_CATCH_EXCPETION();
+
 }

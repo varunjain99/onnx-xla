@@ -25,10 +25,10 @@ struct OnnxXlaBackendID {
 };
 
 struct EventControl {
-  EventControl() : signalled(false) {}
-  bool signalled;
-  std::mutex m;
-  std::condition_variable cv;
+  EventControl() : signalled_(false) {}
+  volatile bool signalled_;
+  std::mutex mutex_;
+  std::condition_variable condvar_;
 };
 
 
@@ -56,7 +56,7 @@ private:
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendIDs)(onnxBackendID *backendIDs, size_t *numBackends) {
   try {
-    *backendIDs = (onnxBackendID)(new OnnxXlaBackendID());
+    *backendIDs = reinterpret_cast<onnxBackendID>(new OnnxXlaBackendID());
     *numBackends = 1;
     return ONNXIFI_STATUS_SUCCESS;
   }
@@ -67,10 +67,10 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
   try {
-    auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
-    if (!backend_id) {
+    if (!backendID) {
       return ONNXIFI_STATUS_INVALID_ID;
     }
+    auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
     delete backend_id;
     return ONNXIFI_STATUS_SUCCESS;
   }
@@ -177,7 +177,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                      onnxBackend *backend) {
   try {
     auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
-    *backend = (onnxBackend)(new BackendControl(backend_id));
+    *backend = reinterpret_cast<onnxBackend>(new BackendControl(backend_id));
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -187,11 +187,11 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackend)(onnxBackend backend) {
   try {
-    auto *backendcontroller = reinterpret_cast<BackendControl *>(backend);
-    if (!backendcontroller) {
+    if (!backend) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }
-    delete backendcontroller;
+    auto *backendController = reinterpret_cast<BackendControl *>(backend);
+    delete backendController;
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -207,8 +207,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                    const onnxTensorDescriptor *weightDescriptors,
                    onnxGraph *graph) {
   try {
-    auto *backendcontroller = reinterpret_cast<BackendControl *>(backend);
-    if (!backendcontroller) {
+    if (!backend) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }
     if (!onnxModel) {
@@ -217,8 +216,8 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     if (onnxModelSize == 0) {
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
-
-    *graph = (onnxGraph) backendcontroller->build(onnxModel, onnxModelSize);
+    auto *backendController = reinterpret_cast<BackendControl *>(backend);
+    *graph = (onnxGraph) backendController->build(onnxModel, onnxModelSize);
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -232,14 +231,13 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                     uint32_t outputsCount,
                     const onnxTensorDescriptor *outputDescriptors) {
   try {
-    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor*>(graph);
-    if (!executor) {
+    if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
     if (!inputDescriptors || !outputDescriptors) {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
-
+    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor*>(graph);
     executor->initIO(inputsCount, inputDescriptors, outputsCount, outputDescriptors);
     return ONNXIFI_STATUS_SUCCESS;
   }
@@ -252,11 +250,10 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxRunGraph)(onnxGraph graph, const onnxMemoryFence *inputFence,
                   onnxMemoryFence *outputFence) {
   try {
-    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
-    if (!executor) {
+    if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
-
+    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
     executor->sendLiterals();
     executor->executeComputation();
     return ONNXIFI_STATUS_SUCCESS;
@@ -268,10 +265,10 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseGraph)(onnxGraph graph) {
   try {
-    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
-    if (!executor) {
+    if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
+    auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
     delete executor;
     return ONNXIFI_STATUS_SUCCESS;
   }
@@ -282,14 +279,16 @@ ONNXIFI_SYMBOL_NAME(onnxReleaseGraph)(onnxGraph graph) {
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitEvent)(onnxBackend backend, onnxEvent* event) {
   try {
-    if (!backend)  {
-      return ONNXIFI_STATUS_INVALID_BACKEND;
-    }
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
+    *event = NULL;
 
-    *event = (onnxEvent) new EventControl();
+    if (!backend)  {
+      return ONNXIFI_STATUS_INVALID_BACKEND;
+    }
+
+    *event = reinterpret_cast<onnxEvent>(new EventControl());
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -301,18 +300,18 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxSignalEvent)(onnxEvent event)  {
   try {
-    auto *e = reinterpret_cast<EventControl *>(event);
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }
+    auto *eventController = reinterpret_cast<EventControl *>(event);
     {
-       std::lock_guard<std::mutex> lk(e->m);
-       if (e->signalled)  {
+       std::lock_guard<std::mutex> lk(eventController->mutex_);
+       if (eventController->signalled_)  {
          return ONNXIFI_STATUS_INVALID_STATE;
        }
-       e->signalled = true;
+       eventController->signalled_ = true;
     }
-    e->cv.notify_all();
+    eventController->condvar_.notify_all();
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();
@@ -322,15 +321,16 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxWaitEvent)(onnxEvent event)  {
   try {
-    auto *e = reinterpret_cast<EventControl *>(event);
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }
-  
-    std::unique_lock<std::mutex> lk(e->m);
-    e->cv.wait(lk, [&e]{return e->signalled;});
+    
+    auto *eventController = reinterpret_cast<EventControl *>(event);  
+    std::unique_lock<std::mutex> lk(eventController->mutex_);
+    eventController->condvar_.wait(lk, [&eventController]
+                                       {return eventController->signalled_;});
     lk.unlock();
-    e->cv.notify_all();
+    eventController->condvar_.notify_all();
         
     return ONNXIFI_STATUS_SUCCESS;
   }
@@ -342,12 +342,11 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxReleaseEvent)(onnxEvent event)  {
   try {
-    auto *e = reinterpret_cast<EventControl *>(event);
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
-    }  
-    
-    delete event;
+    }
+    auto *eventController = reinterpret_cast<EventControl *>(event);
+    delete eventController;
     return ONNXIFI_STATUS_SUCCESS;
   }
   ONNXIFI_CATCH_EXCPETION();

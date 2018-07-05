@@ -102,10 +102,7 @@ namespace onnx_xla {
   }
 
   std::unique_ptr<Literal> XlaExecutor::descriptorToLiteral(const onnxTensorDescriptor& t) {
-    std::vector<int64> sizes;
-    for (auto i = 0; i < t.dimensions; ++i) {
-      sizes.push_back((int64) t.shape[i]);
-    }
+    std::vector<int64> sizes(&t.shape[0], &t.shape[t.dimensions]);
     int64 num_elements = std::accumulate(sizes.begin(), sizes.end(),
                                          (int64) 1, std::multiplies<int64>());
 
@@ -119,7 +116,7 @@ namespace onnx_xla {
       }                                                                        \
       return l;                                                                \
 
-    SWITCH(onnxifiToOnnx(t.dataType))
+    SWITCH(t.dataType)
     #undef OPERATION
   }
 
@@ -133,7 +130,7 @@ namespace onnx_xla {
         const std::string name(VAR##Descriptors[i].name);                       \
         ONNX_ASSERT(io_data_type_.find(name) != io_data_type_.end());           \
         VAR##_buffers_[name] = VAR##Descriptors[i].buffer;                      \
-        ONNX_ASSERT(onnxifiToOnnx(VAR##Descriptors[i].dataType) == io_data_type_[name]);        \
+        ONNX_ASSERT(VAR##Descriptors[i].dataType == io_data_type_[name]);        \
         ONNX_ASSERT(VAR##Descriptors[i].dimensions == io_shape_[name].size());  \
         for (auto j = 0; j < io_shape_[name].size(); ++j)  {                    \
           ONNX_ASSERT(io_shape_[name][j].is_int &&                              \
@@ -218,7 +215,7 @@ namespace onnx_xla {
         isInitialized[name] = true;
         const onnxTensorDescriptor& t = weight_descriptors_[i];
         const Value* v = inputNameToValue[name];
-        ONNX_ASSERT(onnxifiToOnnx(t.dataType) == v->elemType());
+        ONNX_ASSERT(t.dataType == v->elemType());
         ONNX_ASSERT(t.memoryType == ONNXIFI_MEMORY_TYPE_CPU);
         ONNX_ASSERT(t.dimensions == v->sizes().size());
         for (auto j = 0; j < t.dimensions; ++j)  {

@@ -10,7 +10,11 @@
 
 #define ONNXIFI_TRY_CATCH(TRY_BLOCK)                                           \
   try  {                                                                       \
-    return TRY_BLOCK();                                                               \
+    return TRY_BLOCK();                                                        \
+  }                                                                            \
+  catch (const std::bad_alloc& e) {                                            \
+    std::cout << "Allocation failed: " << e.what() << std::endl;               \
+    return ONNXIFI_STATUS_NO_SYSTEM_MEMORY;                                    \
   }                                                                            \
   catch (const std::exception &e) {                                            \
     std::cerr << "Internal Error: " << e.what() << std::endl;                  \
@@ -18,7 +22,7 @@
   }                                                                            \
   catch (...) {                                                                \
     return ONNXIFI_STATUS_INTERNAL_ERROR;                                      \
-  }
+  }                                                                            \
 
 
 //TODO: More formal representation of backendID - CPU, GPU, TPU?
@@ -58,6 +62,7 @@ private:
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendIDs)(onnxBackendID *backendIDs, size_t *numBackends) {
   ONNXIFI_TRY_CATCH(([&, backendIDs, numBackends] {
+    *numBackends = 0;
     *backendIDs = reinterpret_cast<onnxBackendID>(new OnnxXlaBackendID());
     *numBackends = 1;
     return ONNXIFI_STATUS_SUCCESS;
@@ -79,7 +84,8 @@ ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
 
 
 //Returning info for given ID
-//TODO: Expand for different IDs and fill in commented infoType parts
+//TODO: Make sure this information is correct
+//TODO: Expand for different IDs (TPU/GPU) in the future
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendInfo)(onnxBackendID backendID, onnxBackendInfo infoType,
                         void *infoValue, size_t *infoValueSize) {
@@ -102,52 +108,62 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     if (!infoValueSize) {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
-    if (infoType == ONNXIFI_BACKEND_NAME) {
-      return SET_STRING("OnnxXla");
-    } else if (infoType == ONNXIFI_BACKEND_VENDOR) {
-      return SET_STRING("Google");
-    } else if (infoType == ONNXIFI_BACKEND_VERSION) {
-      return SET_STRING("1.0.0");
-    } else if (infoType == ONNXIFI_BACKEND_EXTENSIONS) {
-      *infoValueSize = 0;
-    } else if (infoType == ONNXIFI_BACKEND_DEVICE) {
-      return SET_STRING("cpu (for now in development)");
-    } else if (infoType == ONNXIFI_BACKEND_DEVICE_TYPE) {
-      //return SET_UINT64(ONNXIFI_DEVICE_TYPE_CPU);
-    } else if (infoType == ONNXIFI_BACKEND_CAPABILITIES) {
-      //return SET_UINT64(0UL);
-    } else if (infoType == ONNXIFI_BACKEND_INIT_PROPERTIES) {
-      //return SET_UINT64(0UL);
-    } else if (infoType == ONNXIFI_BACKEND_MEMORY_TYPES) {
-      return SET_UINT64(ONNXIFI_MEMORY_TYPE_CPU);
-    } else if (infoType == ONNXIFI_BACKEND_MEMORY_SIZE) {
-      /*size_t free, total;
-      if (cudaMemGetInfo(&free, &total) != cudaSuccess) {
-        return ONNXIFI_STATUS_BACKEND_UNAVAILABLE;
+
+    switch(infoType)  {
+      case ONNXIFI_BACKEND_NAME:  {
+        return SET_STRING("onnx-xla");
       }
-      return SET_UINT64(uint64_t(total));*/
+      case ONNXIFI_BACKEND_VENDOR:  {
+        return SET_STRING("Google");
+      }
+      case ONNXIFI_BACKEND_VERSION:  {
+        return SET_STRING("1.0.0");
+      }
+      case ONNXIFI_BACKEND_EXTENSIONS:  {
+        *infoValueSize = 0;
+        return ONNXIFI_STATUS_SUCCESS;
+      }
+      case ONNXIFI_BACKEND_DEVICE:  {
+        return SET_STRING("cpu (for now in development)");
+      }
+      case ONNXIFI_BACKEND_DEVICE_TYPE:  {
+        return SET_UINT64(ONNXIFI_DEVICE_TYPE_CPU);
+      }
+      case ONNXIFI_BACKEND_CAPABILITIES:  {
+        return SET_UINT64(0UL);
+      }
+      case ONNXIFI_BACKEND_INIT_PROPERTIES:  {
+        return SET_UINT64(0UL);
+      }
+      case ONNXIFI_BACKEND_MEMORY_TYPES:  {
+        return SET_UINT64(ONNXIFI_MEMORY_TYPE_CPU);
+      }
+      case ONNXIFI_BACKEND_MEMORY_SIZE:  {
+        //TODO
+        return ONNXIFI_STATUS_UNSUPPORTED_PARAMETER;
+      }
+      case ONNXIFI_BACKEND_MAX_GRAPH_SIZE: {
+        return SET_UINT64(1000000UL);
+      }
+      case ONNXIFI_BACKEND_MAX_GRAPH_COUNT: {
+        return SET_UINT64(1UL);
+      }
+      case ONNXIFI_BACKEND_MACS_FP32: {
+        return SET_UINT64(0UL);
+      }
+      case ONNXIFI_BACKEND_MACS_FP16:  {
+        return SET_UINT64(0UL);
+      }
+      case ONNXIFI_BACKEND_MEMORY_BANDWIDTH:  {
+        return SET_UINT64(0UL);
+      }
+      case ONNXIFI_BACKEND_CPU_MEMORY_READ_BANDWIDTH:  {
+        return SET_UINT64(0UL);
+      }
+      default:  {
+        return ONNXIFI_STATUS_UNSUPPORTED_PARAMETER;
+      }
     }
-    // Dummy numbers
-    else if (infoType == ONNXIFI_BACKEND_MAX_GRAPH_SIZE) {
-      //return SET_UINT64(1000000UL);
-    } else if (infoType == ONNXIFI_BACKEND_MAX_GRAPH_COUNT) {
-      //return SET_UINT64(1UL);
-    } else if (infoType == ONNXIFI_BACKEND_MACS_FP32) {
-      //return SET_UINT64(0UL);
-    } else if (infoType == ONNXIFI_BACKEND_MACS_FP16) {
-      //return SET_UINT64(0UL);
-    } else if (infoType == ONNXIFI_BACKEND_MEMORY_BANDWIDTH) {
-      //return SET_UINT64(0UL);
-    } else if (infoType == ONNXIFI_BACKEND_CPU_MEMORY_READ_BANDWIDTH) {
-      //return SET_UINT64(0UL);
-    } else if (infoType == ONNXIFI_BACKEND_CPU_MEMORY_WRITE_BANDWIDTH) {
-      //return SET_UINT64(0UL);
-    } else {
-      return ONNXIFI_STATUS_UNSUPPORTED_PARAMETER;
-    }
-    return ONNXIFI_STATUS_SUCCESS;
-#undef RETURN_STRING
-#undef SET_UINT64
   }))
 }
 

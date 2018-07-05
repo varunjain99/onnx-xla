@@ -228,6 +228,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                    const onnxTensorDescriptor *weightDescriptors,
                    onnxGraph *graph) {
   onnxifiTryCatch([&] {
+    *graph = NULL;
     if (!backend) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }

@@ -106,7 +106,7 @@ namespace onnx_xla  {
     input.buffer = (onnxPointer) new float[24];
 
     //Execute using XLA backend
-    XlaTransform runner(std::move(relu_graph), "relu", 0, NULL);
+    XlaTransform runner(std::move(relu_graph), "relu", 0, nullptr);
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(1, &input, 1, &output);

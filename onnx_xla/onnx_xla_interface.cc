@@ -3,27 +3,28 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <functional>
 
 //TODO: Robust error handling
 //TODO: Figure out how to determine type of device, what information to store
 //      about hardware, and how to modify execution as a result
 
-#define ONNXIFI_TRY_CATCH(TRY_BLOCK)                                           \
-  try  {                                                                       \
-    return TRY_BLOCK();                                                        \
-  }                                                                            \
-  catch (const std::bad_alloc& e) {                                            \
-    std::cout << "Allocation failed: " << e.what() << std::endl;               \
-    return ONNXIFI_STATUS_NO_SYSTEM_MEMORY;                                    \
-  }                                                                            \
-  catch (const std::exception &e) {                                            \
-    std::cerr << "Internal Error: " << e.what() << std::endl;                  \
-    return ONNXIFI_STATUS_INTERNAL_ERROR;                                      \
-  }                                                                            \
-  catch (...) {                                                                \
-    return ONNXIFI_STATUS_INTERNAL_ERROR;                                      \
-  }                                                                            \
-
+onnxStatus onnxifiTryCatch(std::function<onnxStatus()> tryBlock)  {
+  try  {                                                   
+    return tryBlock();          
+  }
+  catch (const std::bad_alloc& e) {                                            
+    std::cout << "Allocation failed: " << e.what() << std::endl;               
+    return ONNXIFI_STATUS_NO_SYSTEM_MEMORY;                                    
+  }                                                                            
+  catch (const std::exception &e) {                                            
+    std::cerr << "Internal Error: " << e.what() << std::endl;                  
+    return ONNXIFI_STATUS_INTERNAL_ERROR;                                      
+  }                                                                            
+  catch (...) {                                                                
+    return ONNXIFI_STATUS_INTERNAL_ERROR;                                      
+  }
+}
 
 //TODO: More formal representation of backendID - CPU, GPU, TPU?
 struct OnnxXlaBackendID {
@@ -61,25 +62,25 @@ private:
 //TODO: Determining # of CPU, GPU, TPU devices and return
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendIDs)(onnxBackendID *backendIDs, size_t *numBackends) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     *numBackends = 0;
     *backendIDs = reinterpret_cast<onnxBackendID>(new OnnxXlaBackendID());
     *numBackends = 1;
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 //Free memory for given backend ID
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     if (!backendID) {
       return ONNXIFI_STATUS_INVALID_ID;
     }
     auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
     delete backend_id;
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 
@@ -89,25 +90,33 @@ ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendInfo)(onnxBackendID backendID, onnxBackendInfo infoType,
                         void *infoValue, size_t *infoValueSize) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
+    if (!infoValueSize) {
+      return ONNXIFI_STATUS_INVALID_POINTER;
+    }
+
+    if (!backendID)  {
+      return ONNXIFI_STATUS_INVALID_ID;
+    }
 
     auto SET_STRING = [&](const char* str)  {
+                        if (!infoValue || *infoValueSize < strlen(str) + 1)  {
+                          *infoValueSize = strlen(str) + 1;
+                          return ONNXIFI_STATUS_FALLBACK;
+                        }
                         strncpy((char *)(infoValue), str, *infoValueSize);
                         *infoValueSize = strlen(str) + 1;
                         return ONNXIFI_STATUS_SUCCESS;
                       };
     auto SET_UINT64 = [&](uint64_t x)  {
-                        if (*infoValueSize < sizeof(uint64_t)) {
-                          return ONNXIFI_STATUS_INVALID_POINTER;
-                        }                                
+                        if (!infoValue || *infoValueSize < sizeof(uint64_t))  {
+                          *infoValueSize = sizeof(uint64_t);
+                          return ONNXIFI_STATUS_FALLBACK;
+                        }
                         *(uint64_t *)(infoValue) = x;                                              
                         *infoValueSize = sizeof(uint64_t);
                         return ONNXIFI_STATUS_SUCCESS;
                       };
-                                        
-    if (!infoValueSize) {
-      return ONNXIFI_STATUS_INVALID_POINTER;
-    }
 
     switch(infoType)  {
       case ONNXIFI_BACKEND_NAME:  {
@@ -164,25 +173,22 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
         return ONNXIFI_STATUS_UNSUPPORTED_PARAMETER;
       }
     }
-  }))
+  });
 }
 
 //TODO: Figure out how to get compatibility e.g. sufficient to run OnnxParser?
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendCompatibility)(onnxBackendID backendID, size_t onnxModelSize,
                                  const void *onnxModel) {
-  ONNXIFI_TRY_CATCH(([&] {
-  
+  onnxifiTryCatch([&] {
     if (!onnxModel) {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
     if (onnxModelSize == 0) {
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
-
     return ONNXIFI_STATUS_SUCCESS;
-
-  }))
+  });
 }
 
 //TODO: any arguments to pass?
@@ -190,24 +196,24 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitBackend)(onnxBackendID backendID, const uint64_t *auxPropertiesList,
                      onnxBackend *backend) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
     *backend = reinterpret_cast<onnxBackend>(new BackendControl(backend_id));
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 //Release BackendControl object
-ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
-ONNXIFI_SYMBOL_NAME(onnxReleaseBackend)(onnxBackend backend) {
-  ONNXIFI_TRY_CATCH(([&] {    
+ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
+    onnxReleaseBackend)(onnxBackend backend) {
+  onnxifiTryCatch([&] {    
     if (!backend) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }
     auto *backendController = reinterpret_cast<BackendControl *>(backend);
     delete backendController;
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 
@@ -219,7 +225,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                    const void *onnxModel, uint32_t weightsCount,
                    const onnxTensorDescriptor *weightDescriptors,
                    onnxGraph *graph) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     if (!backend) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }
@@ -232,7 +238,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     auto *backendController = reinterpret_cast<BackendControl *>(backend);
     *graph = (onnxGraph) backendController->build(onnxModel, onnxModelSize);
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 //Verify IO metadata and use initIO to store location of IO
@@ -242,7 +248,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                     const onnxTensorDescriptor *inputDescriptors,
                     uint32_t outputsCount,
                     const onnxTensorDescriptor *outputDescriptors) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
@@ -252,7 +258,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     auto *executor = reinterpret_cast<onnx_xla::XlaExecutor*>(graph);
     executor->initIO(inputsCount, inputDescriptors, outputsCount, outputDescriptors);
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 //Runs the XlaExecutor by sending literals to server and executing computation 
@@ -260,7 +266,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxRunGraph)(onnxGraph graph, const onnxMemoryFence *inputFence,
                   onnxMemoryFence *outputFence) {
-  ONNXIFI_TRY_CATCH(([&] {
+ onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
@@ -268,26 +274,26 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     executor->sendLiterals();
     executor->executeComputation();
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 //Frees executor memory
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxReleaseGraph)(onnxGraph graph) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
     auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
     delete executor;
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 //Initialize event by creating EventControl object on the heap
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitEvent)(onnxBackend backend, onnxEvent* event) {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
@@ -299,15 +305,13 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 
     *event = reinterpret_cast<onnxEvent>(new EventControl());
     return ONNXIFI_STATUS_SUCCESS;
-  }))
-
-
+  });
 }
 
 //Signal Event by changing the signalled boolean under mutex hold
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxSignalEvent)(onnxEvent event)  {
-  ONNXIFI_TRY_CATCH(([&] {    
+  onnxifiTryCatch([&] {    
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }
@@ -321,13 +325,13 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     }
     eventController->condvar_.notify_all();
     return ONNXIFI_STATUS_SUCCESS;
-  }))
+  });
 }
 
 //Wait for signalled to be turned true using conditional variable to coordinate
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxWaitEvent)(onnxEvent event)  {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }
@@ -338,20 +342,18 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                                        {return eventController->signalled_;});
         
     return ONNXIFI_STATUS_SUCCESS;
-  }))
-
+  });
 }
 
 //Free memory that was allocated for the EventControl object
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxReleaseEvent)(onnxEvent event)  {
-  ONNXIFI_TRY_CATCH(([&] {
+  onnxifiTryCatch([&] {
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }
     auto *eventController = reinterpret_cast<EventControl *>(event);
     delete eventController;
     return ONNXIFI_STATUS_SUCCESS;
-  }))
-
+  });
 }

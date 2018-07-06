@@ -13,7 +13,7 @@ onnxStatus onnxifiTryCatch(std::function<onnxStatus()> tryBlock)  {
     return tryBlock();          
   }
   catch (const std::bad_alloc& e) {                                            
-    std::cout << "Allocation failed: " << e.what() << std::endl;               
+    std::cerr << "Allocation failed: " << e.what() << std::endl;               
     return ONNXIFI_STATUS_NO_SYSTEM_MEMORY;                                    
   }                                                                            
   catch (const std::exception &e) {                                            

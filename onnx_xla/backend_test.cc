@@ -36,7 +36,7 @@ namespace onnx_xla  {
     relu_output->setSizes(sizes);
     relu_output->setUniqueName("relu_output");
     relu_graph->return_node()->addInput(relu_output);
-    
+
     //Set up IO information
     uint64_t shape[3] = {2, 3, 4};
     onnxTensorDescriptor output;
@@ -46,19 +46,19 @@ namespace onnx_xla  {
     output.dimensions = 3;
     output.shape = shape;
     output.buffer = (onnxPointer) new float[24];
- 
+
     //Setup events
     //Hacky event usage to make it work (cannot use onnxifi with backend)
     onnxMemoryFence inputFence;
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     auto inputEvent = new EventControl();
     inputEvent->signalled_ = true;
-    *inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+    inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
     onnxMemoryFence outputFence;
     outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     auto outputEvent = new EventControl();
     outputEvent->signalled_ = false;
-    *outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+    outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
  
     //Execute using XLA backend
     XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);
@@ -129,12 +129,12 @@ namespace onnx_xla  {
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     auto inputEvent = new EventControl();
     inputEvent->signalled_ = true;
-    *inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+    inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
     onnxMemoryFence outputFence;
     outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     auto outputEvent = new EventControl();
     outputEvent->signalled_ = false;
-    *outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+    outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
 
     //Execute using XLA backend
     XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);

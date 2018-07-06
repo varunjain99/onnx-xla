@@ -120,39 +120,53 @@ namespace onnx_xla {
     #undef OPERATION
   }
 
-  void XlaExecutor::initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
+  onnxStatus XlaExecutor::initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
                            uint32_t  outputsCount, const onnxTensorDescriptor* outputDescriptors) {
-    ONNX_ASSERT(num_inputs_ == inputsCount);
-    ONNX_ASSERT(num_outputs_ == outputsCount);
+    if (num_inputs_ != inputsCount)  {
+      throw("Did not receive expected number of inputs");
+    }
+    if (num_outputs_ != outputsCount)  {
+      throw("Did not receive expected number of outputs");
+    }
     
-    #define CHECK_TYPE_AND_SHAPE(VAR)                                         \
+    #define CHECK_TYPE_AND_SHAPE(VAR)                                           \
       for (auto i = 0; i < num_##VAR##s_; ++i)  {                               \
         const std::string name(VAR##Descriptors[i].name);                       \
-        ONNX_ASSERT(io_data_type_.find(name) != io_data_type_.end());           \
+        if (io_data_type_.find(name) == io_data_type_.end())  {                 \
+          return ONNXIFI_STATUS_INVALID_NAME;                                   \
+        }                                                                       \
         VAR##_buffers_[name] = VAR##Descriptors[i].buffer;                      \
-        ONNX_ASSERT(VAR##Descriptors[i].dataType == io_data_type_[name]);        \
-        ONNX_ASSERT(VAR##Descriptors[i].dimensions == io_shape_[name].size());  \
+        if (VAR##Descriptors[i].dataType != io_data_type_[name])  {             \
+          return ONNXIFI_STATUS_MISMATCHING_DATATYPE;                           \
+        } 									\
+        if (VAR##Descriptors[i].dimensions != io_shape_[name].size())  {        \
+          return ONNXIFI_STATUS_MISMATCHING_SHAPE;                              \
+        }									\
         for (auto j = 0; j < io_shape_[name].size(); ++j)  {                    \
-          ONNX_ASSERT(io_shape_[name][j].is_int &&                              \
-                      io_shape_[name][j].dim == VAR##Descriptors[i].shape[j]);  \
-        }                                                                         \
+          if(!io_shape_[name][j].is_int ||                                      \
+             io_shape_[name][j].dim != VAR##Descriptors[i].shape[j])  {         \
+            return ONNXIFI_STATUS_MISMATCHING_SHAPE;                            \
+          }                							\
+        }                                                                       \
       }                                                                         \
 
     CHECK_TYPE_AND_SHAPE(input);
     CHECK_TYPE_AND_SHAPE(output);
+    return ONNXIFI_STATUS_SUCCESS;
     #undef CHECK_TYPE_AND_SHAPE
   }
 
-  void XlaExecutor::sendInputs()  {
+  onnxStatus XlaExecutor::sendInputs()  {
     //WAIT FOR INPUT SYNCHRONIZATION PRIMITIVE
     for (const std::string& s : param_input_name_)  {
       auto l_ptr = this->inputNameToLiteral(s);
       auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
       arguments_.push_back(l_data_ptr.release());
     }
+    return ONNXIFI_STATUS_SUCCESS;
   } 
 
-  void XlaExecutor::executeComputation() {
+  onnxStatus XlaExecutor::executeComputation() {
     
     #define OPERATION(type_to, type_from, vec)                                  \
       type_to* destination = (type_to*) output_buffers_[output_names_[i]];      \
@@ -171,6 +185,7 @@ namespace onnx_xla {
       SWITCH(io_data_type_[output_names_[i]])
     }
     //SET OUTPUT SYNCHRONIZATION PRIMITIVE
+    return ONNXIFI_STATUS_SUCCESS;
     #undef OPERATION
   }
 
@@ -200,8 +215,14 @@ namespace onnx_xla {
     value_to_op_[v] = std::move(builder_.GetTupleElement(op, index));
   }
 
-  void XlaTransform::handleInputs()  {
-    ONNX_ASSERT(ir_->initializers().size() == 0 || !weight_descriptors_);
+  onnxStatus XlaTransform::handleInputs()  {
+    if (ir_->initializers().size() != 0 && weight_descriptors_)  {
+      throw("Static weights of the graph should be passed through ModelProto.graph.initializer,"
+            "or through the weightDescriptors parameters, not both");
+    }
+    if (weights_count_ > 0 && !weight_descriptors_)  {
+      return ONNXIFI_STATUS_INVALID_POINTER;
+    }
     std::unordered_map<std::string, const Value*> inputNameToValue;
     for (const Value* v : ir_->inputs()) {
       inputNameToValue[v->uniqueName()] = v;
@@ -215,12 +236,20 @@ namespace onnx_xla {
         isInitialized[name] = true;
         const onnxTensorDescriptor& t = weight_descriptors_[i];
         const Value* v = inputNameToValue[name];
-        ONNX_ASSERT(t.dataType == v->elemType());
-        ONNX_ASSERT(t.memoryType == ONNXIFI_MEMORY_TYPE_CPU);
-        ONNX_ASSERT(t.dimensions == v->sizes().size());
+        if (t.dataType == v->elemType()) {
+          return ONNXIFI_STATUS_MISMATCHING_DATATYPE;
+        }
+        if (t.memoryType != ONNXIFI_MEMORY_TYPE_CPU)  {
+          throw("The weightDescriptors parameters must have"
+                "memoryType ONNXIFI_MEMORY_TYPE_CPU");
+        }
+        if (t.dimensions != v->sizes().size())  {
+          return ONNXIFI_STATUS_MISMATCHING_SHAPE;
+        }
         for (auto j = 0; j < t.dimensions; ++j)  {
-          ONNX_ASSERT(v->sizes()[j].is_int && 
-                      t.shape[j] == v->sizes()[j].dim);
+          if (!v->sizes()[j].is_int || t.shape[j] != v->sizes()[j].dim)  {
+            return ONNXIFI_STATUS_MISMATCHING_SHAPE;
+          }
         }   
         auto l_ptr = executor_->descriptorToLiteral(t);
         auto constant = builder_.ConstantLiteral(*l_ptr);
@@ -247,9 +276,10 @@ namespace onnx_xla {
         executor_->io_shape_[v->uniqueName()] = v->sizes();
       }
     }
+    return ONNXIFI_STATUS_SUCCESS;
   }
   
-  void XlaTransform::handleOutputs()  {
+  onnxStatus XlaTransform::handleOutputs()  {
     executor_->num_outputs_ = (uint32_t) ir_->outputs().size();
     std::vector<XlaOp> retOps;
     for(const Value* v : ir_->outputs())  {
@@ -259,10 +289,15 @@ namespace onnx_xla {
       executor_->output_names_.push_back(v->uniqueName());
     }
     builder_.Tuple(retOps);
+    return ONNXIFI_STATUS_SUCCESS;
   }
 
-  void XlaTransform::translateGraph() {
-    this->handleInputs();
+  onnxStatus XlaTransform::translateGraph() {
+    auto handleInputsStatus = this->handleInputs();
+    if (handleInputsStatus != ONNXIFI_STATUS_SUCCESS)  {
+      return handleInputsStatus;
+    }
+
     for (auto it = ir_->begin(); it != ir_->end(); ++it) {
       if (it->kind() == ONNX_NAMESPACE::Symbol("Relu")) {
         auto input = value_to_op_[it->inputs()[0]];
@@ -275,28 +310,50 @@ namespace onnx_xla {
         continue;
       }
       else {
-        throw conversion_error("Conversion of node type not supported.");
+        std::cerr << it->kind().toString() << " is not a supported operator" << std::endl;
+        return ONNXIFI_STATUS_UNSUPPORTED_OPERATOR;
       }
     }
-    this->handleOutputs();
 
+    auto handleOutputsStatus = this->handleOutputs();
+    if (handleOutputsStatus != ONNXIFI_STATUS_SUCCESS)  {
+      return handleOutputsStatus;
+    }
     auto computation_status = builder_.Build();
-    TF_CHECK_OK(computation_status.status());
+    if (!computation_status.ok())  {
+      throw("The graph was not able to be built");
+    }
     executor_->computation_ = computation_status.ConsumeValueOrDie();
-
+    return ONNXIFI_STATUS_SUCCESS;
   }
 
   XlaExecutor* XlaTransform::executor()  {
     return executor_.release();
   }
 
-  OnnxParser::OnnxParser(const void* serializedModel, size_t serializedModelSize)  {
-    ONNX_NAMESPACE::ParseProtoFromBytes(&model_, (const char*) serializedModel, serializedModelSize);
-  }
+  OnnxParser::OnnxParser(const void* serializedModel, size_t serializedModelSize) :
+                         serialized_model_(serializedModel), 
+                         serialized_model_size_(serializedModelSize) {}
 
-  std::unique_ptr<Graph> OnnxParser::parse()  {
-    ONNX_NAMESPACE::shape_inference::InferShapes(model_);
-    return ONNX_NAMESPACE::ImportModelProto(model_);
-  }  
+  onnxStatus OnnxParser::parse(std::unique_ptr<Graph>& ir)  {
+    ModelProto deserializedModel;
+    if (!ONNX_NAMESPACE::ParseProtoFromBytes(&deserializedModel,
+                                             (const char*) serialized_model_,
+                                             serialized_model_size_))  {
+      return ONNXIFI_STATUS_INVALID_PROTOBUF;
+    }
+    try {
+      ONNX_NAMESPACE::shape_inference::InferShapes(deserializedModel);
+      ir = ONNX_NAMESPACE::ImportModelProto(deserializedModel);
+      return ONNXIFI_STATUS_SUCCESS;
+    }
+    catch (const std::exception &e) {                          
+      std::cerr << e.what() << std::endl;
+      return ONNXIFI_STATUS_INVALID_MODEL;
+    }            
+    catch (...) {                          
+      return ONNXIFI_STATUS_INVALID_MODEL;
+    }
+  }
   #undef SWITCH
 }

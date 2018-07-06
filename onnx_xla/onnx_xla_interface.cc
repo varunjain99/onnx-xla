@@ -45,16 +45,25 @@ struct BackendControl {
 public:
   BackendControl(OnnxXlaBackendID* id) : backendID(id) {}
   //use OnnxParser and XlaTransform to return executor
-  onnx_xla::XlaExecutor* build(const void* serializedModel, size_t serializedModelSize,
-                               uint32_t weightsCount, const onnxTensorDescriptor *weightDescriptors) {
+  onnxStatus build(const void* serializedModel, size_t serializedModelSize, uint32_t weightsCount, 
+                   const onnxTensorDescriptor *weightDescriptors, onnxGraph* graph) {
    
     onnx_xla::OnnxParser parser(serializedModel, serializedModelSize);
-    std::unique_ptr<ONNX_NAMESPACE::Graph> ir = parser.parse();
+    std::unique_ptr<ONNX_NAMESPACE::Graph> ir(nullptr);
+    auto parseStatus = parser.parse(ir);
+    if (parseStatus != ONNXIFI_STATUS_SUCCESS)  {
+      return parseStatus;
+    }
     std::string build_name = ir->name();
     onnx_xla::XlaTransform runner(std::move(ir), build_name,
                                   weightsCount, weightDescriptors);
-    runner.translateGraph();
-    return runner.executor();
+    auto translateStatus = runner.translateGraph();
+    if (translateStatus != ONNXIFI_STATUS_SUCCESS)  {
+      return translateStatus;
+    }
+
+    *graph = reinterpret_cast<onnxGraph>(runner.executor());
+    return ONNXIFI_STATUS_SUCCESS;
   }
 private:
   OnnxXlaBackendID* backendID;
@@ -239,9 +248,8 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_SIZE;
     }
     auto *backendController = reinterpret_cast<BackendControl *>(backend);
-    *graph = (onnxGraph) backendController->build(onnxModel, onnxModelSize,
-                                            weightsCount, weightDescriptors);
-    return ONNXIFI_STATUS_SUCCESS;
+    return backendController->build(onnxModel, onnxModelSize, weightsCount, 
+                                    weightDescriptors, graph);
   });
 }
 
@@ -260,8 +268,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
     auto *executor = reinterpret_cast<onnx_xla::XlaExecutor*>(graph);
-    executor->initIO(inputsCount, inputDescriptors, outputsCount, outputDescriptors);
-    return ONNXIFI_STATUS_SUCCESS;
+    return executor->initIO(inputsCount, inputDescriptors, outputsCount, outputDescriptors);
   });
 }
 
@@ -275,9 +282,11 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
     auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
-    executor->sendInputs();
-    executor->executeComputation();
-    return ONNXIFI_STATUS_SUCCESS;
+    auto sendInputsStatus = executor->sendInputs();
+    if (sendInputsStatus != ONNXIFI_STATUS_SUCCESS)  {
+      return sendInputsStatus;
+    }
+    return executor->executeComputation();
   });
 }
 

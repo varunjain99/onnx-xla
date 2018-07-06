@@ -57,14 +57,14 @@ namespace onnx_xla {
   class XlaExecutor final  {
   public:
     //Used to pass IO metadata and locations to the engine
-    void initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
+    onnxStatus initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
                 uint32_t  outputsCount, const onnxTensorDescriptor* outputDescriptors);
 
     //Sends input tensor values to the server
-    void sendInputs();
+    onnxStatus sendInputs();
 
     //Runs the computation on the server using passed input 
-    void executeComputation();
+    onnxStatus executeComputation();
 
   private:
     //computation to be run
@@ -122,7 +122,8 @@ namespace onnx_xla {
     //    TODO: Fix kUndefinded translation, which is present for relu test
     //    TODO: Make function registry
     //  Fills up exector_'s output names
-    void translateGraph();
+    //  Returns status
+    onnxStatus translateGraph();
 
     //Used to get handle to XlaExecutor
     //NOTE: Can only be called on once as it releases the unique pointer. Freeing
@@ -163,24 +164,26 @@ namespace onnx_xla {
     //Create ConstantLiteral XlaOps for initializers/weights, verifying weight descriptors;
     //Creates params for other runtime inputs
     //Fill executor_'s input metadata (type, shape) to be verified later
-    void handleInputs();
+    onnxStatus handleInputs();
 
     //Fill output_names_
     //Create output XlaOp
     //Fill executor_'s output metadata (type, shape) to be verified later
-    void handleOutputs();
+    onnxStatus handleOutputs();
   };
 
   //Engine to build up an IR graph from proto bytes format. Model validation and 
   //shape inference for entire graph is conducted here.
   class OnnxParser {
   public:
-    //Constructs ModelProto from byte form
+    //Initializes parser
     OnnxParser(const void* serializedModel, size_t serializedModelSize);
 
-    //Shape inference and model validation, followed by conversion to IR
-    std::unique_ptr<Graph> parse();
+    //Deserialize to modelProto, shape inference, and conversion to IR 
+    //(model validation) stored in ir
+    onnxStatus parse(std::unique_ptr<Graph>& ir);
   private:
-    ModelProto model_;
+    const void* serialized_model_;
+    size_t serialized_model_size_;
   };
 }

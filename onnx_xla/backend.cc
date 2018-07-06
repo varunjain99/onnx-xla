@@ -1,6 +1,8 @@
 #include "onnx_xla/backend.h"
 
 namespace onnx_xla {
+  XlaExecutor::XlaExecutor(onnxBackend backend) : backend_(backend) {}
+
   #define SWITCH(data_type)                                                    \
     switch(data_type) {                                                        \
       case ONNX_NAMESPACE::TensorProto_DataType_FLOAT:  {                      \
@@ -156,8 +158,11 @@ namespace onnx_xla {
     #undef CHECK_TYPE_AND_SHAPE
   }
 
-  onnxStatus XlaExecutor::sendInputs()  {
-    //WAIT FOR INPUT SYNCHRONIZATION PRIMITIVE
+  onnxStatus XlaExecutor::sendInputs(const onnxMemoryFence* inputFence)  {
+    auto waitStatus = onnxWaitEvent(*inputFence->event);
+    if (waitStatus != ONNXIFI_STATUS_SUCCESS)  {
+      return waitStatus;
+    }
     for (const std::string& s : param_input_name_)  {
       auto l_ptr = this->inputNameToLiteral(s);
       auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
@@ -166,7 +171,7 @@ namespace onnx_xla {
     return ONNXIFI_STATUS_SUCCESS;
   } 
 
-  onnxStatus XlaExecutor::executeComputation() {
+  onnxStatus XlaExecutor::executeComputation(onnxMemoryFence* outputFence) {
     
     #define OPERATION(type_to, type_from, vec)                                  \
       type_to* destination = (type_to*) output_buffers_[output_names_[i]];      \
@@ -184,15 +189,14 @@ namespace onnx_xla {
       }
       SWITCH(io_data_type_[output_names_[i]])
     }
-    //SET OUTPUT SYNCHRONIZATION PRIMITIVE
-    return ONNXIFI_STATUS_SUCCESS;
+    return onnxSignalEvent(*outputFence->event);
     #undef OPERATION
   }
 
-  XlaTransform::XlaTransform(std::unique_ptr<Graph> ir, const std::string& build_name,
+  XlaTransform::XlaTransform(onnxBackend backend, std::unique_ptr<Graph> ir, const std::string& build_name,
                              uint32_t weightsCount, const onnxTensorDescriptor *weightDescriptors) :
                              weights_count_(weightsCount), weight_descriptors_(weightDescriptors),
-                             builder_(build_name), executor_(new XlaExecutor()), global_param_number_(0) {
+                             builder_(build_name), executor_(new XlaExecutor(backend)), global_param_number_(0) {
     ir_ = std::move(ir);
   }
 

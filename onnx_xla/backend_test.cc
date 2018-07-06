@@ -1,4 +1,4 @@
-#include "onnx_xla/backend.h"
+#include "onnx_xla/onnxifi_helper.h"
 #include "onnx_xla/backend_test.h"
 #include <stdlib.h>
 #include <cmath>
@@ -46,17 +46,30 @@ namespace onnx_xla  {
     output.dimensions = 3;
     output.shape = shape;
     output.buffer = (onnxPointer) new float[24];
-   
-     //Execute using XLA backend
-    XlaTransform runner(std::move(relu_graph), "relu", 0, NULL);
+ 
+    //Setup events
+    //Hacky event usage to make it work (cannot use onnxifi with backend)
+    onnxMemoryFence inputFence;
+    inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
+    auto inputEvent = new EventControl();
+    inputEvent->signalled_ = true;
+    *inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+    onnxMemoryFence outputFence;
+    outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
+    auto outputEvent = new EventControl();
+    outputEvent->signalled_ = false;
+    *outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+ 
+    //Execute using XLA backend
+    XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(0, nullptr, 1, &output);
-    executor->sendInputs();
-    executor->executeComputation();
+    executor->sendInputs(&inputFence);
+    executor->executeComputation(&outputFence);
 
-    delete executor; 
-    //Check correctness    
+    //Check correctness
+    ONNX_ASSERT(outputEvent->signalled_);
     float* output_ptr = (float*) output.buffer;
     for (int i = 0; i < 24; ++i)  {
       if (initializer.floats()[i] > 0.0f)  {
@@ -65,7 +78,12 @@ namespace onnx_xla  {
         ONNX_ASSERT(almost_equal(0.0f, output_ptr[i]));
       }
     }
+
+    //Free memory
+    delete executor;
     delete [] output_ptr;
+    delete inputEvent;
+    delete outputEvent;
   }
 
   void dynamic_relu_test()  {
@@ -105,8 +123,21 @@ namespace onnx_xla  {
     input.shape = shape;
     input.buffer = (onnxPointer) new float[24];
 
+    //Setup events
+    //Hacky event usage to make it work (cannot use onnxifi with backend)
+    onnxMemoryFence inputFence;
+    inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
+    auto inputEvent = new EventControl();
+    inputEvent->signalled_ = true;
+    *inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+    onnxMemoryFence outputFence;
+    outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
+    auto outputEvent = new EventControl();
+    outputEvent->signalled_ = false;
+    *outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+
     //Execute using XLA backend
-    XlaTransform runner(std::move(relu_graph), "relu", 0, nullptr);
+    XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);
     runner.translateGraph();
     auto executor = runner.executor();
     executor->initIO(1, &input, 1, &output);
@@ -117,12 +148,12 @@ namespace onnx_xla  {
       std::mt19937 rand_engine(rand_dev());
       input_ptr[i] = unif(rand_engine);
     }
-    executor->sendInputs();
-    executor->executeComputation();
+    executor->sendInputs(&inputFence);
+    executor->executeComputation(&outputFence);
 
-    delete executor;
-    float* output_ptr = (float*) output.buffer;
     //Check correctness
+    ONNX_ASSERT(outputEvent->signalled_);
+    float* output_ptr = (float*) output.buffer;
     for (int i = 0; i < 24; ++i)  {
       if (input_ptr[i] > 0.0f)  {
         ONNX_ASSERT(almost_equal(input_ptr[i], output_ptr[i]));
@@ -130,7 +161,12 @@ namespace onnx_xla  {
         ONNX_ASSERT(almost_equal(0.0f, output_ptr[i]));
       }
     }
+
+    //Free memory
+    delete executor;
     delete [] input_ptr;
     delete [] output_ptr;
+    delete inputEvent;
+    delete outputEvent;
   }
 }

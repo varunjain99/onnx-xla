@@ -1,11 +1,10 @@
 #include "onnx/onnxifi.h"
-#include "onnx_xla/backend.h"
+#include "onnx_xla/onnxifi_helper.h"
 #include <thread>
 #include <mutex>
 #include <condition_variable>
 #include <functional>
 
-//TODO: Robust error handling
 //TODO: Figure out how to determine type of device, what information to store
 //      about hardware, and how to modify execution as a result
 
@@ -25,49 +24,6 @@ onnxStatus onnxifiTryCatch(std::function<onnxStatus()> tryBlock)  {
     return ONNXIFI_STATUS_INTERNAL_ERROR;                                      
   }
 }
-
-//TODO: More formal representation of backendID - CPU, GPU, TPU?
-struct OnnxXlaBackendID {
-  int device_id{0};
-};
-
-struct EventControl {
-  EventControl() : signalled_(false) {}
-  volatile bool signalled_;
-  std::mutex mutex_;
-  std::condition_variable condvar_;
-};
-
-
-//Backend engine
-//  backendID will eventually determine translation detail
-struct BackendControl {
-public:
-  BackendControl(OnnxXlaBackendID* id) : backendID(id) {}
-  //use OnnxParser and XlaTransform to return executor
-  onnxStatus build(const void* serializedModel, size_t serializedModelSize, uint32_t weightsCount, 
-                   const onnxTensorDescriptor *weightDescriptors, onnxGraph* graph) {
-   
-    onnx_xla::OnnxParser parser(serializedModel, serializedModelSize);
-    std::unique_ptr<ONNX_NAMESPACE::Graph> ir(nullptr);
-    auto parseStatus = parser.parse(ir);
-    if (parseStatus != ONNXIFI_STATUS_SUCCESS)  {
-      return parseStatus;
-    }
-    std::string build_name = ir->name();
-    onnx_xla::XlaTransform runner(std::move(ir), build_name,
-                                  weightsCount, weightDescriptors);
-    auto translateStatus = runner.translateGraph();
-    if (translateStatus != ONNXIFI_STATUS_SUCCESS)  {
-      return translateStatus;
-    }
-
-    *graph = reinterpret_cast<onnxGraph>(runner.executor());
-    return ONNXIFI_STATUS_SUCCESS;
-  }
-private:
-  OnnxXlaBackendID* backendID;
-};
 
 //Create 1 backendID
 //TODO: Determining # of CPU, GPU, TPU devices and return
@@ -230,7 +186,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 
 //Create and return XlaExecutor object
 // TODO: Ignore the weightDescriptors for now and rely on initialization list
-//TODO: error handling with error status codes passed
+//TODO: more robust error handling in header file to be included
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitGraph)(onnxBackend backend, size_t onnxModelSize,
                    const void *onnxModel, uint32_t weightsCount,
@@ -255,6 +211,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 
 //Verify IO metadata and use initIO to store location of IO
 //TODO: memoryType field ignored for now
+//TODO: more robust error handling in header file to be included
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxSetGraphIO)(onnxGraph graph, uint32_t inputsCount,
                     const onnxTensorDescriptor *inputDescriptors,
@@ -274,6 +231,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 
 //Runs the XlaExecutor by sending literals to server and executing computation 
 //TODO: support for synchronization primitives; For now assume, they are always set
+//TODO: more robust error handling in header file to be included
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxRunGraph)(onnxGraph graph, const onnxMemoryFence *inputFence,
                   onnxMemoryFence *outputFence) {
@@ -281,12 +239,33 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
+    //TODO: Status code specific to events
+    //TODO: Inform user that only ONNXIFI_SYNCHRONIZATION_EVENT is the only acceptable type
+    if (!inputFence)  {
+      throw("Invalid input memory fence");
+    }
+    if (inputFence->type != ONNXIFI_SYNCHRONIZATION_EVENT)  {
+      throw("The input memory fence must have type ONNXIFI_SYNCHRONIZATION_EVENT. "
+            "The event must be initialized.");
+    }
+    if (!outputFence)  {
+      throw("Invalid output memory fence");
+    }
+    if (outputFence->type != ONNXIFI_SYNCHRONIZATION_EVENT)  {
+      throw("The output memory fence must have type ONNXIFI_SYNCHRONIZATION_EVENT. "
+            "The event cannot be initialized.");
+    }
+   
     auto *executor = reinterpret_cast<onnx_xla::XlaExecutor *>(graph);
-    auto sendInputsStatus = executor->sendInputs();
+    auto initStatus = onnxInitEvent(executor->backend_, outputFence->event);
+    if (initStatus != ONNXIFI_STATUS_SUCCESS)  {
+      return initStatus;
+    }
+    auto sendInputsStatus = executor->sendInputs(inputFence);
     if (sendInputsStatus != ONNXIFI_STATUS_SUCCESS)  {
       return sendInputsStatus;
     }
-    return executor->executeComputation();
+    return executor->executeComputation(outputFence);
   });
 }
 

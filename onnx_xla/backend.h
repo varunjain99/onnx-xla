@@ -56,16 +56,23 @@ namespace onnx_xla {
   //output_buffers_ pointers.
   class XlaExecutor final  {
   public:
+    //Constructor initialized with backend handle
+    XlaExecutor(onnxBackend backend);
+
     //Used to pass IO metadata and locations to the engine
     onnxStatus initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
                 uint32_t  outputsCount, const onnxTensorDescriptor* outputDescriptors);
 
     //Sends input tensor values to the server
-    onnxStatus sendInputs();
+    //Input fence (initialized) signals when inputs are ready
+    onnxStatus sendInputs(const onnxMemoryFence* inputFence);
 
     //Runs the computation on the server using passed input 
-    onnxStatus executeComputation();
+    //outputFence (initialized) is signalled once outputs are ready
+    onnxStatus executeComputation(onnxMemoryFence* outputFence);
 
+    //backend handle
+    const onnxBackend backend_;
   private:
     //computation to be run
     XlaComputation computation_;
@@ -109,7 +116,8 @@ namespace onnx_xla {
   public:
     //Passes IR graph to be transformed, name of builder, and weightDescriptor info
     //TODO: Remove build_name? or keep for debugging purposes?
-    XlaTransform(std::unique_ptr<Graph> ir,
+    XlaTransform(onnxBackend backend,
+                 std::unique_ptr<Graph> ir,
                  const std::string& build_name,
                  uint32_t weightsCount, 
                  const onnxTensorDescriptor *weightDescriptors);

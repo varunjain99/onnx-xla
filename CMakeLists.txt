@@ -105,6 +105,12 @@ add_dependencies(onnx_xla xla)
 target_link_libraries(onnx_xla onnx ${XLA_LIBRARIES} ${GRPC_LIBRARIES})
 target_include_directories(onnx_xla PUBLIC ${XLA_INCLUDE_DIRS})
 
+# python interface to ONNXIFI
+set(PY_EXT_SUFFIX ".so")
+add_library(onnx_cpp2py_export MODULE "${ONNX_XLA_ROOT}/test/test.cc")
+
+
+
 # binaries
 file(GLOB_RECURSE binaries
   bin/*.cc)

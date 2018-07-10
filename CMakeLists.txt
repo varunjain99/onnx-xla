@@ -116,10 +116,10 @@ if("${PY_EXT_SUFFIX}" STREQUAL "")
   endif()
 endif()
 
-add_library(python_onnxifi MODULE "${PROJECT_SOURCE_DIR}/python_to_onnxifi/python_to_onnxifi.cc")
+add_library(python_onnxifi MODULE "${PROJECT_SOURCE_DIR}/python_onnxifi/python_onnxifi.cc")
 set_target_properties(python_onnxifi PROPERTIES PREFIX "")
 set_target_properties(python_onnxifi PROPERTIES SUFFIX ${PY_EXT_SUFFIX})
-set_target_properties(python_onnxifi PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/python_to_onnxifi/build")
+set_target_properties(python_onnxifi PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/python_onnxifi/build")
 target_include_directories(python_onnxifi PRIVATE "${PYTHON_INCLUDE_DIR}" ${PROJECT_SOURCE_DIR}/third_party/onnx)
 
 find_package(pybind11)

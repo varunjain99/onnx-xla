@@ -205,17 +205,13 @@ public:
     return devices_.getDeviceInfo();
   }
 
-  bool is_compatible(ModelProto model, std::string device, 
+  bool is_compatible(std::string serializedModel, std::string device, 
                      py::kwargs kwargs)  {
     if (!this->supports_device(device))  {
       return false;
     }
     onnxBackendID id = devices_.getBackendID(device);
-    size_t size = model.ByteSizeLong(); 
-    char* buffer = new char[size];
-    model.SerializeToArray(buffer, size);
-    auto compatibilityStatus = onnxGetBackendCompatibility(id, size, buffer);
-    delete [] buffer;
+    auto compatibilityStatus = onnxGetBackendCompatibility(id, serializedModel.size(), serializedModel.c_str());
     return compatibilityStatus == ONNXIFI_STATUS_SUCCESS || 
            compatibilityStatus == ONNXIFI_STATUS_FALLBACK;
   }
@@ -224,18 +220,19 @@ public:
   //Initializes graph
   //ownership of graph is passed onto BackendRep object
   //Returns BackendRep object
-  BackendRep prepare(ModelProto model, std::string device, py::kwargs kwargs)  {
+  BackendRep prepare(std::string serializedModel, std::string device, py::kwargs kwargs)  {
     return BackendRep(NULL);
   } 
 
 
   //TODO Implement run_model
-  std::unordered_map<std::string, py::array> run_model(ModelProto model, py::dict inputs,
+  std::unordered_map<std::string, py::array> run_model(std::string serializedModel, py::dict inputs,
                                                  std::string device, py::kwargs kwargs)  {
     return std::unordered_map<std::string, py::array>{};
   }
 
   //TODO: Implement run_node
+  //Least priority
   std::unordered_map<std::string, py::array> run_node(NodeProto node, py::dict inputs,
                                                  std::string device, /*outputs_info = None,*/
                                                  py::kwargs kwargs)  {

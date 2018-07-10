@@ -48,7 +48,7 @@ namespace onnx_xla {
       case ONNX_NAMESPACE::TensorProto_DataType_STRING:			       \
       case ONNX_NAMESPACE::TensorProto_DataType_UNDEFINED:		       \
       default:  {							       \
-        throw("Tensor not of a convertible data type.");                       \
+        throw std::runtime_error("Tensor not of a convertible data type.");    \
       }  								       \
     }  									       \
 
@@ -125,10 +125,10 @@ namespace onnx_xla {
   onnxStatus XlaExecutor::initIO(uint32_t inputsCount, const onnxTensorDescriptor* inputDescriptors,
                            uint32_t  outputsCount, const onnxTensorDescriptor* outputDescriptors) {
     if (num_inputs_ != inputsCount)  {
-      throw("Did not receive expected number of inputs");
+      throw std::runtime_error("Did not receive expected number of inputs");
     }
     if (num_outputs_ != outputsCount)  {
-      throw("Did not receive expected number of outputs");
+      throw std::runtime_error("Did not receive expected number of outputs");
     }
     
     #define CHECK_TYPE_AND_SHAPE(VAR)                                           \
@@ -213,7 +213,7 @@ namespace onnx_xla {
 
   onnxStatus XlaTransform::handleInputs()  {
     if (ir_->initializers().size() != 0 && weight_descriptors_)  {
-      throw("Static weights of the graph should be passed through ModelProto.graph.initializer,"
+      throw std::runtime_error("Static weights of the graph should be passed through ModelProto.graph.initializer,"
             "or through the weightDescriptors parameters, not both");
     }
     if (weights_count_ > 0 && !weight_descriptors_)  {
@@ -236,7 +236,7 @@ namespace onnx_xla {
           return ONNXIFI_STATUS_MISMATCHING_DATATYPE;
         }
         if (t.memoryType != ONNXIFI_MEMORY_TYPE_CPU)  {
-          throw("The weightDescriptors parameters must have"
+          throw std::runtime_error("The weightDescriptors parameters must have"
                 "memoryType ONNXIFI_MEMORY_TYPE_CPU");
         }
         if (t.dimensions != v->sizes().size())  {
@@ -307,7 +307,7 @@ namespace onnx_xla {
     }
     auto computation_status = builder_.Build();
     if (!computation_status.ok())  {
-      throw("The graph was not able to be built");
+      throw std::runtime_error("The graph was not able to be built");
     }
     executor_->computation_ = computation_status.ConsumeValueOrDie();
     return ONNXIFI_STATUS_SUCCESS;

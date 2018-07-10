@@ -45,7 +45,7 @@ namespace onnx_xla  {
       case ONNX_NAMESPACE::TensorProto_DataType_COMPLEX128:
       case ONNX_NAMESPACE::TensorProto_DataType_STRING:
       case ONNX_NAMESPACE::TensorProto_DataType_UNDEFINED: {
-        throw("Not supported");
+        throw std::runtime_error("Not supported");
       }
     }
   }

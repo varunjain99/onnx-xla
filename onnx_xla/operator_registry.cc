@@ -4,23 +4,22 @@ namespace onnx_xla  {
   
   OperatorRegistry::OperatorRegisterOnce::OperatorRegisterOnce(const Symbol& nodeKind, TranslationFunction translator)  {
     auto& map = OperatorRegistry::map();
-    if (map.find(nodeKind) == map.end())  {
-      map[nodeKind] = translator;
-    } else {
-      throw std::runtime_error("Operator registry error");
+    if (!map.insert(std::pair<Symbol, TranslationFunction>(nodeKind, translator)).second)  {
+      throw std::runtime_error("Registry error: Operator added more than once");
     }
   }
 
-  onnxStatus OperatorRegistry::executeTranslation(Node& n, XlaBuilder& builder, ValueOpMap& valueToOp)  {
+  onnxStatus OperatorRegistry::translate(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp)  {
     auto& map = OperatorRegistry::map();
-    if (map.find(n.kind()) != map.end())  {
-      return map[n.kind()](n, builder, valueToOp);
+    auto it = map.find(n.kind());
+    if (it != map.end()) {
+      return it->second(n, builder, valueToOp);
     } else {
       return ONNXIFI_STATUS_UNSUPPORTED_OPERATOR;
     }
   }
 
-  OperatorRegistry* OperatorRegistry::registry()  {
+  OperatorRegistry& OperatorRegistry::registry()  {
     static OperatorRegistry registry_;
     return &registry_;
   }
@@ -30,21 +29,21 @@ namespace onnx_xla  {
     return map;
   }
 
-  onnxStatus translateRelu(Node& n, XlaBuilder& builder, ValueOpMap& valueToOp)  {
-    auto input = valueToOp[n.inputs()[0]];
+  onnxStatus translateRelu(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp)  {
+    auto input = valueToOp[n.inputs().at(0)];
     auto shape = builder.GetShape(input);
     if (!shape.ok())  {
       throw std::runtime_error("Internal error: Unexpected operation shape");
     }
     auto zero = builder.ConstantLiteral(*LiteralBase::CreateFromShape(shape.ValueOrDie()));
     auto maximum = builder.Max(input, zero);
-    valueToOp[n.outputs()[0]] = std::move(maximum);
+    valueToOp[n.outputs().at(0)] = std::move(maximum);
     return ONNXIFI_STATUS_SUCCESS;
   }
   REGISTER_OPERATOR_TRANSLATOR(Relu, translateRelu)
  
   //TODO: Handle Undefined properly
-  onnxStatus translateUndefined(Node& n, XlaBuilder& builder, ValueOpMap& valueToOp)  {
+  onnxStatus translateUndefined(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp)  {
     return ONNXIFI_STATUS_SUCCESS;
   }
   REGISTER_OPERATOR_TRANSLATOR(Undefined, translateUndefined) 

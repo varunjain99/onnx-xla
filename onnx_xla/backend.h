@@ -18,9 +18,10 @@
 #include <memory>
 
 namespace onnx_xla {
-  using xla::GlobalData;
-  using xla::XlaComputation;
-  using ONNX_NAMESPACE::ModelProto;
+  using ::xla::GlobalData;
+  using ::xla::XlaComputation;
+  using ::ONNX_NAMESPACE::ModelProto;
+  using ::ONNX_NAMESPACE::Tensor;
 
   class XlaTransform;
   class XlaExecutor;

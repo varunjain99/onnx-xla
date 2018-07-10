@@ -6,27 +6,27 @@
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
 
 #include <functional>
+#include <utility>
 
 namespace onnx_xla  {
 
-  using xla::Literal;
-  using xla::ShapeUtil;
-  using xla::Shape;
-  using xla::primitive_util::NativeToPrimitiveType;
-  using xla::XlaOp;
-  using xla::XlaBuilder;
-  using xla::LiteralBase;
-  using xla::StatusOr;
+  using ::xla::Literal;
+  using ::xla::ShapeUtil;
+  using ::xla::Shape;
+  using ::xla::primitive_util::NativeToPrimitiveType;
+  using ::xla::XlaOp;
+  using ::xla::XlaBuilder;
+  using ::xla::LiteralBase;
+  using ::xla::StatusOr;
 
-  using ONNX_NAMESPACE::Tensor;
-  using ONNX_NAMESPACE::Value;
-  using ONNX_NAMESPACE::Dimension;
-  using ONNX_NAMESPACE::Graph;
-  using ONNX_NAMESPACE::Symbol;
-  using ONNX_NAMESPACE::Node;
+  using ::ONNX_NAMESPACE::Value;
+  using ::ONNX_NAMESPACE::Dimension;
+  using ::ONNX_NAMESPACE::Graph;
+  using ::ONNX_NAMESPACE::Symbol;
+  using ::ONNX_NAMESPACE::Node;
 
   using ValueOpMap = std::unordered_map<const Value*, XlaOp>;
-  using TranslationFunction = std::function<onnxStatus(Node&, XlaBuilder&, ValueOpMap&)>;
+  using TranslationFunction = std::function<onnxStatus(const Node&, XlaBuilder&, ValueOpMap&)>;
   using TranslationMap = std::unordered_map<Symbol, TranslationFunction>;
   
   //Class for registry of ONNX operators with corresponding translation functions
@@ -38,10 +38,13 @@ namespace onnx_xla  {
       OperatorRegisterOnce(const Symbol& nodeKind, TranslationFunction translator);     
     };
  
-    //Execute translation for given node
-    onnxStatus executeTranslation(Node& n, XlaBuilder& builder, ValueOpMap& valueToOp);
-    //Returns pointer to static singleton registry
-    static OperatorRegistry* registry();
+    //Translate given node
+      //Updates builder
+      //In: Expect valueToOp to exist for every node input
+      //Out: Expect valueToOp to be assigned for every node output
+    onnxStatus translate(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp);
+    //Returns reference to static singleton registry
+    static OperatorRegistry& registry();
   private:
     //Singleton instance should only be made in the class
     OperatorRegistry() = default;

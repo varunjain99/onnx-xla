@@ -293,9 +293,9 @@ namespace onnx_xla {
     if (handleInputsStatus != ONNXIFI_STATUS_SUCCESS)  {
       return handleInputsStatus;
     }
-    auto* registry = OperatorRegistry::registry();
+    auto& registry = OperatorRegistry::registry();
     for (auto it = ir_->begin(); it != ir_->end(); ++it) {
-      auto translateStatus = registry->executeTranslation(**it, builder_, value_to_op_);
+      auto translateStatus = registry.translate(**it, builder_, value_to_op_);
       if (translateStatus != ONNXIFI_STATUS_SUCCESS)  {
         return translateStatus;
       }

@@ -1,36 +1,40 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
 #include <string.h>
 #include <google/protobuf/message_lite.h>
 #include <unordered_map>
 #include <utility>
 #include <cstdio>
 #include "onnx/onnxifi.h"
-#include "onnx/onnx_pb.h"
+#include "onnx/onnx.pb.h"
+#include "onnx/proto_utils.h"
 
 namespace py = pybind11;
+using ::ONNX_NAMESPACE::ModelProto;
+using ::ONNX_NAMESPACE::NodeProto;
 
 struct DeviceIDs  {
 public:
   //Get all backendIDs from ONNXIFI interface
   //Fill device_to_onnxBackendID map
-  DeviceIDs() :  {
+  DeviceIDs() : ids_{nullptr}, num_backends_(0)  {
     if (onnxGetBackendIDs(ids_, &num_backends_) != ONNXIFI_STATUS_FALLBACK) {
-      throw("Internal error: onnxGetBackendIDs failed (expected ONNXIFI_STATUS_FALLBACK)");
+      throw std::runtime_error("Internal error: onnxGetBackendIDs failed (expected ONNXIFI_STATUS_FALLBACK)");
     }
     ids_ = new onnxBackendID[num_backends_];
     if (onnxGetBackendIDs(ids_, &num_backends_) != ONNXIFI_STATUS_SUCCESS) {
-      throw("Internal error: onnxGetBackendIDs failed (expected ONNXIFI_STATUS_SUCCESS)");
+      throw std::runtime_error("Internal error: onnxGetBackendIDs failed (expected ONNXIFI_STATUS_SUCCESS)");
     }
 
     for (auto i = 0; i < num_backends_; ++i)  {
       onnxEnum deviceType;
       size_t infoSize = sizeof(onnxEnum);
       if (onnxGetBackendInfo(ids_[i], ONNXIFI_BACKEND_DEVICE_TYPE, 
-          &deviceType, &deviceType, &infoSize) != ONNXIFI_STATUS_SUCCESS)  {
-        throw("Internal Error: onnxGetBackendInfo failed (expected ONNXIFI_STATUS_SUCCESS)");
+                            &deviceType, &infoSize) != ONNXIFI_STATUS_SUCCESS)  {
+        throw std::runtime_error("Internal Error: onnxGetBackendInfo failed (expected ONNXIFI_STATUS_SUCCESS)");
       }
-      if (deviceType_to_string.find(deviceType) == deviceType_to_string.end())  {
-        throw("Internal Error: onnxGetBackendInfo returned an invalid device type");
+      if (deviceType_to_string_.find(deviceType) == deviceType_to_string_.end())  {
+        throw std::runtime_error("Internal Error: onnxGetBackendInfo returned an invalid device type");
       }
       device_to_onnxBackendID_[deviceType].push_back(ids_[i]);
     }
@@ -41,26 +45,30 @@ public:
     //Second element is a device description from the ONNXIFI interface
     //Example of the pair: ("GPU:1", "gpu description")
   std::vector<std::pair<std::string, std::string>> getDeviceInfo()  {
-    std::vector<std::pair<std::string, std::string>> deviceInfo;
-    for (auto it : device_to_onnxBackendID)  {
+    std::vector<std::pair<std::string, std::string>> deviceInfoVector;
+    for (auto it : device_to_onnxBackendID_)  {
       auto& deviceType = it.first;
       auto& deviceList = it.second;
       for (auto i = 0; i < deviceList.size(); ++i)  {
         size_t deviceInfoSize = 0;
         if (onnxGetBackendInfo(deviceList[i], ONNXIFI_BACKEND_DEVICE,
                                NULL, &deviceInfoSize) != ONNXIFI_STATUS_FALLBACK)  {
-          throw("Internal Error: onnxGetBackendInfo failed (expected ONNXIFI_STATUS_FALLBACK)");
+          throw std::runtime_error("Internal Error: onnxGetBackendInfo failed (expected ONNXIFI_STATUS_FALLBACK)");
         }
         char* deviceInfo = new char[deviceInfoSize];
         if (onnxGetBackendInfo(deviceList[i], ONNXIFI_BACKEND_DEVICE,
                                deviceInfo, &deviceInfoSize) != ONNXIFI_STATUS_SUCCESS)  {
-          throw("Internal Error: onnxGetBackendInfo failed (expected ONNXIFI_STATUS_SUCCESS)");
+          throw std::runtime_error("Internal Error: onnxGetBackendInfo failed (expected ONNXIFI_STATUS_SUCCESS)");
         }
-        std::string deviceHandle = deviceType_to_string[deviceType] + ":" + std::to_string(i + 1);
-        deviceInfo.push_back(std::pair(deviceHandle, deviceInfo));
+        auto it = deviceType_to_string_.find(deviceType);
+        if (it == deviceType_to_string_.end())  {
+          throw std::runtime_error("Internal Error: onnxBackendInfo returned unexpected device type");
+        }
+        std::string deviceHandle(it->second + std::string(":") + std::to_string(i + 1));
+        deviceInfoVector.push_back(std::pair<std::string, std::string>(deviceHandle, deviceInfo));
       }
     }
-    return deviceInfo;
+    return deviceInfoVector;
   }
 
   //parses deviceHandle string (e.g. CPU:1 or GPU) and returns onnxBackendID
@@ -73,18 +81,19 @@ public:
       std::sscanf(deviceHandle.c_str() + position + 1, "%zu", &deviceID);
       deviceString = deviceHandle.substr(0, position);
     }
-    if (string_to_deviceType.find(deviceString) == string_to_deviceType.end())  {
+    auto it = string_to_deviceType_.find(deviceString);
+    if (it == string_to_deviceType_.end())  {
       return NULL;
     }
-    auto deviceType = string_to_deviceType[deviceString];
+    auto deviceType = it->second;
     //Treating ID of 0 as 1 and bringing 1-indexing to 0-indexing
     if (deviceID > 0) {
       deviceID--;
     }
-    if (deviceID < 0 || deviceID >= device_to_onnxBackendID[deviceType].size())  {
+    if (deviceID < 0 || deviceID >= device_to_onnxBackendID_[deviceType].size())  {
       return NULL;
     }
-    return device_to_onnxBackendID[deviceType][deviceID];
+    return device_to_onnxBackendID_[deviceType][deviceID];
   }
 
   //Input is a string device handle 
@@ -110,7 +119,7 @@ public:
 
   //Release initialized backends
   //Release all backendIDs
-  ~BackendIDs()  {
+  ~DeviceIDs()  {
     for (auto backend : initialized_) {
       if (onnxReleaseBackend(backend.second) != ONNXIFI_STATUS_SUCCESS)  {
         throw("Internal error: onnxReleaseBackend failed (expected ONNXIFI_STATUS_SUCCESS)");
@@ -118,8 +127,8 @@ public:
     }
     if (!ids_) {
       for (auto i = 0; i < num_backends_; ++i)  {
-        if (onnxReleaseBackendIDs(ids_[i]) != ONNXIFI_STATUS_SUCCESS)  {
-          throw("Internal error: onnxReleaseBackendIDs failed (expected ONNXIFI_STATUS_SUCCESS)");
+        if (onnxReleaseBackendID(ids_[i]) != ONNXIFI_STATUS_SUCCESS)  {
+          throw("Internal error: onnxReleaseBackendID failed (expected ONNXIFI_STATUS_SUCCESS)");
         }
       }
       delete [] ids_;
@@ -129,22 +138,9 @@ public:
   //Convenience maps to map betweeen onnxEnum and string
   //  python user will input the string
   //  C++ internals and ONNXIFI represent as onnxEnum
-  static const std::unordered_map<onnxEnum, std::string> deviceType_to_string = 
-                                                {{ONNXIFI_DEVICE_TYPE_NPU, "NPU"},
-                                                 {ONNXIFI_DEVICE_TYPE_DSP, "DSP"},
-                                                 {ONNXIFI_DEVICE_TYPE_GPU, "GPU"},
-                                                 {ONNXIFI_DEVICE_TYPE_CPU, "CPU"},
-                                                 {ONNXIFI_DEVICE_TYPE_FPGA, "FPGA"},
-                                                 {ONNXIFI_DEVICE_TYPE_HETEROGENEOUS, "HETEROGENEOUS"}};
+  static const std::unordered_map<onnxEnum, std::string> deviceType_to_string_; 
 
-  static const std::unordered_map<onnxEnum, std::string> string_to_deviceType = 
-                                                {{"NPU", ONNXIFI_DEVICE_TYPE_NPU},
-                                                 {"DSP", ONNXIFI_DEVICE_TYPE_DSP},
-                                                 {"GPU", ONNXIFI_DEVICE_TYPE_GPU},
-                                                 {"CPU", ONNXIFI_DEVICE_TYPE_CPU},
-                                                 {"FPGA", ONNXIFI_DEVICE_TYPE_FPGA},
-                                                 {"HETEROGENEOUS", ONNXIFI_DEVICE_TYPE_HETEROGENEOUS}};
- 
+  static const std::unordered_map<std::string, onnxEnum> string_to_deviceType_; 
 private: 
   //Array of all backendIDs
   onnxBackendID* ids_;
@@ -153,26 +149,38 @@ private:
   //device_to_onnxBackendID[deviceType][deviceID - 1] will give corresponding onnxBackendID
   //1-indexed to conform to onnx/onnx/backend/base.py
   //deviceID of 0 refers to any onnxBackendID of that deviceType
-  std::unordered_map<onnxEnum, vector<onnxBackendID>> device_to_onnxBackendID_;
+  std::unordered_map<onnxEnum, std::vector<onnxBackendID>> device_to_onnxBackendID_;
 
   //If the backendID has been initialized, will map to corresponding backendID pointer
   //Otherwise, not present
   std::unordered_map<onnxBackendID, onnxBackend> initialized_;
-}
+};
+
+const std::unordered_map<onnxEnum, std::string> DeviceIDs::deviceType_to_string_ = {{ONNXIFI_DEVICE_TYPE_NPU, "NPU"},
+                                                                                    {ONNXIFI_DEVICE_TYPE_DSP, "DSP"},
+                                                                                    {ONNXIFI_DEVICE_TYPE_GPU, "GPU"},
+                                                                                    {ONNXIFI_DEVICE_TYPE_CPU, "CPU"},
+                                                                                    {ONNXIFI_DEVICE_TYPE_FPGA, "FPGA"},
+                                                                                    {ONNXIFI_DEVICE_TYPE_HETEROGENEOUS, "HETEROGENEOUS"}};
+
+const std::unordered_map<std::string, onnxEnum> DeviceIDs::string_to_deviceType_ =  {{"NPU", ONNXIFI_DEVICE_TYPE_NPU},
+                                                                                     {"DSP", ONNXIFI_DEVICE_TYPE_DSP},
+                                                                                     {"GPU", ONNXIFI_DEVICE_TYPE_GPU},
+                                                                                     {"CPU", ONNXIFI_DEVICE_TYPE_CPU},
+                                                                                     {"FPGA", ONNXIFI_DEVICE_TYPE_FPGA},
+                                                                                     {"HETEROGENEOUS", ONNXIFI_DEVICE_TYPE_HETEROGENEOUS}};
 
 
 
 
 
-
-
-
-
-struct BackendRep()   {
+struct BackendRep   {
 public:
-  BackendRep(onnxGraph&& graph): graph_(graph) {}
-  std::vector<onnxTensorDescriptor> run(std::vector<onnxTensorDescriptor> inputs, py::kwargs)  {
-
+  BackendRep(onnxGraph graph): graph_(graph) {}
+ 
+  //TODO: Implement run
+  std::unordered_map<std::string, py::array> run(py::dict inputs, py::kwargs kwargs = {})  {
+    return std::unordered_map<std::string, py::array>{};
   }
 
   ~BackendRep()  {
@@ -182,78 +190,72 @@ public:
   }
 private:    
   onnxGraph graph_;  
-}
+};
 
 class Backend  {
 public:
-  static DeviceIDs devices_;
+  Backend() : devices_() {}
 
-  bool is_compatible(ModelProto model, char* device="CPU", 
-                     py::kwargs)  {
+  //Parses string and checks if corresponding backendID exists
+  bool supports_device(std::string device)  {
+    return devices_.getBackendID(device) != NULL;
+  }
+
+  std::vector<std::pair<std::string, std::string>> get_device_info() {
+    return devices_.getDeviceInfo();
+  }
+
+  bool is_compatible(ModelProto model, std::string device="CPU", 
+                     py::kwargs kwargs = {})  {
     if (!this->supports_device(device))  {
       return false;
     }
+    onnxBackendID id = devices_.getBackendID(device);
     size_t size = model.ByteSizeLong(); 
     char* buffer = new char[size];
     model.SerializeToArray(buffer, size);
-    auto compatibilityStatus = onnxGetBackendCompatibility(backendID, size, buffer);
+    auto compatibilityStatus = onnxGetBackendCompatibility(id, size, buffer);
     delete [] buffer;
     return compatibilityStatus == ONNXIFI_STATUS_SUCCESS || 
            compatibilityStatus == ONNXIFI_STATUS_FALLBACK;
   }
 
-  //TODO: Weight Descriptors
+  //TODO: Implement prepare
   //Initializes graph
   //ownership of graph is passed onto BackendRep object
-  //Returns pointer to BackendRep object - ownership must be passed to python
-  //so GC cleans up
-  BackendRep* prepare(ModelProto model, device="CPU", py::kwargs)  {
-    onnxBackend backend = devices_->prep_device(device);
-    if (!backend)  {
-      return nullptr; 
-    }
-    std::string data;
-    model.SerializeToString(&data);
-    const void* serializedModel = data.c_str();
-    size_t serializedModelSize = data.size();
-    onnxGraph graph;
-    if (onnxInitGraph(backend, serializedModelSize, serializedModel, 0, nullptr, &graph)
-                                                              != ONNXIFI_STATUS_SUCCESS)  {
-      throw("Internal error: onnxInitGraph failed (expected ONNXIFI_STATUS_SUCCESS)");
-    }
-
-    return new BackendRep(std::move(graph));
+  //Returns BackendRep object
+  BackendRep prepare(ModelProto model, std::string device="CPU", py::kwargs kwargs = {})  {
+    return BackendRep(NULL);
   } 
 
 
-    def run_model(cls,
-                  model,  # type: ModelProto
-                  inputs,  # type: Any
-                  device='CPU',  # type: Text
-                  **kwargs  # type: Any
-                  )
-
-
-    def run_node(cls,
-                 node,  # type: NodeProto
-                 inputs,  # type: Any
-                 device='CPU',  # type: Text
-                 outputs_info=None,  # type: Optional[Sequence[Tuple[numpy.dtype, Tuple[int, ...]]]]
-                 **kwargs  # type: Dict[Text, Any]
-                 )
-
-  //Parses string and checks if corresponding backendID exists
-  bool supports_device(char* device)  {
-    return devices_.getBackendID(device) != NULL;
+  //TODO Implement run_model
+  std::unordered_map<std::string, py::array> run_model(ModelProto model, py::dict inputs,
+                                                 std::string device = "CPU", py::kwargs kwargs = {})  {
+    return std::unordered_map<std::string, py::array>{};
   }
 
+  //TODO: Implement run_node
+  std::unordered_map<std::string, py::array> run_node(NodeProto node, py::dict inputs,
+                                                 std::string device = "CPU", /*outputs_info = None,*/
+                                                 py::kwargs kwargs = {})  {
+    return std::unordered_map<std::string, py::array>{};
+  }
 private:
-}
+  DeviceIDs devices_;
+};
 
-Backend::DeviceIDs devices_ = DeviceIDs();
 
-PYBIND11_MODULE(example, m) {
-    py::class_<BackendIDs>(m, "BackendIDs")
+PYBIND11_MODULE(python_onnxifi, m) {
+    py::class_<BackendRep>(m, "BackendRep")
+        .def("run", &BackendRep::run);
+
+    py::class_<Backend>(m, "Backend")
         .def(py::init<>())
-        .def("getDeviceType", &BackendIDs::getDeviceType);
+        .def("is_compatible", &Backend::is_compatible)
+        .def("prepare", &Backend::prepare)
+        .def("run_model", &Backend::run_model)
+        .def("run_node", &Backend::run_node)
+        .def("supports_device", &Backend::supports_device)
+        .def("get_device_info", &Backend::get_device_info);
 }

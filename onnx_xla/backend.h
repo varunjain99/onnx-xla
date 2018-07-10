@@ -103,9 +103,8 @@ namespace onnx_xla {
     //Fills up XlaExecutor based on the IR graph. Function accomplishes:
     //  Initializer/weight values added as constants to the graph 
     //  Fills up executor_'s expected IO metadata, which can be verified in initIO
-    //  Translates IR graph node by node 
+    //  Translates IR graph node by node dispatching to operator registry 
     //    TODO: Fix kUndefinded translation, which is present for relu test
-    //    TODO: Make function registry
     //  Fills up exector_'s output names
     //  Returns status
     onnxStatus translateGraph();

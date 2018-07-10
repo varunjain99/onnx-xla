@@ -1,4 +1,5 @@
 #include "onnx_xla/operator_registry.h"
+#include <iostream>
 namespace onnx_xla  {
   
   OperatorRegistry::OperatorRegisterOnce::OperatorRegisterOnce(const Symbol& nodeKind, TranslationFunction translator)  {
@@ -6,7 +7,7 @@ namespace onnx_xla  {
     if (map.find(nodeKind) == map.end())  {
       map[nodeKind] = translator;
     } else {
-      throw("Operator registry error");
+      throw std::runtime_error("Operator registry error");
     }
   }
 
@@ -33,7 +34,7 @@ namespace onnx_xla  {
     auto input = valueToOp[n.inputs()[0]];
     auto shape = builder.GetShape(input);
     if (!shape.ok())  {
-      throw("Invalid shape of input to relu");
+      throw std::runtime_error("Internal error: Unexpected operation shape");
     }
     auto zero = builder.ConstantLiteral(*LiteralBase::CreateFromShape(shape.ValueOrDie()));
     auto maximum = builder.Max(input, zero);

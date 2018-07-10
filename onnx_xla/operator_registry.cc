@@ -21,7 +21,7 @@ namespace onnx_xla  {
 
   OperatorRegistry& OperatorRegistry::registry()  {
     static OperatorRegistry registry_;
-    return &registry_;
+    return registry_;
   }
 
   TranslationMap& OperatorRegistry::map()  {

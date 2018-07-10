@@ -139,8 +139,8 @@ public:
   //  python user will input the string
   //  C++ internals and ONNXIFI represent as onnxEnum
   static const std::unordered_map<onnxEnum, std::string> deviceType_to_string_; 
-
   static const std::unordered_map<std::string, onnxEnum> string_to_deviceType_; 
+
 private: 
   //Array of all backendIDs
   onnxBackendID* ids_;
@@ -179,7 +179,7 @@ public:
   BackendRep(onnxGraph graph): graph_(graph) {}
  
   //TODO: Implement run
-  std::unordered_map<std::string, py::array> run(py::dict inputs, py::kwargs kwargs = {})  {
+  std::unordered_map<std::string, py::array> run(py::dict inputs, py::kwargs kwargs)  {
     return std::unordered_map<std::string, py::array>{};
   }
 
@@ -205,8 +205,8 @@ public:
     return devices_.getDeviceInfo();
   }
 
-  bool is_compatible(ModelProto model, std::string device="CPU", 
-                     py::kwargs kwargs = {})  {
+  bool is_compatible(ModelProto model, std::string device, 
+                     py::kwargs kwargs)  {
     if (!this->supports_device(device))  {
       return false;
     }
@@ -224,21 +224,21 @@ public:
   //Initializes graph
   //ownership of graph is passed onto BackendRep object
   //Returns BackendRep object
-  BackendRep prepare(ModelProto model, std::string device="CPU", py::kwargs kwargs = {})  {
+  BackendRep prepare(ModelProto model, std::string device, py::kwargs kwargs)  {
     return BackendRep(NULL);
   } 
 
 
   //TODO Implement run_model
   std::unordered_map<std::string, py::array> run_model(ModelProto model, py::dict inputs,
-                                                 std::string device = "CPU", py::kwargs kwargs = {})  {
+                                                 std::string device, py::kwargs kwargs)  {
     return std::unordered_map<std::string, py::array>{};
   }
 
   //TODO: Implement run_node
   std::unordered_map<std::string, py::array> run_node(NodeProto node, py::dict inputs,
-                                                 std::string device = "CPU", /*outputs_info = None,*/
-                                                 py::kwargs kwargs = {})  {
+                                                 std::string device, /*outputs_info = None,*/
+                                                 py::kwargs kwargs)  {
     return std::unordered_map<std::string, py::array>{};
   }
 private:

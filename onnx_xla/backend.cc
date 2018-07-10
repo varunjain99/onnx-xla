@@ -249,7 +249,7 @@ namespace onnx_xla {
         }   
         auto l_ptr = executor_->descriptorToLiteral(t);
         auto constant = builder_.ConstantLiteral(*l_ptr);
-        value_to_op_[v] = std::move(constant);
+        value_to_op_[v] = constant;
       }
     } else {
       executor_->num_inputs_ = (uint32_t) ((int64_t) (ir_->inputs().size()) - (int64_t) (ir_->initializers().size()));
@@ -258,7 +258,7 @@ namespace onnx_xla {
         isInitialized[name] = true;
         auto l_ptr = executor_->tensorToLiteral(t);
         auto constant = builder_.ConstantLiteral(*l_ptr);
-        value_to_op_[inputNameToValue[name]] = std::move(constant);
+        value_to_op_[inputNameToValue[name]] = constant;
       }
     }
 
@@ -267,7 +267,7 @@ namespace onnx_xla {
         executor_->param_input_name_.push_back(v->uniqueName());
         auto param = builder_.Parameter(global_param_number_++, shapeOfValue(v),
                                         v->uniqueName());
-        value_to_op_[v] = std::move(param);
+        value_to_op_[v] = param;
         executor_->io_data_type_[v->uniqueName()] = v->elemType();
         executor_->io_shape_[v->uniqueName()] = v->sizes();
       }

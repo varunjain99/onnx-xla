@@ -37,7 +37,7 @@ namespace onnx_xla  {
     }
     auto zero = builder.ConstantLiteral(*LiteralBase::CreateFromShape(shape.ValueOrDie()));
     auto maximum = builder.Max(input, zero);
-    valueToOp[n.outputs().at(0)] = std::move(maximum);
+    valueToOp[n.outputs().at(0)] = maximum;
     return ONNXIFI_STATUS_SUCCESS;
   }
   REGISTER_OPERATOR_TRANSLATOR(Relu, translateRelu)

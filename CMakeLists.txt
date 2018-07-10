@@ -106,10 +106,28 @@ target_link_libraries(onnx_xla onnx ${XLA_LIBRARIES} ${GRPC_LIBRARIES})
 target_include_directories(onnx_xla PUBLIC ${XLA_INCLUDE_DIRS})
 
 # python interface to ONNXIFI
-set(PY_EXT_SUFFIX ".so")
-add_library(onnx_cpp2py_export MODULE "${ONNX_XLA_ROOT}/test/test.cc")
+if("${PY_EXT_SUFFIX}" STREQUAL "")
+  if (MSVC)
+    set(PY_EXT_SUFFIX ".pyd")
+  else()
+    set(PY_EXT_SUFFIX ".so")
+  endif()
+endif()
 
+add_library(python_onnxifi MODULE "${ONNX_XLA_ROOT}/test/test.cc")
+set_target_properties(python_onnxifi PROPERTIES PREFIX "")
+set_target_properties(python_onnxifi PROPERTIES SUFFIX ${PY_EXT_SUFFIX})
+set_target_properties(python_onnxifi PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+target_include_directories(python_onnxifi PRIVATE "${PYTHON_INCLUDE_DIR}")
 
+find_package(pybind11)
+if(pybind11_FOUND)
+  target_include_directories(python_onnxifi PRIVATE ${pybind11_INCLUDE_DIRS})
+else()
+  target_include_directories(python_onnxifi PRIVATE ${ONNX_XLA_ROOT}/third_party/onnx/third_party/pybind11/include)
+endif()
+
+target_link_libraries(python_onnxifi PRIVATE onnx onnx_xla)
 
 # binaries
 file(GLOB_RECURSE binaries

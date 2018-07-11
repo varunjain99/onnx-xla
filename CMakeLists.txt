@@ -116,7 +116,8 @@ if("${PY_EXT_SUFFIX}" STREQUAL "")
   endif()
 endif()
 
-add_library(python_onnxifi MODULE "${PROJECT_SOURCE_DIR}/python_onnxifi/python_onnxifi.cc")
+add_library(python_onnxifi MODULE "${PROJECT_SOURCE_DIR}/python_onnxifi/python_onnxifi.cc"
+                                  "${PROJECT_SOURCE_DIR}/python_onnxifi/data_conversion.cc")
 set_target_properties(python_onnxifi PROPERTIES PREFIX "")
 set_target_properties(python_onnxifi PROPERTIES SUFFIX ${PY_EXT_SUFFIX})
 set_target_properties(python_onnxifi PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/python_onnxifi/build")

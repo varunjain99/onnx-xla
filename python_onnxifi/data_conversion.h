@@ -2,6 +2,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <pybind11/pytypes.h>
 
 #include "onnx/onnxifi.h"
 #include "onnx/onnx.pb.h"
@@ -11,6 +12,7 @@
 
 namespace py = pybind11;
 
+using ::ONNX_NAMESPACE::ModelProto;
 //Utility class to navigate conversions of onnxTensorDescriptor and numpy arrays
 class DataConversion  {
 public:
@@ -26,7 +28,7 @@ public:
  
   //Fills up weight_descriptors_ vector
   //Only called once, when preparing the model
-  void makeWeightDescriptors(const py::dict& numpyArrays);
+  void makeWeightDescriptors(py::dict& numpyArrays);
  
   //TODO: If input shape/type have not changed (static environment)
     // updateInputDescriptors, updateOutputDescriptors, onnxSetGraphIO should not be called
@@ -34,11 +36,12 @@ public:
 
   //Releases any old input descriptors if they are stored
   //Fills up input_descriptors_ with new input descriptors
-  void updateInputDescriptors(const py::dict& numpyArrays);      
+  void updateInputDescriptors(py::dict& numpyArrays);      
 
   //Releases any old output descriptors if they are stored
   //Fills up output_descriptors_ with new output descriptors
-  //TODO: In dynamic environment, the shape inference will be dependent on current input_descriptors_ 
+  //TODO: Support for dynamic environment - the shape inference should be dependent on current input_descriptors_
+  //      Currently only static environment support
   void updateOutputDescriptors(ModelProto& model);
 
   //Input: empty dictionary
@@ -47,9 +50,28 @@ public:
   void getNumpyFromOutputDescriptors(py::dict& numpyArrays);
 
 private:
+  //Helper to updateOutputDescriptors
+  //Uses onnx_type and number of elements in tensor to store number of bytes needed
+  template<typename onnx_type, typename unused>
+  static void getBufferSize(uint64_t& buffer_size, const uint64_t* shape, uint32_t dimensions);
+
+  //Helper to getNumpyFromOutputDescriptors
+  //Converts data in tensor descriptor into numpy array, adding it to the dictionary
+  template<typename onnx_type, typename py_type>
+  static void addNumpyArray(py::dict& numpyArrays, const onnxTensorDescriptor& t);
+
+  //Helpers to makeDescriptorsFromNumpy
+  //Fills up onnx TensorDescriptor with metadata and data
+  template<typename onnx_type, typename py_type>
+  static void fillTensorDescriptorImpl(onnxTensorDescriptor& t, const py::buffer_info& arrayInfo,
+                                       ONNX_NAMESPACE::TensorProto_DataType dataType, const char* name); 
+
+  //Execute dispatch for fillTensorDescriptorImpl
+  static void fillTensorDescriptor(onnxTensorDescriptor& t, py::array& py_array, const char* name);
+
   //Input: numpy arrays passed in through python interface, empty onnxTensorDescriptor array
   //Output: tensorDescriptors is filled with appropriate values
-  static void makeDescriptorsFromNumpy(const py::dict& numpyArrays, std::vector<onnxTensorDescriptor>& tensorDescriptors);
+  static void makeDescriptorsFromNumpy(py::dict& numpyArrays, std::vector<onnxTensorDescriptor>& tensorDescriptors);
 
   //Releases resources allocated by tensorDescriptors and clears it
   static void releaseDescriptors(std::vector<onnxTensorDescriptor>& tensorDescriptors);
@@ -58,4 +80,4 @@ private:
   std::vector<onnxTensorDescriptor> input_descriptors_;
   std::vector<onnxTensorDescriptor> output_descriptors_;
   std::vector<onnxTensorDescriptor> weight_descriptors_;
-}
+};

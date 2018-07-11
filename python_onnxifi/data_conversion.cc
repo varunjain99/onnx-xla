@@ -142,8 +142,14 @@ void DataConversion::addNumpyArray(py::dict& numpyArrays, const onnxTensorDescri
   numpyArrays[py::str(std::string(t.name))] = numpyArray;
 }
 
-void DataConversion::getNumpyFromOutputDescriptors(py::dict& numpyArrays)  {
-  for (const auto& descriptor : output_descriptors_)  {
+py::dict DataConversion::getNumpyOutputs() const {
+  py::dict outputDict;
+  getNumpyFromDescriptors(outputDict, output_descriptors_);
+  return outputDict;
+}
+
+void DataConversion::getNumpyFromDescriptors(py::dict& numpyArrays, const std::vector<onnxTensorDescriptor>& tensorDescriptors)  {
+  for (const auto& descriptor : tensorDescriptors)  {
     DISPATCH_OVER_NUMERIC_DATA_TYPE(descriptor.dataType, addNumpyArray, numpyArrays, descriptor)
   } 
 }

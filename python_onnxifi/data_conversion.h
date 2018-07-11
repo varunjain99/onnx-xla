@@ -14,7 +14,8 @@ namespace py = pybind11;
 
 using ::ONNX_NAMESPACE::ModelProto;
 //Utility class to navigate conversions of onnxTensorDescriptor and numpy arrays
-class DataConversion  {
+//NOTE: py::dict is not const anywhere because pybind11 request function is not
+class DataConversion final  {
 public:
   //Constructor creates empty DataConversion object
   //1 DataConversion object for every onnxGraph or BackendRep
@@ -44,10 +45,17 @@ public:
   //      Currently only static environment support
   void updateOutputDescriptors(ModelProto& model);
 
+  //Returns dictionary of of name to numpy array from output_descriptors_
+  py::dict getNumpyOutputs() const;
+
   //Input: empty dictionary
   //Output: dictionary full of numpy outputs
   //Convert from output onnxTensorDescriptor to numpy dictionary
-  void getNumpyFromOutputDescriptors(py::dict& numpyArrays);
+  static void getNumpyFromDescriptors(py::dict& numpyArrays, const std::vector<onnxTensorDescriptor>& tensorDescriptors);
+
+  //Input: numpy arrays passed in through python interface, empty onnxTensorDescriptor array
+  //Output: tensorDescriptors is filled with appropriate values
+  static void makeDescriptorsFromNumpy(py::dict& numpyArrays, std::vector<onnxTensorDescriptor>& tensorDescriptors);
 
 private:
   //Helper to updateOutputDescriptors
@@ -68,10 +76,6 @@ private:
 
   //Execute dispatch for fillTensorDescriptorImpl
   static void fillTensorDescriptor(onnxTensorDescriptor& t, py::array& py_array, const char* name);
-
-  //Input: numpy arrays passed in through python interface, empty onnxTensorDescriptor array
-  //Output: tensorDescriptors is filled with appropriate values
-  static void makeDescriptorsFromNumpy(py::dict& numpyArrays, std::vector<onnxTensorDescriptor>& tensorDescriptors);
 
   //Releases resources allocated by tensorDescriptors and clears it
   static void releaseDescriptors(std::vector<onnxTensorDescriptor>& tensorDescriptors);

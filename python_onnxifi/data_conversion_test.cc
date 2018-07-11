@@ -5,6 +5,7 @@ py::dict convert(py::dict inputDict)  {
   DataConversion::makeDescriptorsFromNumpy(inputDict, tensorDescriptors);
   py::dict outputDict;
   DataConversion::getNumpyFromDescriptors(outputDict, tensorDescriptors);
+  DataConversion::releaseDescriptors(tensorDescriptors);
   return outputDict;
 };
 

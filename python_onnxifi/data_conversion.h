@@ -29,6 +29,7 @@ public:
  
   //Fills up weight_descriptors_ vector
   //Only called once, when preparing the model
+  //Not necessary to releaseDescriptors (handled by destructor)
   void makeWeightDescriptors(py::dict& numpyArrays);
  
   //TODO: If input shape/type have not changed (static environment)
@@ -37,12 +38,14 @@ public:
 
   //Releases any old input descriptors if they are stored
   //Fills up input_descriptors_ with new input descriptors
+  //Not necessary to releaseDescriptors (handled by destructor)
   void updateInputDescriptors(py::dict& numpyArrays);      
 
   //Releases any old output descriptors if they are stored
   //Fills up output_descriptors_ with new output descriptors
   //TODO: Support for dynamic environment - the shape inference should be dependent on current input_descriptors_
   //      Currently only static environment support
+  //Not necessary to releaseDescriptors (handled by destructor)
   void updateOutputDescriptors(ModelProto& model);
 
   //Returns dictionary of of name to numpy array from output_descriptors_
@@ -55,8 +58,11 @@ public:
 
   //Input: numpy arrays passed in through python interface, empty onnxTensorDescriptor array
   //Output: tensorDescriptors is filled with appropriate values
+  //Note: If this is directly called, must releaseDescriptors
   static void makeDescriptorsFromNumpy(py::dict& numpyArrays, std::vector<onnxTensorDescriptor>& tensorDescriptors);
 
+  //Releases resources allocated by tensorDescriptors and clears it
+  static void releaseDescriptors(std::vector<onnxTensorDescriptor>& tensorDescriptors);
 private:
   //Helper to updateOutputDescriptors
   //Uses onnx_type and number of elements in tensor to store number of bytes needed
@@ -76,9 +82,6 @@ private:
 
   //Execute dispatch for fillTensorDescriptorImpl
   static void fillTensorDescriptor(onnxTensorDescriptor& t, py::array& py_array, const char* name);
-
-  //Releases resources allocated by tensorDescriptors and clears it
-  static void releaseDescriptors(std::vector<onnxTensorDescriptor>& tensorDescriptors);
 
   //Vectors of input, output, and weight tensor Descriptors
   std::vector<onnxTensorDescriptor> input_descriptors_;

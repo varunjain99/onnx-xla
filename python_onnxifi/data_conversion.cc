@@ -100,8 +100,8 @@ void DataConversion::getBufferSize(uint64_t& buffer_size, const uint64_t* shape,
 void DataConversion::updateOutputDescriptors(ModelProto& model)  {
   releaseDescriptors(output_descriptors_);
   ::ONNX_NAMESPACE::shape_inference::InferShapes(model);
-  auto& outputs = model.graph().output();
-  for (auto& vi : outputs)  {
+  const auto& outputs = model.graph().output();
+  for (const auto& vi : outputs)  {
     onnxTensorDescriptor outputDescriptor;
     char* name = new char[vi.name().size() + 1];
     strcpy(name, vi.name().c_str());
@@ -243,9 +243,3 @@ void DataConversion::releaseDescriptors(std::vector<onnxTensorDescriptor>& tenso
   tensorDescriptors.clear();
 }
 
-/*
-PYBIND11_MODULE(python_onnxifi, m) {
-    m.doc() = "pybind11 example plugin"; // optional module docstring
-
-    m.def("test", &test, "Analyze numpy");
-}*/

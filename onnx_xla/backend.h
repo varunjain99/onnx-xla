@@ -22,6 +22,7 @@ namespace onnx_xla {
   using ::xla::XlaComputation;
   using ::ONNX_NAMESPACE::ModelProto;
   using ::ONNX_NAMESPACE::Tensor;
+  using ::ONNX_NAMESPACE::Graph;
 
   class XlaTransform;
   class XlaExecutor;

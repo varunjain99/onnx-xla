@@ -21,7 +21,6 @@ namespace onnx_xla  {
 
   using ::ONNX_NAMESPACE::Value;
   using ::ONNX_NAMESPACE::Dimension;
-  using ::ONNX_NAMESPACE::Graph;
   using ::ONNX_NAMESPACE::Symbol;
   using ::ONNX_NAMESPACE::Node;
 

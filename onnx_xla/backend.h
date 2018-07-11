@@ -2,9 +2,6 @@
 
 #include "onnx/onnx.pb.h"
 #include "onnx/proto_utils.h"
-#include "onnx_xla/types.h"
-#include "onnx/common/ir.h"
-#include "onnx/common/ir_pb_converter.h"
 #include "onnx/onnxifi.h"
 #include "onnx/proto_utils.h"
 #include "onnx/shape_inference/implementation.h"
@@ -12,38 +9,20 @@
 #include "tensorflow/compiler/xla/rpc/computation_client.h"
 #include "tensorflow/compiler/xla/client/client.h"
 #include "tensorflow/compiler/xla/rpc/grpc_stub.h"
-#include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
 #include "tensorflow/compiler/xla/rpc/xla_service.grpc.pb.h"
 #include <grpcpp/grpcpp.h>
+
+#include "onnx_xla/types.h"
+#include "onnx_xla/operator_registry.h"
 
 #include <memory>
 
 namespace onnx_xla {
-  using xla::Literal;
-  using xla::ShapeUtil;
-  using xla::Shape;
-  using xla::primitive_util::NativeToPrimitiveType;
-  using xla::XlaOp;
-  using xla::XlaBuilder;
-  using xla::GlobalData;
-  using xla::LiteralBase;
-  using xla::StatusOr;
-  using xla::XlaComputation;
-
-  using ONNX_NAMESPACE::Tensor;
-  using ONNX_NAMESPACE::Value;
-  using ONNX_NAMESPACE::Dimension;
-  using ONNX_NAMESPACE::Graph;
-  using ONNX_NAMESPACE::Symbol;
-  using ONNX_NAMESPACE::ModelProto;
-
-  struct conversion_error final : public std::exception {
-  private:
-    const std::string msg_;
-  public:
-    explicit conversion_error(std::string msg) : msg_(std::move(msg)) {}
-    const char* what() const noexcept override { return msg_.c_str(); }
-  };
+  using ::xla::GlobalData;
+  using ::xla::XlaComputation;
+  using ::ONNX_NAMESPACE::ModelProto;
+  using ::ONNX_NAMESPACE::Tensor;
+  using ::ONNX_NAMESPACE::Graph;
 
   class XlaTransform;
   class XlaExecutor;
@@ -126,9 +105,8 @@ namespace onnx_xla {
     //Fills up XlaExecutor based on the IR graph. Function accomplishes:
     //  Initializer/weight values added as constants to the graph 
     //  Fills up executor_'s expected IO metadata, which can be verified in initIO
-    //  Translates IR graph node by node 
+    //  Translates IR graph node by node dispatching to operator registry 
     //    TODO: Fix kUndefinded translation, which is present for relu test
-    //    TODO: Make function registry
     //  Fills up exector_'s output names
     //  Returns status
     onnxStatus translateGraph();
@@ -155,7 +133,7 @@ namespace onnx_xla {
 
     //Used to keep track of values and XlaOp's
     //whose output corresponds to them
-    std::unordered_map<const Value*, XlaOp> value_to_op_;
+    ValueOpMap value_to_op_;
 
     //Keeps track of number of parameters in computation
     //  TODO: Make local? Only used by one function
@@ -163,10 +141,6 @@ namespace onnx_xla {
 
     //Helper to get shape of associated value
     static inline Shape shapeOfValue(const Value* v);
-
-    //Helpers to register value with and operation in value_to_op_
-    void registerValueOp(const Value* v, XlaOp& op);
-    void registerValueOp(const Value* v, XlaOp& op, int index);
 
 
     //Create ConstantLiteral XlaOps for initializers/weights, verifying weight descriptors;

@@ -242,17 +242,17 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     //TODO: Status code specific to events
     //TODO: Inform user that only ONNXIFI_SYNCHRONIZATION_EVENT is the only acceptable type
     if (!inputFence)  {
-      throw("Invalid input memory fence");
+      throw std::runtime_error("Invalid input memory fence");
     }
     if (inputFence->type != ONNXIFI_SYNCHRONIZATION_EVENT)  {
-      throw("The input memory fence must have type ONNXIFI_SYNCHRONIZATION_EVENT. "
+      throw std::runtime_error("The input memory fence must have type ONNXIFI_SYNCHRONIZATION_EVENT. "
             "The event must be initialized.");
     }
     if (!outputFence)  {
-      throw("Invalid output memory fence");
+      throw std::runtime_error("Invalid output memory fence");
     }
     if (outputFence->type != ONNXIFI_SYNCHRONIZATION_EVENT)  {
-      throw("The output memory fence must have type ONNXIFI_SYNCHRONIZATION_EVENT. "
+      throw std::runtime_error("The output memory fence must have type ONNXIFI_SYNCHRONIZATION_EVENT. "
             "The event cannot be initialized.");
     }
    

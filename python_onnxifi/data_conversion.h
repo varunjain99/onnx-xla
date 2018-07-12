@@ -16,33 +16,24 @@ using ::ONNX_NAMESPACE::ModelProto;
 // Utility class to navigate conversions of onnxTensorDescriptor and numpy
 // arrays
 // NOTE: py::dict is not const anywhere because pybind11 request function is not
+
+// Structor to manage onnxTensorDescriptor data for lifetime of the descriptor
+struct DescriptorData {
+  DescriptorData();
+  DescriptorData(const DescriptorData& d) = default;
+  // Ensure pointers point to beginning of vectors/strings
+  DescriptorData(DescriptorData&& d) noexcept;
+
+  onnxTensorDescriptor descriptor;
+  std::vector<uint64_t> shape;
+  std::string name;
+  // container for bytes
+  std::vector<char> buffer;
+};
+
+
 class DataConversion final {
  public:
-  // Structor to manage onnxTensorDescriptor data for lifetime of the descriptor
-  struct DescriptorData {
-    DescriptorData() {}
-    // Guard against copying large data
-    DescriptorData(DescriptorData const&) = delete;
-    // Ensure pointers point to beginning of vectors/strings
-    DescriptorData(DescriptorData&& d) noexcept {
-      name = std::move(d.name);
-      buffer = std::move(d.buffer);
-      shape = std::move(d.shape);
-      descriptor.name = name.c_str();
-      descriptor.dimensions = shape.size();
-      descriptor.shape = shape.data();
-      descriptor.buffer = reinterpret_cast<onnxPointer>(buffer.data());
-      descriptor.memoryType = d.descriptor.memoryType;
-      descriptor.dataType = d.descriptor.dataType;
-    }
-
-    onnxTensorDescriptor descriptor;
-    std::vector<uint64_t> shape;
-    std::string name;
-    // container for bytes
-    std::vector<char> buffer;
-  };
-
   // Constructor creates empty DataConversion object
   // 1 DataConversion object for every onnxGraph or BackendRep
   DataConversion();

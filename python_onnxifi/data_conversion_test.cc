@@ -1,11 +1,10 @@
 #include "python_onnxifi/data_conversion.h"
 
 py::dict convert(py::dict inputDict)  {
-  std::vector<onnxTensorDescriptor> tensorDescriptors;
-  DataConversion::makeDescriptorsFromNumpy(inputDict, tensorDescriptors);
+  std::vector<DataConversion::DescriptorData> descriptorsData;
+  DataConversion::makeDescriptorsDataFromNumpy(inputDict, descriptorsData);
   py::dict outputDict;
-  DataConversion::getNumpyFromDescriptors(outputDict, tensorDescriptors);
-  DataConversion::releaseDescriptors(tensorDescriptors);
+  DataConversion::getNumpyFromDescriptorsData(outputDict, descriptorsData);
   return outputDict;
 };
 

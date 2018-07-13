@@ -22,7 +22,7 @@ int main(int argc, char** argv)  {
   
   //Initialize backend
   onnxBackendID backendIDs;
-  size_t numBackends;
+  size_t numBackends = 1;
   onnxBackend backend;
   if (onnxGetBackendIDs(&backendIDs, &numBackends) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error getting backend IDs" << std::endl;

@@ -20,7 +20,7 @@ using ::ONNX_NAMESPACE::ModelProto;
 // Structor to manage onnxTensorDescriptor data for lifetime of the descriptor
 struct DescriptorData {
   DescriptorData();
-  DescriptorData(const DescriptorData& d) = default;
+  DescriptorData(const DescriptorData& d);
   // Ensure pointers point to beginning of vectors/strings
   DescriptorData(DescriptorData&& d) noexcept;
 
@@ -31,7 +31,7 @@ struct DescriptorData {
   std::vector<char> buffer;
 };
 
-
+//TODO: Support for strides
 class DataConversion final {
  public:
   // Constructor creates empty DataConversion object

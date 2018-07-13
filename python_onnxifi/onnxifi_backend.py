@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from build.python_onnxifi import *
 import onnx
 from onnx import (NodeProto,
@@ -7,7 +9,7 @@ class OnnxifiBackendRep(object):
     #Constructor never be used - underlying C++ object created behind the scenes
     #in OnnxifiBacken::prepare
     def run(self, inputs, **kwargs):  # type: (Any, **Any) -> Tuple[Any, ...]
-        self.backend_rep_.run(inputs, **kwargs)
+        return self.backend_rep_.run(inputs, **kwargs)
 
 
 class OnnxifiBackend(object):
@@ -19,7 +21,7 @@ class OnnxifiBackend(object):
                       device='CPU',  # type: Text
                       **kwargs  # type: Any
                       ):  # type: (...) -> bool
-        self.backend_(model.SerializeToString(), device, **kwargs)
+        return self.backend_.is_compatible(model.SerializeToString(), device, **kwargs)
 
     def prepare(self,
                 model,  # type: ModelProto
@@ -27,7 +29,7 @@ class OnnxifiBackend(object):
                 **kwargs  # type: Any
                 ):  # type: (...) -> BackendRep
         onnx.checker.check_model(model)
-        return self.backend_(model.SerializeToString(), device, **kwargs)
+        return self.backend_.prepare(model.SerializeToString(), device, **kwargs)
 
     def run_model(self,
                   model,  # type: ModelProto
@@ -50,4 +52,8 @@ class OnnxifiBackend(object):
         return None
 
     def supports_device(self, device):  # type: (Text) -> bool
-        self.backend_.supports_device(device)
+        return self.backend_.supports_device(device)
+
+    def get_devices_info(self): #type: () -> [Sequence[Tuple[string, string]]]
+        return self.backend_.get_devices_info()
+

@@ -1,10 +1,12 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 #include <string.h>
 #include <google/protobuf/message_lite.h>
 #include <unordered_map>
 #include <utility>
 #include <cstdio>
+#include <memory>
 #include "onnx/onnxifi.h"
 #include "onnx/onnx.pb.h"
 #include "onnx/proto_utils.h"
@@ -18,7 +20,7 @@ struct DeviceIDs {
  public:
   // Get all backendIDs from ONNXIFI interface
   // Fill device_to_onnxBackendID map
-  DeviceIDs() : ids_{nullptr}, num_backends_(0) {
+  DeviceIDs() : ids_(nullptr), num_backends_(0) {
     if (onnxGetBackendIDs(ids_, &num_backends_) != ONNXIFI_STATUS_FALLBACK) {
       throw std::runtime_error(
           "Internal error: onnxGetBackendIDs failed (expected "
@@ -55,7 +57,7 @@ struct DeviceIDs {
   // device
   // Second element is a device description from the ONNXIFI interface
   // Example of the pair: ("GPU:1", "gpu description")
-  std::vector<std::pair<std::string, std::string>> getDeviceInfo() {
+  std::vector<std::pair<std::string, std::string>> getDevicesInfo() {
     std::vector<std::pair<std::string, std::string>> deviceInfoVector;
     for (auto it : device_to_onnxBackendID_) {
       auto& deviceType = it.first;
@@ -99,8 +101,8 @@ struct DeviceIDs {
     size_t position = deviceHandle.find(':');
     if (position != std::string::npos) {
       std::sscanf(deviceHandle.c_str() + position + 1, "%zu", &deviceID);
-      deviceString = deviceHandle.substr(0, position);
     }
+    deviceString = deviceHandle.substr(0, position);
     auto it = string_to_deviceType_().find(deviceString);
     if (it == string_to_deviceType_().end()) {
       return NULL;
@@ -256,9 +258,6 @@ struct BackendRep {
     outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     onnxEvent outputEvent;
     outputFence.event = &outputEvent;
-    if (onnxWaitEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS)  {
-      throw std::runtime_error("Internal Error: Error waiting for output event (expected ONNXIFI_STATUS_SUCCESS)");
-    }
     if (onnxRunGraph(graph_, &inputFence, &outputFence) != ONNXIFI_STATUS_SUCCESS)  {
       std::cerr << "Graph failed to run successfully" << std::endl;
       //TODO: Return None
@@ -300,8 +299,8 @@ class Backend {
     return devices_.getBackendID(device) != NULL;
   }
 
-  std::vector<std::pair<std::string, std::string>> get_device_info() {
-    return devices_.getDeviceInfo();
+  std::vector<std::pair<std::string, std::string>> get_devices_info() {
+    return devices_.getDevicesInfo();
   }
 
   bool is_compatible(std::string serializedModel,
@@ -320,12 +319,13 @@ class Backend {
   // Prepares backend and initializs graph through BackendRep
   // Returns BackendRep object
   //TODO: Handle weight descriptors
-  BackendRep prepare(std::string serializedModel,
+  //TODO: Figure out how to not copy on return here
+  std::unique_ptr<BackendRep> prepare(std::string serializedModel,
                      std::string device,
                      py::kwargs kwargs) {
     onnxBackend backend = devices_.prepDevice(device);
     onnxGraph graph;
-    return BackendRep(std::move(serializedModel), backend);  
+    return std::unique_ptr<BackendRep>(new BackendRep(std::move(serializedModel), backend));  
   }
 
   // TODO: Implement run_node
@@ -351,5 +351,5 @@ PYBIND11_MODULE(python_onnxifi, m) {
       .def("prepare", &Backend::prepare)
       .def("run_node", &Backend::run_node)
       .def("supports_device", &Backend::supports_device)
-      .def("get_device_info", &Backend::get_device_info);
+      .def("get_devices_info", &Backend::get_devices_info);
 }

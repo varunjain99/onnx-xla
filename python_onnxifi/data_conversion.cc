@@ -19,6 +19,17 @@ DescriptorData::DescriptorData(DescriptorData&& d) noexcept {
   descriptor.dataType = d.descriptor.dataType;
 }
 
+DescriptorData::DescriptorData(const DescriptorData& d) {
+  name = d.name;
+  buffer = d.buffer;
+  shape = d.shape;
+  descriptor.name = name.c_str();
+  descriptor.dimensions = shape.size();
+  descriptor.shape = shape.data();
+  descriptor.buffer = reinterpret_cast<onnxPointer>(buffer.data());
+  descriptor.memoryType = d.descriptor.memoryType;
+  descriptor.dataType = d.descriptor.dataType;
+}
 
 DataConversion::DataConversion() : input_descriptors_data_(), output_descriptors_data_(), weight_descriptors_data_(){}
 

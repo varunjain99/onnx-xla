@@ -22,7 +22,7 @@ int main(int argc, char** argv)  {
   
   //Initialize backend
   onnxBackendID backendIDs;
-  size_t numBackends;
+  size_t numBackends = 1;
   onnxBackend backend;
   if (onnxGetBackendIDs(&backendIDs, &numBackends) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error getting backend IDs" << std::endl;
@@ -39,7 +39,6 @@ int main(int argc, char** argv)  {
   raw_input.SetCloseOnDelete(true);
   google::protobuf::io::CodedInputStream coded_input(&raw_input);
   coded_input.GetDirectBufferPointer(&buffer, &size);
- 
  //Fill in I/O information
   uint64_t shape[2] = {1, 2};
 

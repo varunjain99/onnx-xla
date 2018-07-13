@@ -70,7 +70,7 @@ include_directories(
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 if(NOT DEFINED ONNX_NAMESPACE)
-  set(ONNX_NAMESPACE onnx)
+  set(ONNX_NAMESPACE onnx_xla)
 endif()
 add_definitions("-DONNX_NAMESPACE=${ONNX_NAMESPACE}")
 
@@ -106,7 +106,6 @@ target_link_libraries(onnx_xla onnx ${XLA_LIBRARIES} ${GRPC_LIBRARIES})
 target_include_directories(onnx_xla PUBLIC ${XLA_INCLUDE_DIRS})
 
 # python interface to ONNXIFI
-set(PYTHON_INCLUDE_DIR "/usr/include/python2.7")
 
 if("${PY_EXT_SUFFIX}" STREQUAL "")
   if (MSVC)
@@ -131,7 +130,7 @@ else()
   target_include_directories(python_onnxifi PRIVATE ${PROJECT_SOURCE_DIR}/third_party/onnx/third_party/pybind11/include)
 endif()
 
-target_link_libraries(python_onnxifi PRIVATE onnx onnx_xla)
+target_link_libraries(python_onnxifi PRIVATE onnx_xla)
 
 # Exposing test function for DataConversion to python
 add_library(data_conversion_test MODULE "${PROJECT_SOURCE_DIR}/python_onnxifi/data_conversion.cc" "${PROJECT_SOURCE_DIR}/python_onnxifi/data_conversion_test.cc")

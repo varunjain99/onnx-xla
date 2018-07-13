@@ -4,3 +4,6 @@
 [submodule "third_party/pytorch"]
 	path = third_party/pytorch
 	url = https://github.com/asuhan/pytorch
+[submodule "third_party/pybind11"]
+	path = third_party/pybind11
+	url = https://github.com/pybind/pybind11.git

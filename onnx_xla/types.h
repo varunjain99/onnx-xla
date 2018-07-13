@@ -31,9 +31,6 @@ namespace onnx_xla  {
 
    using ::Eigen::half;
 
-   //Helper functions to translate between types
-   //TODO: Remove onnxifiToOnnx as apparently the two have the same values
+   //Helper functions to translate between ONNX and XLA types
    xla::PrimitiveType onnxToPrimitive(const ONNX_NAMESPACE::TensorProto_DataType& data_type);
-   ONNX_NAMESPACE::TensorProto_DataType onnxifiToOnnx(const onnxEnum& data_type);
-   
 }

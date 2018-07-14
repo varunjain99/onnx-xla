@@ -127,7 +127,7 @@ find_package(pybind11)
 if(pybind11_FOUND)
   target_include_directories(python_onnxifi PRIVATE ${pybind11_INCLUDE_DIRS})
 else()
-  target_include_directories(python_onnxifi PRIVATE ${PROJECT_SOURCE_DIR}/third_party/onnx/third_party/pybind11/include)
+  target_include_directories(python_onnxifi PRIVATE ${PROJECT_SOURCE_DIR}/third_party/pybind11/include)
 endif()
 
 target_link_libraries(python_onnxifi PRIVATE onnx_xla)

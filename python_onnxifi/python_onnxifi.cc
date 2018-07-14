@@ -48,7 +48,7 @@ struct DeviceIDs {
             "Internal Error: onnxGetBackendInfo returned an invalid device "
             "type");
       }
-      device_to_onnxBackendID_[deviceType].push_back(ids_[i]);
+      device_to_onnxBackendID_[deviceType].emplace_back(ids_[i]);
     }
   }
 
@@ -86,7 +86,7 @@ struct DeviceIDs {
         }
         std::string deviceHandle(it->second + std::string(":") +
                                  std::to_string(i + 1));
-        deviceInfoVector.push_back(
+        deviceInfoVector.emplace_back(
             std::pair<std::string, std::string>(deviceHandle, deviceInfo));
       }
     }

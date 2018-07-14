@@ -59,7 +59,7 @@ namespace onnx_xla  {
       auto secondOp = valueToOp[n.inputs().at(i)];
       auto firstNDim = ShapeUtil::Rank(builder.GetShape(firstOp).ValueOrDie());
       auto secondNDim = ShapeUtil::Rank(builder.GetShape(secondOp).ValueOrDie());
-      std::vector<int64> broadcastDims = {};
+      std::vector<int64> broadcastDims;
       if (firstNDim != secondNDim || firstNDim != 0 || secondNDim != 0)  {
         auto minDim = std::min(firstNDim, secondNDim);
         auto maxDim = std::max(firstNDim, secondNDim);

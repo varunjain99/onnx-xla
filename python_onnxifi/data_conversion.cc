@@ -64,14 +64,26 @@ DataConversion::DataConversion(const std::string& serializedModel)  {
 
 DataConversion::~DataConversion() {}
 
-void DataConversion::makeWeightDescriptorsData(py::dict& numpyArrays) {
-  makeDescriptorsDataFromNumpy(numpyArrays, weight_descriptors_data_);
+py::dict DataConversion::getNumpyDictOutputs() const {
+  py::dict outputDict;
+  NumpyDictFromDescriptorDataMap(outputDict, output_descriptors_data_);
+  return outputDict;
 }
 
-void DataConversion::updateInputDescriptorsData(py::dict& numpyArrays) {
-  input_descriptors_data_.clear();
-  makeDescriptorsDataFromNumpy(numpyArrays, input_descriptors_data_);
+bool DataConversion::updateDescriptors(py::dict& inputs)  {
+  DescriptorDataMapFromNumpyDict(inputs, input_descriptors_data_);
+  DescriptorDataMapFromModelProtoOutputs(model_, output_descriptors_data_);
+  return true;
 }
+
+std::vector<onnxTensorDescriptor> DataConversion::getInputDescriptors() const  {
+  return getTensorDescriptors(input_descriptors_data_);
+}
+
+std::vector<onnxTensorDescriptor> DataConversion::getOutputDescriptors() const  {
+  return getTensorDescriptors(output_descriptors_data_);
+}
+
 
 // TODO: This should be moved to onnx repository: onnx/common/tensor.h
 // Proposal: The dispatch switches off tensor type to execute a
@@ -150,75 +162,46 @@ void DataConversion::getBufferSize(uint64_t& buffer_size,
   buffer_size = sizeof(onnx_type) * numElements;
 }
 
-void DataConversion::updateOutputDescriptorsData(ModelProto& model) {
+void DataConversion::DescriptorDataMapFromModelProtoOutputs(ModelProto& model, std::unordered_map<std::string, DescriptorData>& descriptorsData) {
   ::ONNX_NAMESPACE::shape_inference::InferShapes(model);
   const auto& outputs = model.graph().output();
   for (const auto& vi : outputs) {
-    auto it = output_descriptors_data_.find(vi.name());
-    if (it == output_descriptors_data_.end())  {
+    auto it = descriptorsData.find(vi.name());
+    if (it == descriptorsData.end())  {
       throw std::runtime_error("Invalid input name");
     }
-    DescriptorData& outputData = it->second;
-    outputData.name = vi.name();
-    outputData.descriptor.name = outputData.name.c_str();
+    DescriptorData& dd = it->second;
+    dd.name = vi.name();
+    dd.descriptor.name = dd.name.c_str();
     if (!vi.type().tensor_type().has_elem_type()) {
       throw std::runtime_error(
           "Non-static ModelProto: Output data type not found");
     }
-    outputData.descriptor.dataType = vi.type().tensor_type().elem_type();
-    outputData.descriptor.dimensions =
+    dd.descriptor.dataType = vi.type().tensor_type().elem_type();
+    dd.descriptor.dimensions =
         vi.type().tensor_type().shape().dim_size();
-    for (auto i = 0; i < outputData.descriptor.dimensions; ++i) {
+    for (auto i = 0; i < dd.descriptor.dimensions; ++i) {
       const auto& dim = vi.type().tensor_type().shape().dim(i);
       if (!dim.has_dim_value()) {
         throw std::runtime_error(
             "Non-static ModelProto: Output shape dimension not found");
       }
-      outputData.shape.emplace_back(dim.dim_value());
+      dd.shape.emplace_back(dim.dim_value());
     }
-    outputData.descriptor.shape = outputData.shape.data();
-    outputData.descriptor.memoryType =
+    dd.descriptor.shape = dd.shape.data();
+    dd.descriptor.memoryType =
         ONNXIFI_MEMORY_TYPE_CPU;  // TODO: Expand memory types?
     uint64_t buffer_size;
     DISPATCH_OVER_NUMERIC_DATA_TYPE(
-        outputData.descriptor.dataType, getBufferSize, buffer_size,
-        outputData.descriptor.shape, outputData.descriptor.dimensions)
-    outputData.buffer.resize(buffer_size);
-    outputData.descriptor.buffer =
-        reinterpret_cast<onnxPointer>(outputData.buffer.data());
+        dd.descriptor.dataType, getBufferSize, buffer_size,
+        dd.descriptor.shape, dd.descriptor.dimensions)
+    dd.buffer.resize(buffer_size);
+    dd.descriptor.buffer =
+        reinterpret_cast<onnxPointer>(dd.buffer.data());
   }
 }
 
-template <typename onnx_type, typename py_type>
-void DataConversion::addNumpyArray(py::dict& numpyArrays,
-                                   const DescriptorData& dd) {
-  auto numElements = std::accumulate(dd.shape.begin(), dd.shape.end(),
-                                     1UL, std::multiplies<uint64_t>());
-  py_type intermediateBuffer[numElements];
-  onnx_type* oldBuffer = reinterpret_cast<onnx_type*>(dd.descriptor.buffer);
-  std::copy(oldBuffer, oldBuffer + numElements, intermediateBuffer);
-  std::vector<ptrdiff_t> shape(dd.descriptor.shape,
-                               dd.descriptor.shape + dd.descriptor.dimensions);
-  auto numpyArray = py::array_t<py_type>(shape, intermediateBuffer);
-  numpyArrays[py::str(std::string(dd.descriptor.name))] = numpyArray;
-}
-
-py::dict DataConversion::getNumpyOutputs() const {
-  py::dict outputDict;
-  getNumpyFromDescriptorsData(outputDict, output_descriptors_data_);
-  return outputDict;
-}
-
-void DataConversion::getNumpyFromDescriptorsData(
-    py::dict& numpyArrays,
-    const std::unordered_map<std::string, DescriptorData>& descriptorsData) {
-  for (const auto& dd : descriptorsData) {
-    DISPATCH_OVER_NUMERIC_DATA_TYPE(dd.second.descriptor.dataType, addNumpyArray,
-                                    numpyArrays, dd.second)
-  }
-}
-
-void DataConversion::makeDescriptorsDataFromNumpy(
+void DataConversion::DescriptorDataMapFromNumpyDict(
     py::dict& numpyArrays,
     std::unordered_map<std::string, DescriptorData>& descriptorsData) {
   for (const auto& item : numpyArrays) {
@@ -253,8 +236,7 @@ void DataConversion::fillDescriptorDataImpl(
   dd.descriptor.buffer = reinterpret_cast<onnxPointer>(buffer);
 }
 
-// TODO: Change from format == letter comparison to using buffer_info format
-// template
+
 void DataConversion::fillDescriptorData(DescriptorData& dd,
                                         py::array& py_array,
                                         const std::string& name) {
@@ -306,16 +288,27 @@ void DataConversion::fillDescriptorData(DescriptorData& dd,
   }
 }
 
-std::vector<onnxTensorDescriptor> DataConversion::getInputTensorDescriptors() {
-  return getTensorDescriptors(input_descriptors_data_);
+template <typename onnx_type, typename py_type>
+void DataConversion::addNumpyArray(py::dict& numpyArrays,
+                                   const DescriptorData& dd) {
+  auto numElements = std::accumulate(dd.shape.begin(), dd.shape.end(),
+                                     1UL, std::multiplies<uint64_t>());
+  py_type intermediateBuffer[numElements];
+  onnx_type* oldBuffer = reinterpret_cast<onnx_type*>(dd.descriptor.buffer);
+  std::copy(oldBuffer, oldBuffer + numElements, intermediateBuffer);
+  std::vector<ptrdiff_t> shape(dd.descriptor.shape,
+                               dd.descriptor.shape + dd.descriptor.dimensions);
+  auto numpyArray = py::array_t<py_type>(shape, intermediateBuffer);
+  numpyArrays[py::str(std::string(dd.descriptor.name))] = numpyArray;
 }
 
-std::vector<onnxTensorDescriptor> DataConversion::getOutputTensorDescriptors() {
-  return getTensorDescriptors(output_descriptors_data_);
-}
-
-std::vector<onnxTensorDescriptor> DataConversion::getWeightTensorDescriptors() {
-  return getTensorDescriptors(weight_descriptors_data_);
+void DataConversion::NumpyDictFromDescriptorDataMap(
+    py::dict& numpyArrays,
+    const std::unordered_map<std::string, DescriptorData>& descriptorsData) {
+  for (const auto& dd : descriptorsData) {
+    DISPATCH_OVER_NUMERIC_DATA_TYPE(dd.second.descriptor.dataType, addNumpyArray,
+                                    numpyArrays, dd.second)
+  }
 }
 
 std::vector<onnxTensorDescriptor> DataConversion::getTensorDescriptors(

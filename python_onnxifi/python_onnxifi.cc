@@ -222,27 +222,19 @@ struct BackendRep {
   BackendRep(std::string&& serializedModel, onnxBackend backend) : graph_(), backend_(backend), serialized_model_(serializedModel), conversion_(serialized_model_) {
     if (onnxInitGraph(backend, serialized_model_.size(), serialized_model_.c_str(), 0, nullptr, &graph_)
                                          != ONNXIFI_STATUS_SUCCESS) {
-      std::cerr << "Could not initialize graph on given device" << std::endl;
-      graph_ = NULL; //Make dummy BackendRep with NULL graph TODO: Return python None object
+      throw std::runtime_error("Could not initialize graph on given device");
     }
   }
 
-  // TODO: Implement run
   //TODO: Change usage of memoryFence (onnxEvent instead of onnxEvent*) when submodule pulled
   py::dict run(py::dict inputs, py::kwargs kwargs) {
-    conversion_.updateInputDescriptorsData(inputs);
-    auto inputDescriptors = conversion_.getInputTensorDescriptors();
-    ModelProto model;
-    if (!model.ParseFromString(serialized_model_))  {
-      std::cerr << "Failed to parse model proto" << std::endl;
-      //TODO: Return None
-    }
-    conversion_.updateOutputDescriptorsData(model);
-    auto outputDescriptors = conversion_.getOutputTensorDescriptors();
-    if (onnxSetGraphIO(graph_, inputDescriptors.size(), inputDescriptors.data(),
-                               outputDescriptors.size(), outputDescriptors.data()) != ONNXIFI_STATUS_SUCCESS)  {
-      std::cerr << "I/O could not be set" << std::endl;
-      //TODO: Return None
+    if (conversion_.updateDescriptors(inputs))  {
+      auto inputDescriptors = conversion_.getInputDescriptors();
+      auto outputDescriptors = conversion_.getOutputDescriptors();
+      if (onnxSetGraphIO(graph_, inputDescriptors.size(), inputDescriptors.data(),
+                                 outputDescriptors.size(), outputDescriptors.data()) != ONNXIFI_STATUS_SUCCESS)  {
+        throw std::runtime_error("I/O could not be set");
+      }
     }
     onnxMemoryFence inputFence;
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
@@ -259,8 +251,7 @@ struct BackendRep {
     onnxEvent outputEvent;
     outputFence.event = &outputEvent;
     if (onnxRunGraph(graph_, &inputFence, &outputFence) != ONNXIFI_STATUS_SUCCESS)  {
-      std::cerr << "Graph failed to run successfully" << std::endl;
-      //TODO: Return None
+      throw std::runtime_error("Graph failed to run successfully");
     }
     if (onnxWaitEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS)  {
       throw std::runtime_error("Internal Error: Error waiting for output event (expected ONNXIFI_STATUS_SUCCESS)");
@@ -272,7 +263,7 @@ struct BackendRep {
       throw std::runtime_error("Internal Error: Error releasing output event (expected ONNXIFI_STATUS_SUCCESS)");
     }
 
-    return conversion_.getNumpyOutputs();    
+    return conversion_.getNumpyDictOutputs();    
   }
 
   ~BackendRep() {
@@ -319,7 +310,6 @@ class Backend {
   // Prepares backend and initializs graph through BackendRep
   // Returns BackendRep object
   //TODO: Handle weight descriptors
-  //TODO: Figure out how to not copy on return here
   std::unique_ptr<BackendRep> prepare(std::string& serializedModel,
                      const std::string& device,
                      py::kwargs kwargs) {

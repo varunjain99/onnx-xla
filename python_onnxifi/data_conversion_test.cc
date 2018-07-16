@@ -2,9 +2,9 @@
 
 py::dict convert(py::dict inputDict)  {
   std::unordered_map<std::string, DescriptorData> descriptorsData;
-  DataConversion::makeDescriptorsDataFromNumpy(inputDict, descriptorsData);
+  DataConversion::DescriptorDataMapFromNumpyDict(inputDict, descriptorsData);
   py::dict outputDict;
-  DataConversion::getNumpyFromDescriptorsData(outputDict, descriptorsData);
+  DataConversion::NumpyDictFromDescriptorDataMap(outputDict, descriptorsData);
   return outputDict;
 };
 

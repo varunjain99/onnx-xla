@@ -8,6 +8,7 @@ import onnx
 from onnx import ModelProto, NodeProto
 import numpy as np
 
+#TODO:  use python's unittest module to make these real test cases
 backend = OnnxifiBackend()
 print(backend.get_devices_info())
 assert(backend.supports_device("CPU"))

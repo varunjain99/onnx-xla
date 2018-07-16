@@ -1,24 +1,19 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-#from __future__ import unicode_literals
+from __future__ import unicode_literals
 
 from distutils.spawn import find_executable
 from distutils import sysconfig, log
 import setuptools
-import setuptools.command.build_py
-import setuptools.command.develop
-import setuptools.command.install
+import setuptools.command.build_ext
 
-from collections import namedtuple
 from contextlib import contextmanager
-import glob
 import os
 import shlex
 import subprocess
 import sys
 import struct
-from textwrap import dedent
 import multiprocessing
 
 TOP_DIR = os.path.realpath(os.path.dirname(__file__))
@@ -139,35 +134,33 @@ class cmake_build(setuptools.Command):
                 build_args.extend(['--', '-j', str(self.jobs)])
             subprocess.check_call(build_args)
 
-class build_py(setuptools.command.build_py.build_py):
+class build_ext(setuptools.command.build_ext.build_ext):
     def run(self):
         self.run_command('cmake_build')
-        setuptools.command.build_py.build_py.run(self)
+        setuptools.command.build_ext.build_ext.run(self)
 
-class develop(setuptools.command.develop.develop):
-    def run(self):
-        self.run_command('build_py')
-        setuptools.command.develop.develop.run(self)
+    def build_extensions(self):
+        for ext in self.extensions:
+            fullname = self.get_ext_fullname(ext.name)
+            filename = os.path.basename(self.get_ext_filename(fullname))
 
-class install(setuptools.command.install.install):
-    def run(self):
-        self.run_command('build_py')
-        setuptools.command.install.install.run(self)
+            lib_path = CMAKE_BUILD_DIR
+            src = os.path.join(lib_path, filename)
+            dst = os.path.join(os.path.realpath(self.build_lib), filename)
+            self.copy_file(src, dst)
 
 
 cmdclass = {
     'cmake_build': cmake_build,
-    'build_py': build_py,
-    'develop': develop,
-    'install': install,
+    'build_ext': build_ext,
 }
 
 ################################################################################
 # Packages and Modules
 ################################################################################
 
-package_dir = {'' : 'python_onnxifi'}
-py_modules = ['onnxifi_backend']
+package_dir = {str('') : str('python_onnxifi')}
+py_modules = [str('onnxifi_backend')]
 
 install_requires.extend([
     'protobuf',
@@ -179,15 +172,21 @@ install_requires.extend([
 ])
 
 ################################################################################
-# Test
+# Extensions
 ################################################################################
 
-setup_requires.append('pytest-runner')
-tests_require.append('pytest-cov')
-tests_require.append('nbval')
-tests_require.append('tabulate')
-tests_require.append('typing')
-tests_require.append('typing-extensions')
+ext_modules = [
+    setuptools.Extension(
+        name=str('python_onnxifi'),
+        sources=[]),
+    setuptools.Extension(
+        name=str('data_conversion_test'),
+        sources=[]),
+]
+
+################################################################################
+# Test
+################################################################################
 
 ################################################################################
 # Final
@@ -197,6 +196,7 @@ setuptools.setup(
     name="onnx-xla",
     version='1.0',
     description="ONNX and XLA Integration through ONNXIFI",
+    ext_modules=ext_modules,
     py_modules=py_modules,
     package_dir=package_dir,
     cmdclass=cmdclass,

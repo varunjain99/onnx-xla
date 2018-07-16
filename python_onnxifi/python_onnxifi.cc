@@ -16,6 +16,8 @@ namespace py = pybind11;
 using ::ONNX_NAMESPACE::ModelProto;
 using ::ONNX_NAMESPACE::NodeProto;
 
+//TODO: Introduce some macro for enforcing equality 
+
 struct DeviceIDs {
  public:
   // Get all backendIDs from ONNXIFI interface
@@ -99,7 +101,7 @@ struct DeviceIDs {
     std::string deviceString;
     size_t deviceID = 0;
     size_t position = deviceHandle.find(':');
-    if (position != std::string::npos) {
+    if (position < deviceHandle.size() - 1) {
       std::sscanf(deviceHandle.c_str() + position + 1, "%zu", &deviceID);
     }
     deviceString = deviceHandle.substr(0, position);
@@ -130,16 +132,19 @@ struct DeviceIDs {
     if (!id) {
       return NULL;
     }
-    if (initialized_.find(id) == initialized_.end()) {
+    auto it = initialized_.find(id);
+    if (it == initialized_.end()) {
       onnxBackend backend;
       if (onnxInitBackend(id, NULL, &backend) != ONNXIFI_STATUS_SUCCESS) {
         throw std::runtime_error(
             "Internal error: onnxInitBackend failed (expected "
             "ONNXIFI_STATUS_SUCCESS)");
       }
-      initialized_[id] = backend;
+      initialized_.emplace(id, backend);
+      return backend;
+    } else {
+      return it->second;
     }
-    return initialized_[id];
   }
 
   // Release initialized backends
@@ -152,7 +157,7 @@ struct DeviceIDs {
             "ONNXIFI_STATUS_SUCCESS)");
       }
     }
-    if (!ids_) {
+    if (ids_) {
       for (auto i = 0; i < num_backends_; ++i) {
         if (onnxReleaseBackendID(ids_[i]) != ONNXIFI_STATUS_SUCCESS) {
           throw std::runtime_error(
@@ -192,7 +197,7 @@ struct DeviceIDs {
 
 const std::unordered_map<onnxEnum, std::string>&
 DeviceIDs::deviceType_to_string_() {
-  static std::unordered_map<onnxEnum, std::string> deviceType_to_string_ = {
+  static const std::unordered_map<onnxEnum, std::string> deviceType_to_string_ = {
       {ONNXIFI_DEVICE_TYPE_NPU, "NPU"},
       {ONNXIFI_DEVICE_TYPE_DSP, "DSP"},
       {ONNXIFI_DEVICE_TYPE_GPU, "GPU"},
@@ -204,7 +209,7 @@ DeviceIDs::deviceType_to_string_() {
 
 const std::unordered_map<std::string, onnxEnum>&
 DeviceIDs::string_to_deviceType_() {
-  static std::unordered_map<std::string, onnxEnum> string_to_deviceType_ = {
+  static const std::unordered_map<std::string, onnxEnum> string_to_deviceType_ = {
       {"NPU", ONNXIFI_DEVICE_TYPE_NPU},
       {"DSP", ONNXIFI_DEVICE_TYPE_DSP},
       {"GPU", ONNXIFI_DEVICE_TYPE_GPU},

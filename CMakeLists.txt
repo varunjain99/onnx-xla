@@ -120,7 +120,7 @@ add_library(python_onnxifi MODULE "${PROJECT_SOURCE_DIR}/python_onnxifi/python_o
 set_target_properties(python_onnxifi PROPERTIES PREFIX "")
 set_target_properties(python_onnxifi PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
 set_target_properties(python_onnxifi PROPERTIES SUFFIX ${PY_EXT_SUFFIX})
-set_target_properties(python_onnxifi PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/python_onnxifi/build")
+set_target_properties(python_onnxifi PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 target_include_directories(python_onnxifi PRIVATE "${PYTHON_INCLUDE_DIR}" ${PROJECT_SOURCE_DIR}/third_party/onnx)
 
 find_package(pybind11)
@@ -137,7 +137,7 @@ add_library(data_conversion_test MODULE "${PROJECT_SOURCE_DIR}/python_onnxifi/da
 set_target_properties(data_conversion_test PROPERTIES PREFIX "")
 set_target_properties(data_conversion_test PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
 set_target_properties(data_conversion_test PROPERTIES SUFFIX ${PY_EXT_SUFFIX})
-set_target_properties(data_conversion_test PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/python_onnxifi/build")
+set_target_properties(data_conversion_test PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 target_include_directories(data_conversion_test PRIVATE "${PYTHON_INCLUDE_DIR}" ${PROJECT_SOURCE_DIR}/third_party/onnx)
 
 find_package(pybind11)

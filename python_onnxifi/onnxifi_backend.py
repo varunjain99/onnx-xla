@@ -1,13 +1,18 @@
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 from __future__ import unicode_literals
 
-from build.python_onnxifi import *
+from python_onnxifi import Backend, BackendRep
 import onnx
 from onnx import (NodeProto,
                   ModelProto)
 
 class OnnxifiBackendRep(object):
-    #Constructor never be used - underlying C++ object created behind the scenes
-    #in OnnxifiBacken::prepare
+    def __init__(self, backendRep):
+        self.backend_rep_ = backendRep
+
     def run(self, inputs, **kwargs):  # type: (Any, **Any) -> Tuple[Any, ...]
         return self.backend_rep_.run(inputs, **kwargs)
 
@@ -29,7 +34,7 @@ class OnnxifiBackend(object):
                 **kwargs  # type: Any
                 ):  # type: (...) -> BackendRep
         onnx.checker.check_model(model)
-        return self.backend_.prepare(model.SerializeToString(), device, **kwargs)
+        return OnnxifiBackendRep(self.backend_.prepare(model.SerializeToString(), device, **kwargs))
 
     def run_model(self,
                   model,  # type: ModelProto

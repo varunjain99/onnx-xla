@@ -1,4 +1,9 @@
-import build.data_conversion_test as dct
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
+import data_conversion_test as dct
 import numpy as np
 
 #testing conversion functions from DataConversion class

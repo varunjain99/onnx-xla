@@ -1,7 +1,7 @@
 #include "python_onnxifi/data_conversion.h"
 
 py::dict convert(py::dict inputDict)  {
-  std::vector<DescriptorData> descriptorsData;
+  std::unordered_map<std::string, DescriptorData> descriptorsData;
   DataConversion::makeDescriptorsDataFromNumpy(inputDict, descriptorsData);
   py::dict outputDict;
   DataConversion::getNumpyFromDescriptorsData(outputDict, descriptorsData);

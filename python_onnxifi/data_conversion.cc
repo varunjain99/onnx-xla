@@ -1,5 +1,7 @@
 #include "python_onnxifi/data_conversion.h"
 
+#include <utility>
+#include <unordered_set>
 #include <algorithm>
 #include <complex>
 #include <functional>
@@ -31,7 +33,34 @@ DescriptorData::DescriptorData(const DescriptorData& d) {
   descriptor.dataType = d.descriptor.dataType;
 }
 
-DataConversion::DataConversion() : input_descriptors_data_(), output_descriptors_data_(), weight_descriptors_data_(){}
+//TODO: weight descriptors
+DataConversion::DataConversion(const std::string& serializedModel)  {
+  if (!model_.ParseFromString(serializedModel))  {
+    throw std::runtime_error( "Failed to parse model proto");
+  }
+  const auto& initializers = model_.graph().initializer();
+  const auto& inputs = model_.graph().input();
+  const auto& outputs = model_.graph().output();
+  std::unordered_set<std::string> initializerNames;
+  for (const auto& t : initializers) {
+    if (!initializerNames.insert(t.name()).second)  {
+      throw std::runtime_error("Invalid model: repeated initializer name");
+    }
+  }
+  for (const auto& vi : inputs)  {
+    if (initializerNames.find(vi.name()) == initializerNames.end())  {
+      if (!input_descriptors_data_.insert(std::pair<std::string, DescriptorData>(vi.name(), DescriptorData())).second)  {
+        throw std::runtime_error("Invalid model: repeated input name");
+      }
+    }
+  }
+
+  for (const auto& vi : outputs)  {
+    if (!output_descriptors_data_.insert(std::pair<std::string, DescriptorData>(vi.name(), DescriptorData())).second)  {
+        throw std::runtime_error("Invalid model: repeated output name");
+    }
+  }
+}
 
 DataConversion::~DataConversion() {}
 
@@ -122,11 +151,14 @@ void DataConversion::getBufferSize(uint64_t& buffer_size,
 }
 
 void DataConversion::updateOutputDescriptorsData(ModelProto& model) {
-  output_descriptors_data_.clear();
   ::ONNX_NAMESPACE::shape_inference::InferShapes(model);
   const auto& outputs = model.graph().output();
   for (const auto& vi : outputs) {
-    DescriptorData outputData;
+    auto it = output_descriptors_data_.find(vi.name());
+    if (it == output_descriptors_data_.end())  {
+      throw std::runtime_error("Invalid input name");
+    }
+    DescriptorData& outputData = it->second;
     outputData.name = vi.name();
     outputData.descriptor.name = outputData.name.c_str();
     if (!vi.type().tensor_type().has_elem_type()) {
@@ -154,7 +186,6 @@ void DataConversion::updateOutputDescriptorsData(ModelProto& model) {
     outputData.buffer.resize(buffer_size);
     outputData.descriptor.buffer =
         reinterpret_cast<onnxPointer>(outputData.buffer.data());
-    output_descriptors_data_.emplace_back(std::move(outputData));
   }
 }
 
@@ -180,22 +211,22 @@ py::dict DataConversion::getNumpyOutputs() const {
 
 void DataConversion::getNumpyFromDescriptorsData(
     py::dict& numpyArrays,
-    const std::vector<DescriptorData>& descriptorsData) {
+    const std::unordered_map<std::string, DescriptorData>& descriptorsData) {
   for (const auto& dd : descriptorsData) {
-    DISPATCH_OVER_NUMERIC_DATA_TYPE(dd.descriptor.dataType, addNumpyArray,
-                                    numpyArrays, dd)
+    DISPATCH_OVER_NUMERIC_DATA_TYPE(dd.second.descriptor.dataType, addNumpyArray,
+                                    numpyArrays, dd.second)
   }
 }
 
 void DataConversion::makeDescriptorsDataFromNumpy(
     py::dict& numpyArrays,
-    std::vector<DescriptorData>& descriptorsData) {
+    std::unordered_map<std::string, DescriptorData>& descriptorsData) {
   for (const auto& item : numpyArrays) {
-    DescriptorData dd;
+    std::string name = std::string(py::str(item.first));
+    DescriptorData& dd = descriptorsData[name];
     py::array numpyArray = py::reinterpret_borrow<py::array>(
         item.second);  // TODO: Check if of type py::array
-    fillDescriptorData(dd, numpyArray, std::string(py::str(item.first)));
-    descriptorsData.emplace_back(std::move(dd));
+    fillDescriptorData(dd, numpyArray, name);
   }
 }
 
@@ -288,10 +319,10 @@ std::vector<onnxTensorDescriptor> DataConversion::getWeightTensorDescriptors() {
 }
 
 std::vector<onnxTensorDescriptor> DataConversion::getTensorDescriptors(
-    const std::vector<DescriptorData>& descriptorsData) {
+    const std::unordered_map<std::string, DescriptorData>& descriptorsData) {
   std::vector<onnxTensorDescriptor> tensorDescriptors;
   for (const auto& dd : descriptorsData) {
-    tensorDescriptors.emplace_back(dd.descriptor);
+    tensorDescriptors.emplace_back(dd.second.descriptor);
   }
   return tensorDescriptors;
 }

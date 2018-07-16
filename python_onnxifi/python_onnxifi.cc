@@ -219,7 +219,7 @@ struct BackendRep {
  public:
   //ONNXIFI graph that has been initalized
   //takes ownership of serializedModel used to initialize G
-  BackendRep(std::string&& serializedModel, onnxBackend backend) : graph_(), backend_(backend), serialized_model_(serializedModel), conversion_() {
+  BackendRep(std::string&& serializedModel, onnxBackend backend) : graph_(), backend_(backend), serialized_model_(serializedModel), conversion_(serialized_model_) {
     if (onnxInitGraph(backend, serialized_model_.size(), serialized_model_.c_str(), 0, nullptr, &graph_)
                                          != ONNXIFI_STATUS_SUCCESS) {
       std::cerr << "Could not initialize graph on given device" << std::endl;
@@ -295,7 +295,7 @@ class Backend {
   Backend() : devices_() {}
 
   // Parses string and checks if corresponding backendID exists
-  bool supports_device(std::string device) {
+  bool supports_device(const std::string& device) {
     return devices_.getBackendID(device) != NULL;
   }
 
@@ -303,8 +303,8 @@ class Backend {
     return devices_.getDevicesInfo();
   }
 
-  bool is_compatible(std::string serializedModel,
-                     std::string device,
+  bool is_compatible(const std::string& serializedModel,
+                     const std::string& device,
                      py::kwargs kwargs) {
     if (!this->supports_device(device)) {
       return false;
@@ -320,8 +320,8 @@ class Backend {
   // Returns BackendRep object
   //TODO: Handle weight descriptors
   //TODO: Figure out how to not copy on return here
-  std::unique_ptr<BackendRep> prepare(std::string serializedModel,
-                     std::string device,
+  std::unique_ptr<BackendRep> prepare(std::string& serializedModel,
+                     const std::string& device,
                      py::kwargs kwargs) {
     onnxBackend backend = devices_.prepDevice(device);
     onnxGraph graph;
@@ -333,7 +333,7 @@ class Backend {
   py::dict run_node(
       NodeProto node,
       py::dict inputs,
-      std::string device, /*outputs_info = None,*/
+      const std::string& device, /*outputs_info = None,*/
       py::kwargs kwargs) {
     return py::dict{};
   }

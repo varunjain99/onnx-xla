@@ -9,8 +9,12 @@
 #include "onnx/shape_inference/implementation.h"
 
 #include <vector>
+#include <unordered_map>
 
 namespace py = pybind11;
+
+//Friend function for testing purposes
+py::dict convert(py::dict inputDict);
 
 using ::ONNX_NAMESPACE::ModelProto;
 // Utility class to navigate conversions of onnxTensorDescriptor and numpy
@@ -34,9 +38,11 @@ struct DescriptorData {
 //TODO: Support for strides
 class DataConversion final {
  public:
-  // Constructor creates empty DataConversion object
+  friend py::dict convert(py::dict inputDict);
+  // Constructor creates DataConversion object with underlying model
+  // Initializes underlying member variables
   // 1 DataConversion object for every onnxGraph or BackendRep
-  DataConversion();
+  DataConversion(const std::string& serializedModel);
 
   // Release any resources allocated in by object
   ~DataConversion();
@@ -45,7 +51,7 @@ class DataConversion final {
   // numpy inputs
   // and weights are valid (particularly useful for static environment)
 
-  // Fills up weight_descriptors_data_ vector
+  // Fills up weight_descriptors_data_ map
   // Only called once, when preparing the model
   void makeWeightDescriptorsData(py::dict& numpyArrays);
 
@@ -69,20 +75,6 @@ class DataConversion final {
   // Returns dictionary of of name to numpy array from output_descriptors_data_
   py::dict getNumpyOutputs() const;
 
-  // Input: empty dictionary
-  // Output: dictionary full of numpy outputs
-  // Convert from output onnxTensorDescriptor to numpy dictionary
-  static void getNumpyFromDescriptorsData(
-      py::dict& numpyArrays,
-      const std::vector<DescriptorData>& descriptorsData);
-
-  // Input: numpy arrays passed in through python interface, empty
-  // DescriptorData array
-  // Output: descriptorsData is filled with appropriate values
-  static void makeDescriptorsDataFromNumpy(
-      py::dict& numpyArrays,
-      std::vector<DescriptorData>& descriptorsData);
-
   // Returns vector of just the onnxTensorDescriptor structure, for input,
   // output, and weight
   std::vector<onnxTensorDescriptor> getInputTensorDescriptors();
@@ -92,9 +84,23 @@ class DataConversion final {
   // Helper to above functions, giving onnxTensorDescriptor from DescriptorData
   // vector
   static std::vector<onnxTensorDescriptor> getTensorDescriptors(
-      const std::vector<DescriptorData>& descriptorsData);
+      const std::unordered_map<std::string, DescriptorData>& descriptorsData);
 
  private:
+  // Input: numpy arrays passed in through python interface, empty
+  // DescriptorData array
+  // Output: descriptorsData is filled with appropriate values
+  static void makeDescriptorsDataFromNumpy(
+      py::dict& numpyArrays,
+      std::unordered_map<std::string, DescriptorData>& descriptorsData);
+
+  // Input: empty dictionary
+  // Output: dictionary full of numpy outputs
+  // Convert from output onnxTensorDescriptor to numpy dictionary
+  static void getNumpyFromDescriptorsData(
+      py::dict& numpyArrays,
+      const std::unordered_map<std::string, DescriptorData>& descriptorsData);
+
   // Helper to updateOutputDescriptorsData
   // Uses onnx_type and number of elements in tensor to store number of bytes
   // needed
@@ -124,7 +130,9 @@ class DataConversion final {
                                  const std::string& name);
 
   // Vectors of input, output, and weight tensor Descriptors
-  std::vector<DescriptorData> input_descriptors_data_;
-  std::vector<DescriptorData> output_descriptors_data_;
-  std::vector<DescriptorData> weight_descriptors_data_;
+  std::unordered_map<std::string, DescriptorData> input_descriptors_data_;
+  std::unordered_map<std::string, DescriptorData> output_descriptors_data_;
+  std::unordered_map<std::string, DescriptorData> weight_descriptors_data_;
+  
+  ModelProto model_;
 };

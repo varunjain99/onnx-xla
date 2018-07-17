@@ -5,8 +5,11 @@
 #include "onnx/onnxifi.h"
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
 
+#include "onnx_xla/types.h"
+
 #include <functional>
 #include <utility>
+#include <algorithm>
 
 namespace onnx_xla  {
 

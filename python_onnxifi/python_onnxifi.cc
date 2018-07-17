@@ -222,8 +222,10 @@ DeviceIDs::string_to_deviceType_() {
 
 struct BackendRep {
  public:
-  //ONNXIFI graph that has been initalized
-  //takes ownership of serializedModel used to initialize G
+  //Takes ownership of serializedModel, used to initialize graph
+  //DataConversion object sets up tensor descriptors
+  //IO is set and graph is initialized
+  //Only works for static grphas
   BackendRep(std::string&& serializedModel, onnxBackend backend) : graph_(), backend_(backend), serialized_model_(serializedModel), conversion_(serialized_model_) {
     if (onnxInitGraph(backend, serialized_model_.size(), serialized_model_.c_str(), 0, nullptr, &graph_)
                                          != ONNXIFI_STATUS_SUCCESS) {
@@ -270,6 +272,7 @@ struct BackendRep {
     return conversion_.getOutputs();    
   }
 
+  //Manages the graph objects
   ~BackendRep() {
     if (onnxReleaseGraph(graph_) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error(
@@ -294,10 +297,12 @@ class Backend {
     return devices_.getBackendID(device) != NULL;
   }
 
+  // Returns dctionary of string with information about devicea
   std::vector<std::pair<std::string, std::string>> get_devices_info() {
     return devices_.getDevicesInfo();
   }
 
+  //Uses ONNXIFI to check compatibility
   bool is_compatible(const std::string& serializedModel,
                      const std::string& device,
                      py::kwargs kwargs) {
@@ -311,9 +316,9 @@ class Backend {
            compatibilityStatus == ONNXIFI_STATUS_FALLBACK;
   }
 
-  // Prepares backend and initializs graph through BackendRep
+  // Prepares backend and initializers graph through BackendRep
   // Returns BackendRep object
-  //TODO: Handle weight descriptors
+  //TODO: Handle weight descriptors as kwargs
   std::unique_ptr<BackendRep> prepare(std::string& serializedModel,
                      const std::string& device,
                      py::kwargs kwargs) {
@@ -322,15 +327,7 @@ class Backend {
     return std::unique_ptr<BackendRep>(new BackendRep(std::move(serializedModel), backend));  
   }
 
-  // TODO: Implement run_node
-  // Least priority
-  py::dict run_node(
-      NodeProto node,
-      py::list inputs,
-      const std::string& device, /*outputs_info = None,*/
-      py::kwargs kwargs) {
-    return py::dict{};
-  }
+}
 
  private:
   DeviceIDs devices_;
@@ -343,7 +340,6 @@ PYBIND11_MODULE(python_onnxifi, m) {
       .def(py::init<>())
       .def("is_compatible", &Backend::is_compatible)
       .def("prepare", &Backend::prepare)
-      .def("run_node", &Backend::run_node)
       .def("supports_device", &Backend::supports_device)
       .def("get_devices_info", &Backend::get_devices_info);
 }

@@ -96,20 +96,19 @@ DescriptorData::DescriptorData(const DescriptorData& d) {
   descriptor.dataType = d.descriptor.dataType;
 }
 
-//TODO: Make error checking more clear
 DescriptorData::DescriptorData(const ValueInfoProto& vip)  {
     name = vip.name();
     descriptor.name = name.c_str();
-    if (!vip.type().tensor_type().has_elem_type()) {
+    if (!vip.type().tensor_type().has_elem_type()) {  //TODO: ENFORCE_EQ
       throw std::runtime_error(
           "Non-static ModelProto: Data type not found");
     }
-    descriptor.dataType = vip.type().tensor_type().elem_type();
+    descriptor.dataType = vip.type().tensor_type().elem_type(); //TODO ENFORCE_EQ
     descriptor.dimensions =
-        vip.type().tensor_type().shape().dim_size();
+        vip.type().tensor_type().shape().dim_size();  //TODO ENFORCE_EQ
     for (auto i = 0; i < descriptor.dimensions; ++i) {
       const auto& dim = vip.type().tensor_type().shape().dim(i);
-      if (!dim.has_dim_value()) {
+      if (!dim.has_dim_value()) {  //TODO: ENFORCE_EQ
         throw std::runtime_error(
             "Non-static ModelProto: Shape dimension not found");
       }
@@ -137,7 +136,7 @@ void DescriptorData::getBufferSize(uint64_t& buffer_size,
 
 
 
-//TODO: weight descriptors
+//TODO: Addweight descriptors
 DataConversion::DataConversion(const std::string& serializedModel)  {
   if (!model_.ParseFromString(serializedModel))  {
     throw std::runtime_error( "Failed to parse model proto");
@@ -161,13 +160,15 @@ DataConversion::DataConversion(const std::string& serializedModel)  {
   }
 }
 
-DataConversion::~DataConversion() {}
-
 template <typename onnx_type, typename py_type>
 void DataConversion::fillDescriptorDataImpl(
     DescriptorData& dd,
     const py::array& numpyArray,
     ONNX_NAMESPACE::TensorProto_DataType dataType)  {
+  //TODO: ENFORCE_EQ
+  if (dd.descriptor.name != dd.name.c_str()) throw std::runtime_error("Wrong input data type");
+  if (dd.descriptor.shape != dd.shape.data()) throw std::runtime_error("Wrong input data type");
+  if (reinterpret_cast<char*>(dd.descriptor.buffer) != dd.buffer.data()) throw std::runtime_error("Wrong input data type"); 
   if (dd.descriptor.dataType != dataType) throw std::runtime_error("Wrong input data type");
   if (dd.descriptor.dimensions != numpyArray.ndim()) throw std::runtime_error("Wrong input dimension");
   if (!std::equal(numpyArray.shape(), numpyArray.shape() + numpyArray.ndim(), dd.shape.begin())) throw std::runtime_error("Wrong input shape");
@@ -178,10 +179,8 @@ void DataConversion::fillDescriptorDataImpl(
 }
 
 
-//TODO: Perform checks that numpy array is of write shape/typei
-//TODO: Change char comparison to rigorous form
 void DataConversion::fillDescriptorDataVector(const py::list& numpyArrayList, std::vector<DescriptorData>& descriptorsData)  {
-  if (descriptorsData.size() != numpyArrayList.size())  {
+  if (descriptorsData.size() != numpyArrayList.size())  { //TODO: ENFORCE_EQ
     throw std::runtime_error("Incompatible vector sizes");
   }
   auto ddIterator = descriptorsData.begin();

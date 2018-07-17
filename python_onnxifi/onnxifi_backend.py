@@ -13,7 +13,8 @@ class OnnxifiBackendRep(object):
     def __init__(self, backendRep):
         self.backend_rep_ = backendRep
 
-    def run(self, inputs, **kwargs):  # type: (Any, **Any) -> Tuple[Any, ...]
+    # Inputs is a list of numpy arrays corresponding to ModelProto
+    def run(self, inputs, **kwargs):
         return self.backend_rep_.run(inputs, **kwargs)
 
 
@@ -21,6 +22,7 @@ class OnnxifiBackend(object):
     def __init__(self):
         self.backend_ = Backend()
 
+    #Use ONNXIFI interface to determine compatibility of model
     def is_compatible(self,
                       model,  # type: ModelProto
                       device='CPU',  # type: Text
@@ -28,6 +30,9 @@ class OnnxifiBackend(object):
                       ):  # type: (...) -> bool
         return self.backend_.is_compatible(model.SerializeToString(), device, **kwargs)
 
+    # Sets up model on given backend device
+    # Returns OnnxifiBackendRep object to be run
+    # TODO: Use kwargs to pass in weightDescriptors
     def prepare(self,
                 model,  # type: ModelProto
                 device='CPU',  # type: Text
@@ -36,6 +41,8 @@ class OnnxifiBackend(object):
         onnx.checker.check_model(model)
         return OnnxifiBackendRep(self.backend_.prepare(model.SerializeToString(), device, **kwargs))
 
+    # Runs model using list of numpy inputs
+    # Returns list of outputs
     def run_model(self,
                   model,  # type: ModelProto
                   inputs,  # type: Any
@@ -56,9 +63,11 @@ class OnnxifiBackend(object):
                  ):  # type: (...) -> Optional[Tuple[Any, ...]]
         return None
 
+    # Returns boolean indicating whether the backend with given device is supported
     def supports_device(self, device):  # type: (Text) -> bool
         return self.backend_.supports_device(device)
 
+    # Utility function return information about available devices
     def get_devices_info(self): #type: () -> [Sequence[Tuple[string, string]]]
         return self.backend_.get_devices_info()
 

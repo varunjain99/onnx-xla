@@ -15,21 +15,21 @@ namespace py = pybind11;
 
 using ::ONNX_NAMESPACE::ModelProto;
 using ::ONNX_NAMESPACE::ValueInfoProto;
+
 // Utility classes to navigate conversions of onnxTensorDescriptor and numpy
-// arrays
-// NOTE: py::dict is not const anywhere because pybind11 request function is not
 
 // Struct to manage onnxTensorDescriptor data for lifetime of the descriptor
 struct DescriptorData {
+  //Setup metadata and allocate buffer
   DescriptorData(const ValueInfoProto& vip);
-  DescriptorData(const DescriptorData& d);
   // Ensure pointers point to beginning of vectors/strings
+  DescriptorData(const DescriptorData& d);
   DescriptorData(DescriptorData&& d) noexcept;
 
   onnxTensorDescriptor descriptor;
+  // Containers for memory managment
   std::vector<uint64_t> shape;
   std::string name;
-  // container for bytes
   std::vector<char> buffer;
 
   //Returns size of buffer need to store data of onnxType with given shape
@@ -42,15 +42,12 @@ struct DescriptorData {
 class DataConversion final {
  public:
   // Constructor creates DataConversion object with underlying model
-  // Initializes member variables with descriptor metadata and allocates buffer
+  // Initializes member variables with descriptor metadata and allocates buffers
   // Throws if input or output descriptor data was not found/inferred 
   // 1 DataConversion object for every onnxGraph or BackendRep
   DataConversion(const std::string& serializedModel);
 
-  // Release any resources allocated in by object
-  ~DataConversion();
-
-  // Returns list of numpy outputs in order of ModelProto outputs
+  // Returns list of numpy outputs from descriptor buffers in order of ModelProto outputs
   py::list getOutputs() const;
 
   // Sets inputs in tensor descriptor buffers from numpy arrays
@@ -65,7 +62,7 @@ class DataConversion final {
   /************************************************************************/
   /********  DESCRIPTOR DATA    --->   NUMPY ARRAYS   *********************/
 
-  //Adds array corresponding to dd to numpyVector
+  //Adds array corresponding to dd to numpyArrayList
   template <typename onnx_type, typename py_type>
   static void addNumpyArray(py::list& numpyArrayList, const DescriptorData& dd);
 
@@ -82,12 +79,12 @@ class DataConversion final {
   template <typename onnx_type, typename py_type>
   static void fillDescriptorDataImpl(
       DescriptorData& dd,
-      const py::array& arrayInfo,
+      const py::array& numpyArray,
       ONNX_NAMESPACE::TensorProto_DataType dataType);
 
-  //Fills descriptorsData buffers with values from numpyVector
+  //Fills descriptorsData buffers with values from numpyArrayList
   //Metadata of descriptorsData must be filled and buffer must be allocated
-  //Throws if numpy inputs do not match expected
+  //Throws if numpy inputs and descriptors do not match or are unexpected
   static void fillDescriptorDataVector(const py::list& numpyArrayList, std::vector<DescriptorData>& descriptorsData);
 
 

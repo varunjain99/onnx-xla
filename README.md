@@ -10,6 +10,4 @@ Steps to test:
 
 4. To the backends ability to run a simple ModelProto graph with a Relu operator, "cd build && ./relu_model" 
 
-5. To test the data_conversion module, "cd python_onnxifi && python data_conversion_tester.py"
-
-6. To execute a test using the python wrapper of onnxifi, "python test.py"
+5. To execute a test using the python wrapper of onnxifi, "python test.py"

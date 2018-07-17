@@ -16,7 +16,7 @@ namespace py = pybind11;
 using ::ONNX_NAMESPACE::ModelProto;
 using ::ONNX_NAMESPACE::NodeProto;
 
-//TODO: Introduce some macro for enforcing equality 
+// TODO: Introduce some macro for enforcing equality
 
 struct DeviceIDs {
  public:
@@ -197,82 +197,101 @@ struct DeviceIDs {
 
 const std::unordered_map<onnxEnum, std::string>&
 DeviceIDs::deviceType_to_string_() {
-  static const std::unordered_map<onnxEnum, std::string> deviceType_to_string_ = {
-      {ONNXIFI_DEVICE_TYPE_NPU, "NPU"},
-      {ONNXIFI_DEVICE_TYPE_DSP, "DSP"},
-      {ONNXIFI_DEVICE_TYPE_GPU, "GPU"},
-      {ONNXIFI_DEVICE_TYPE_CPU, "CPU"},
-      {ONNXIFI_DEVICE_TYPE_FPGA, "FPGA"},
-      {ONNXIFI_DEVICE_TYPE_HETEROGENEOUS, "HETEROGENEOUS"}};
+  static const std::unordered_map<onnxEnum, std::string> deviceType_to_string_ =
+      {{ONNXIFI_DEVICE_TYPE_NPU, "NPU"},
+       {ONNXIFI_DEVICE_TYPE_DSP, "DSP"},
+       {ONNXIFI_DEVICE_TYPE_GPU, "GPU"},
+       {ONNXIFI_DEVICE_TYPE_CPU, "CPU"},
+       {ONNXIFI_DEVICE_TYPE_FPGA, "FPGA"},
+       {ONNXIFI_DEVICE_TYPE_HETEROGENEOUS, "HETEROGENEOUS"}};
   return deviceType_to_string_;
 }
 
 const std::unordered_map<std::string, onnxEnum>&
 DeviceIDs::string_to_deviceType_() {
-  static const std::unordered_map<std::string, onnxEnum> string_to_deviceType_ = {
-      {"NPU", ONNXIFI_DEVICE_TYPE_NPU},
-      {"DSP", ONNXIFI_DEVICE_TYPE_DSP},
-      {"GPU", ONNXIFI_DEVICE_TYPE_GPU},
-      {"CPU", ONNXIFI_DEVICE_TYPE_CPU},
-      {"FPGA", ONNXIFI_DEVICE_TYPE_FPGA},
-      {"HETEROGENEOUS", ONNXIFI_DEVICE_TYPE_HETEROGENEOUS}};
+  static const std::unordered_map<std::string, onnxEnum> string_to_deviceType_ =
+      {{"NPU", ONNXIFI_DEVICE_TYPE_NPU},
+       {"DSP", ONNXIFI_DEVICE_TYPE_DSP},
+       {"GPU", ONNXIFI_DEVICE_TYPE_GPU},
+       {"CPU", ONNXIFI_DEVICE_TYPE_CPU},
+       {"FPGA", ONNXIFI_DEVICE_TYPE_FPGA},
+       {"HETEROGENEOUS", ONNXIFI_DEVICE_TYPE_HETEROGENEOUS}};
 
   return string_to_deviceType_;
 }
 
 struct BackendRep {
  public:
-  //Takes ownership of serializedModel, used to initialize graph
-  //DataConversion object sets up tensor descriptors
-  //IO is set and graph is initialized
-  //Only works for static grphas
-  BackendRep(std::string&& serializedModel, onnxBackend backend) : graph_(), backend_(backend), serialized_model_(serializedModel), conversion_(serialized_model_) {
-    if (onnxInitGraph(backend, serialized_model_.size(), serialized_model_.c_str(), 0, nullptr, &graph_)
-                                         != ONNXIFI_STATUS_SUCCESS) {
+  // Takes ownership of serializedModel, used to initialize graph
+  // DataConversion object sets up tensor descriptors
+  // IO is set and graph is initialized
+  // Only works for static grphas
+  BackendRep(std::string&& serializedModel, onnxBackend backend)
+      : graph_(),
+        backend_(backend),
+        serialized_model_(serializedModel),
+        conversion_(serialized_model_) {
+    if (onnxInitGraph(backend, serialized_model_.size(),
+                      serialized_model_.c_str(), 0, nullptr,
+                      &graph_) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error("Could not initialize graph on given device");
     }
     auto inputDescriptors = conversion_.getInputDescriptors();
     auto outputDescriptors = conversion_.getOutputDescriptors();
     if (onnxSetGraphIO(graph_, inputDescriptors.size(), inputDescriptors.data(),
-                               outputDescriptors.size(), outputDescriptors.data()) != ONNXIFI_STATUS_SUCCESS)  {
+                       outputDescriptors.size(),
+                       outputDescriptors.data()) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error("I/O could not be set");
     }
   }
 
-  //TODO: Change usage of memoryFence (onnxEvent instead of onnxEvent*) when submodule pulled
+  // TODO: Change usage of memoryFence (onnxEvent instead of onnxEvent*) when
+  // submodule pulled
+  //Runs graph given input list, returning output list
   py::list run(py::list inputs, py::kwargs kwargs) {
     onnxMemoryFence inputFence;
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     onnxEvent inputEvent;
     conversion_.setInputs(inputs);
-    if (onnxInitEvent(backend_, &inputEvent) != ONNXIFI_STATUS_SUCCESS)  {
-      throw std::runtime_error("Internal Error: Event for input memory fence could not be initialized (expected ONNXIFI_STATUS_SUCCESS)");
+    if (onnxInitEvent(backend_, &inputEvent) != ONNXIFI_STATUS_SUCCESS) {
+      throw std::runtime_error(
+          "Internal Error: Event for input memory fence could not be "
+          "initialized (expected ONNXIFI_STATUS_SUCCESS)");
     }
-    if (onnxSignalEvent(inputEvent) != ONNXIFI_STATUS_SUCCESS)  {
-      throw std::runtime_error("Internal Error: Event for input memory fence could not be signalled (expected ONNXIFI_STATUS_SUCCESS)");
+    if (onnxSignalEvent(inputEvent) != ONNXIFI_STATUS_SUCCESS) {
+      throw std::runtime_error(
+          "Internal Error: Event for input memory fence could not be signalled "
+          "(expected ONNXIFI_STATUS_SUCCESS)");
     }
     inputFence.event = &inputEvent;
     onnxMemoryFence outputFence;
     outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     onnxEvent outputEvent;
     outputFence.event = &outputEvent;
-    if (onnxRunGraph(graph_, &inputFence, &outputFence) != ONNXIFI_STATUS_SUCCESS)  {
+    if (onnxRunGraph(graph_, &inputFence, &outputFence) !=
+        ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error("Graph failed to run successfully");
     }
-    if (onnxWaitEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS)  {
-      throw std::runtime_error("Internal Error: Error waiting for output event (expected ONNXIFI_STATUS_SUCCESS)");
+    if (onnxWaitEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS) {
+      throw std::runtime_error(
+          "Internal Error: Error waiting for output event (expected "
+          "ONNXIFI_STATUS_SUCCESS)");
     }
-    if (onnxReleaseEvent(inputEvent) != ONNXIFI_STATUS_SUCCESS)  {
-      throw std::runtime_error("Internal Error: Error releasing input event (expected ONNXIFI_STATUS_SUCCESS)");
+    if (onnxReleaseEvent(inputEvent) != ONNXIFI_STATUS_SUCCESS) {
+      throw std::runtime_error(
+          "Internal Error: Error releasing input event (expected "
+          "ONNXIFI_STATUS_SUCCESS)");
     }
-    if (onnxReleaseEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS)  {
-      throw std::runtime_error("Internal Error: Error releasing output event (expected ONNXIFI_STATUS_SUCCESS)");
+    if (onnxReleaseEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS) {
+      throw std::runtime_error(
+          "Internal Error: Error releasing output event (expected "
+          "ONNXIFI_STATUS_SUCCESS)");
     }
 
-    return conversion_.getOutputs();    
+    return conversion_.getOutputs();
   }
 
-  //Manages the graph objects
+  // Manages the graph objects
   ~BackendRep() {
     if (onnxReleaseGraph(graph_) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error(
@@ -302,7 +321,7 @@ class Backend {
     return devices_.getDevicesInfo();
   }
 
-  //Uses ONNXIFI to check compatibility
+  // Uses ONNXIFI to check compatibility
   bool is_compatible(const std::string& serializedModel,
                      const std::string& device,
                      py::kwargs kwargs) {
@@ -318,16 +337,15 @@ class Backend {
 
   // Prepares backend and initializers graph through BackendRep
   // Returns BackendRep object
-  //TODO: Handle weight descriptors as kwargs
+  // TODO: Handle weight descriptors as kwargs
   std::unique_ptr<BackendRep> prepare(std::string& serializedModel,
-                     const std::string& device,
-                     py::kwargs kwargs) {
+                                      const std::string& device,
+                                      py::kwargs kwargs) {
     onnxBackend backend = devices_.prepDevice(device);
     onnxGraph graph;
-    return std::unique_ptr<BackendRep>(new BackendRep(std::move(serializedModel), backend));  
+    return std::unique_ptr<BackendRep>(
+        new BackendRep(std::move(serializedModel), backend));
   }
-
-}
 
  private:
   DeviceIDs devices_;

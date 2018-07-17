@@ -229,21 +229,20 @@ struct BackendRep {
                                          != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error("Could not initialize graph on given device");
     }
+    auto inputDescriptors = conversion_.getInputDescriptors();
+    auto outputDescriptors = conversion_.getOutputDescriptors();
+    if (onnxSetGraphIO(graph_, inputDescriptors.size(), inputDescriptors.data(),
+                               outputDescriptors.size(), outputDescriptors.data()) != ONNXIFI_STATUS_SUCCESS)  {
+      throw std::runtime_error("I/O could not be set");
+    }
   }
 
   //TODO: Change usage of memoryFence (onnxEvent instead of onnxEvent*) when submodule pulled
-  py::dict run(py::dict inputs, py::kwargs kwargs) {
-    if (conversion_.updateDescriptors(inputs))  {
-      auto inputDescriptors = conversion_.getInputDescriptors();
-      auto outputDescriptors = conversion_.getOutputDescriptors();
-      if (onnxSetGraphIO(graph_, inputDescriptors.size(), inputDescriptors.data(),
-                                 outputDescriptors.size(), outputDescriptors.data()) != ONNXIFI_STATUS_SUCCESS)  {
-        throw std::runtime_error("I/O could not be set");
-      }
-    }
+  py::list run(py::list inputs, py::kwargs kwargs) {
     onnxMemoryFence inputFence;
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     onnxEvent inputEvent;
+    conversion_.setInputs(inputs);
     if (onnxInitEvent(backend_, &inputEvent) != ONNXIFI_STATUS_SUCCESS)  {
       throw std::runtime_error("Internal Error: Event for input memory fence could not be initialized (expected ONNXIFI_STATUS_SUCCESS)");
     }
@@ -268,7 +267,7 @@ struct BackendRep {
       throw std::runtime_error("Internal Error: Error releasing output event (expected ONNXIFI_STATUS_SUCCESS)");
     }
 
-    return conversion_.getNumpyDictOutputs();    
+    return conversion_.getOutputs();    
   }
 
   ~BackendRep() {
@@ -327,7 +326,7 @@ class Backend {
   // Least priority
   py::dict run_node(
       NodeProto node,
-      py::dict inputs,
+      py::list inputs,
       const std::string& device, /*outputs_info = None,*/
       py::kwargs kwargs) {
     return py::dict{};

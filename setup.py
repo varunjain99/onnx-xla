@@ -179,9 +179,6 @@ ext_modules = [
     setuptools.Extension(
         name=str('python_onnxifi'),
         sources=[]),
-    setuptools.Extension(
-        name=str('data_conversion_test'),
-        sources=[]),
 ]
 
 ################################################################################

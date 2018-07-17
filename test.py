@@ -9,7 +9,10 @@ from onnx import ModelProto, NodeProto
 import numpy as np
 
 #TODO:  use python's unittest module to make these real test cases
+#       instead of this crude one
 backend = OnnxifiBackend()
+
+print("Available devices")
 print(backend.get_devices_info())
 assert(backend.supports_device("CPU"))
 assert(not backend.supports_device("GPU"))
@@ -24,15 +27,20 @@ graph = onnx.helper.make_graph(
     outputs=[onnx.helper.make_tensor_value_info(
         'y', onnx.TensorProto.FLOAT, [1, 2])])
 model = onnx.helper.make_model(graph, producer_name='backend-test')
+onnx.checker.check_model(model)
+
+assert(backend.is_compatible(model, device='CPU'))
+backendrep = backend.prepare(model, device='CPU')
 
 x = np.random.randn(1, 2).astype(np.float32)
 y = np.maximum(x, 0)
 
-onnx.checker.check_model(model)
-assert(backend.is_compatible(model, device='CPU'))
-backendrep = backend.prepare(model, device='CPU')
-outputs = backendrep.run({'x' : x})
-expected_outputs = {'y' : y}
-print(outputs)
+outputs = backendrep.run([x])
+expected_outputs = [y]
+
+print("Output")
+print(expected_outputs[0])
+print("Input")
+print(x)
 np.testing.assert_equal(expected_outputs, outputs)
 

@@ -13,17 +13,15 @@
 
 namespace py = pybind11;
 
-//Friend function for testing purposes
-py::dict convert(py::dict inputDict);
-
 using ::ONNX_NAMESPACE::ModelProto;
-// Utility class to navigate conversions of onnxTensorDescriptor and numpy
+using ::ONNX_NAMESPACE::ValueInfoProto;
+// Utility classes to navigate conversions of onnxTensorDescriptor and numpy
 // arrays
 // NOTE: py::dict is not const anywhere because pybind11 request function is not
 
-// Structor to manage onnxTensorDescriptor data for lifetime of the descriptor
+// Struct to manage onnxTensorDescriptor data for lifetime of the descriptor
 struct DescriptorData {
-  DescriptorData();
+  DescriptorData(const ValueInfoProto& vip);
   DescriptorData(const DescriptorData& d);
   // Ensure pointers point to beginning of vectors/strings
   DescriptorData(DescriptorData&& d) noexcept;
@@ -33,32 +31,30 @@ struct DescriptorData {
   std::string name;
   // container for bytes
   std::vector<char> buffer;
+
+  //Returns size of buffer need to store data of onnxType with given shape
+  template <typename onnx_type, typename unused>
+  static void getBufferSize(uint64_t& buffer_size, const uint64_t* shape, uint32_t dimensions);
 };
 
-//TODO: Weight descriptors
+//TODO: Weight descriptor conversions
 //TODO: Support for strides
 class DataConversion final {
  public:
-  friend py::dict convert(py::dict inputDict);
   // Constructor creates DataConversion object with underlying model
-  // Initializes underlying member variables
+  // Initializes member variables with descriptor metadata and allocates buffer
+  // Throws if input or output descriptor data was not found/inferred 
   // 1 DataConversion object for every onnxGraph or BackendRep
   DataConversion(const std::string& serializedModel);
 
   // Release any resources allocated in by object
   ~DataConversion();
 
-  // TODO: Implement some sort of checkNumpyWithModel function that checks if
-  // numpy inputs
-  // and weights are valid (particularly useful for static environment)
+  // Returns list of numpy outputs in order of ModelProto outputs
+  py::list getOutputs() const;
 
-  // Returns dictionary of of name to numpy array from output_descriptors_data_
-  py::dict getNumpyDictOutputs() const;
-
-  //Fills up the input_descriptors_data_ and output_descriptors_data_ member variables,
-  //The boolen value returned indicates whether of not the descriptor values were
-  // changed by the call (i.e. whether onnxSetGraphIO needs to be called
-  bool updateDescriptors(py::dict& inputs);
+  // Sets inputs in tensor descriptor buffers from numpy arrays
+  void setInputs(const py::list& inputs);
 
   //Return tensor descriptors from the stored member variables
   std::vector<onnxTensorDescriptor> getInputDescriptors() const;
@@ -66,75 +62,47 @@ class DataConversion final {
 
 
  private:
+  /************************************************************************/
+  /********  DESCRIPTOR DATA    --->   NUMPY ARRAYS   *********************/
+
+  //Adds array corresponding to dd to numpyVector
+  template <typename onnx_type, typename py_type>
+  static void addNumpyArray(py::list& numpyArrayList, const DescriptorData& dd);
+
+  //Appends to numpyArrayList with arrays corresponding to descriptorsData
+  static void fillNumpyArrayList(py::list& numpyArrayList, const std::vector<DescriptorData>& descriptorsData);
 
 
   /************************************************************************/
-  /*******   MODEL PROTO OUTPUTS   ----> DESCRIPTOR DATA MAP **************/
+  /******** NUMPY ARRAYS    --->   DESCRIPTOR DATA   **********************/
 
-  // Fills up descriptorsData map based on ModelProto graph outputs
-  // Throws exception if cannot infer all necessary info
-  static void DescriptorDataMapFromModelProtoOutputs(ModelProto& model, std::unordered_map<std::string, DescriptorData>& descriptorsData);
-
-  // Helper function
-  // Uses onnx_type and tensor shape to compute buffer_size bytes
-  template <typename onnx_type, typename unused>
-  static void getBufferSize(uint64_t& buffer_size,
-                            const uint64_t* shape,
-                            uint32_t dimensions);
-
-
-  /************************************************************************/
-  /*******   NUMPY ARRAY DICT   ----> DESCRIPTOR DATA MAP   ***************/
-  
-  // Fills up descriptorData map based on values from numpyArrays dictionary
-  static void DescriptorDataMapFromNumpyDict(
-      py::dict& numpyArrays,
-      std::unordered_map<std::string, DescriptorData>& descriptorsData);
-
-
-  // Helper function
-  // Fills up DescriptorData with metadata and data given type info
+  //Fills dd buffer with buffer data from arrayInfo
+  //Throws if metadata does not match
+  //Requires buffer to be allocated from before
   template <typename onnx_type, typename py_type>
   static void fillDescriptorDataImpl(
       DescriptorData& dd,
-      const py::buffer_info& arrayInfo,
-      ONNX_NAMESPACE::TensorProto_DataType dataType,
-      const std::string& name);
+      const py::array& arrayInfo,
+      ONNX_NAMESPACE::TensorProto_DataType dataType);
 
-  // Helper function 
-  // Executes disaptch to fillDescriptorDataImpl
-  static void fillDescriptorData(DescriptorData& dd,
-                                 py::array& py_array,
-                                 const std::string& name);
+  //Fills descriptorsData buffers with values from numpyVector
+  //Metadata of descriptorsData must be filled and buffer must be allocated
+  //Throws if numpy inputs do not match expected
+  static void fillDescriptorDataVector(const py::list& numpyArrayList, std::vector<DescriptorData>& descriptorsData);
 
 
   /************************************************************************/
-  /*******  DESCRIPTOR DATA MAP  ---->  DESCRIPTOR DATA MAP ***************/
+  /********************     ADDITIONAL HELPERS  ***************************/
 
-  // Fills up numpyArrays dictionary from descriptorsData map
-  static void NumpyDictFromDescriptorDataMap(
-      py::dict& numpyArrays,
-      const std::unordered_map<std::string, DescriptorData>& descriptorsData);
-
-  // Helper function
-  // Adds one array to numpyArrays dict, based on the dd DescriptorData object 
-  template <typename onnx_type, typename py_type>
-  static void addNumpyArray(py::dict& numpyArrays, const DescriptorData& dd);
-
-
-  /************************************************************************/
-  /******  DESCRIPTOR DATA MAP   ----> ONNX TENSOR DESCRIPTOR VECTOR  *****/
-
-  static std::vector<onnxTensorDescriptor> getTensorDescriptors(
-      const std::unordered_map<std::string, DescriptorData>& descriptorsData);
+  //Returns vector of onnxTensorDescriptor based on descriptorsData vector
+  static std::vector<onnxTensorDescriptor> getTensorDescriptors(const std::vector<DescriptorData>& descriptorsData);
 
   /************************************************************************/
   /*********************PRIVATE MEMBER VARIABLES***************************/
 
   // Vectors of input, output, and weight tensor Descriptors
-  std::unordered_map<std::string, DescriptorData> input_descriptors_data_;
-  std::unordered_map<std::string, DescriptorData> output_descriptors_data_;
-  std::unordered_map<std::string, DescriptorData> weight_descriptors_data_;
+  std::vector<DescriptorData> input_descriptors_data_;
+  std::vector<DescriptorData> output_descriptors_data_;
 
   //ModelProto model the object uses  
   ModelProto model_;

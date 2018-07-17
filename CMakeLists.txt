@@ -132,23 +132,6 @@ endif()
 
 target_link_libraries(python_onnxifi PRIVATE onnx_xla)
 
-# Exposing test function for DataConversion to python
-add_library(data_conversion_test MODULE "${PROJECT_SOURCE_DIR}/python_onnxifi/data_conversion.cc" "${PROJECT_SOURCE_DIR}/python_onnxifi/data_conversion_test.cc")
-set_target_properties(data_conversion_test PROPERTIES PREFIX "")
-set_target_properties(data_conversion_test PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
-set_target_properties(data_conversion_test PROPERTIES SUFFIX ${PY_EXT_SUFFIX})
-set_target_properties(data_conversion_test PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-target_include_directories(data_conversion_test PRIVATE "${PYTHON_INCLUDE_DIR}" ${PROJECT_SOURCE_DIR}/third_party/onnx)
-
-find_package(pybind11)
-if(pybind11_FOUND)
-  target_include_directories(data_conversion_test PRIVATE ${pybind11_INCLUDE_DIRS})
-else()
-  target_include_directories(data_conversion_test PRIVATE ${PROJECT_SOURCE_DIR}/third_party/onnx/third_party/pybind11/include)
-endif()
-
-target_link_libraries(data_conversion_test PRIVATE onnx)
-
 # binaries
 file(GLOB_RECURSE binaries
   bin/*.cc)

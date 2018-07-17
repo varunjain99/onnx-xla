@@ -7,88 +7,6 @@
 #include <functional>
 namespace py = pybind11;
 
-DescriptorData::DescriptorData() {}
-
-DescriptorData::DescriptorData(DescriptorData&& d) noexcept {
-  name = std::move(d.name);
-  buffer = std::move(d.buffer);
-  shape = std::move(d.shape);
-  descriptor.name = name.c_str();
-  descriptor.dimensions = shape.size();
-  descriptor.shape = shape.data();
-  descriptor.buffer = reinterpret_cast<onnxPointer>(buffer.data());
-  descriptor.memoryType = d.descriptor.memoryType;
-  descriptor.dataType = d.descriptor.dataType;
-}
-
-DescriptorData::DescriptorData(const DescriptorData& d) {
-  name = d.name;
-  buffer = d.buffer;
-  shape = d.shape;
-  descriptor.name = name.c_str();
-  descriptor.dimensions = shape.size();
-  descriptor.shape = shape.data();
-  descriptor.buffer = reinterpret_cast<onnxPointer>(buffer.data());
-  descriptor.memoryType = d.descriptor.memoryType;
-  descriptor.dataType = d.descriptor.dataType;
-}
-
-//TODO: weight descriptors
-DataConversion::DataConversion(const std::string& serializedModel)  {
-  if (!model_.ParseFromString(serializedModel))  {
-    throw std::runtime_error( "Failed to parse model proto");
-  }
-  const auto& initializers = model_.graph().initializer();
-  const auto& inputs = model_.graph().input();
-  const auto& outputs = model_.graph().output();
-  std::unordered_set<std::string> initializerNames;
-  for (const auto& t : initializers) {
-    if (!initializerNames.insert(t.name()).second)  {
-      throw std::runtime_error("Invalid model: repeated initializer name");
-    }
-  }
-  for (const auto& vi : inputs)  {
-    if (initializerNames.find(vi.name()) == initializerNames.end())  {
-      if (!input_descriptors_data_.insert(std::pair<std::string, DescriptorData>(vi.name(), DescriptorData())).second)  {
-        throw std::runtime_error("Invalid model: repeated input name");
-      }
-    }
-  }
-
-  for (const auto& vi : outputs)  {
-    if (!output_descriptors_data_.insert(std::pair<std::string, DescriptorData>(vi.name(), DescriptorData())).second)  {
-        throw std::runtime_error("Invalid model: repeated output name");
-    }
-  }
-}
-
-DataConversion::~DataConversion() {}
-
-py::dict DataConversion::getNumpyDictOutputs() const {
-  py::dict outputDict;
-  NumpyDictFromDescriptorDataMap(outputDict, output_descriptors_data_);
-  return outputDict;
-}
-
-bool DataConversion::updateDescriptors(py::dict& inputs)  {
-  DescriptorDataMapFromNumpyDict(inputs, input_descriptors_data_);
-  DescriptorDataMapFromModelProtoOutputs(model_, output_descriptors_data_);
-  return true;
-}
-
-std::vector<onnxTensorDescriptor> DataConversion::getInputDescriptors() const  {
-  return getTensorDescriptors(input_descriptors_data_);
-}
-
-std::vector<onnxTensorDescriptor> DataConversion::getOutputDescriptors() const  {
-  return getTensorDescriptors(output_descriptors_data_);
-}
-
-
-// TODO: This should be moved to onnx repository: onnx/common/tensor.h
-// Proposal: The dispatch switches off tensor type to execute a
-// templated function whose first type is the onnx storage type for one ddent,
-// and the second type is the natural type with size in the case name.
 #define DISPATCH_OVER_NUMERIC_DATA_TYPE(data_type, op_template, ...)         \
   switch (data_type) {                                                       \
     case ONNX_NAMESPACE::TensorProto_DataType_FLOAT: {                       \
@@ -153,8 +71,63 @@ std::vector<onnxTensorDescriptor> DataConversion::getOutputDescriptors() const  
     }                                                                        \
   }
 
+
+DescriptorData::DescriptorData(DescriptorData&& d) noexcept {
+  name = std::move(d.name);
+  buffer = std::move(d.buffer);
+  shape = std::move(d.shape);
+  descriptor.name = name.c_str();
+  descriptor.dimensions = shape.size();
+  descriptor.shape = shape.data();
+  descriptor.buffer = reinterpret_cast<onnxPointer>(buffer.data());
+  descriptor.memoryType = d.descriptor.memoryType;
+  descriptor.dataType = d.descriptor.dataType;
+}
+
+DescriptorData::DescriptorData(const DescriptorData& d) {
+  name = d.name;
+  buffer = d.buffer;
+  shape = d.shape;
+  descriptor.name = name.c_str();
+  descriptor.dimensions = shape.size();
+  descriptor.shape = shape.data();
+  descriptor.buffer = reinterpret_cast<onnxPointer>(buffer.data());
+  descriptor.memoryType = d.descriptor.memoryType;
+  descriptor.dataType = d.descriptor.dataType;
+}
+
+//TODO: Make error checking more clear
+DescriptorData::DescriptorData(const ValueInfoProto& vip)  {
+    name = vip.name();
+    descriptor.name = name.c_str();
+    if (!vip.type().tensor_type().has_elem_type()) {
+      throw std::runtime_error(
+          "Non-static ModelProto: Data type not found");
+    }
+    descriptor.dataType = vip.type().tensor_type().elem_type();
+    descriptor.dimensions =
+        vip.type().tensor_type().shape().dim_size();
+    for (auto i = 0; i < descriptor.dimensions; ++i) {
+      const auto& dim = vip.type().tensor_type().shape().dim(i);
+      if (!dim.has_dim_value()) {
+        throw std::runtime_error(
+            "Non-static ModelProto: Shape dimension not found");
+      }
+      shape.emplace_back(dim.dim_value());
+    }
+    descriptor.shape = shape.data();
+    descriptor.memoryType =
+        ONNXIFI_MEMORY_TYPE_CPU;  // TODO: Expand memory types?
+    uint64_t buffer_size;
+    DISPATCH_OVER_NUMERIC_DATA_TYPE(
+        descriptor.dataType, getBufferSize, buffer_size,
+        descriptor.shape, descriptor.dimensions)
+    buffer.resize(buffer_size);
+    descriptor.buffer = reinterpret_cast<onnxPointer>(buffer.data());
+}
+
 template <typename onnx_type, typename unused>
-void DataConversion::getBufferSize(uint64_t& buffer_size,
+void DescriptorData::getBufferSize(uint64_t& buffer_size,
                                    const uint64_t* shape,
                                    uint32_t dimensions) {
   auto numElements = std::accumulate(shape, shape + dimensions, 1UL,
@@ -162,134 +135,114 @@ void DataConversion::getBufferSize(uint64_t& buffer_size,
   buffer_size = sizeof(onnx_type) * numElements;
 }
 
-void DataConversion::DescriptorDataMapFromModelProtoOutputs(ModelProto& model, std::unordered_map<std::string, DescriptorData>& descriptorsData) {
-  ::ONNX_NAMESPACE::shape_inference::InferShapes(model);
-  const auto& outputs = model.graph().output();
-  for (const auto& vi : outputs) {
-    auto it = descriptorsData.find(vi.name());
-    if (it == descriptorsData.end())  {
-      throw std::runtime_error("Invalid input name");
+
+
+//TODO: weight descriptors
+DataConversion::DataConversion(const std::string& serializedModel)  {
+  if (!model_.ParseFromString(serializedModel))  {
+    throw std::runtime_error( "Failed to parse model proto");
+  }
+  ::ONNX_NAMESPACE::shape_inference::InferShapes(model_);
+  const auto& initializers = model_.graph().initializer();
+  const auto& inputs = model_.graph().input();
+  const auto& outputs = model_.graph().output();
+  std::unordered_set<std::string> initializerNames;
+  for (const auto& t : initializers) {
+    initializerNames.insert(t.name());
+  }
+  for (const auto& vip : inputs)  {
+    std::string name = vip.name();
+    if (initializerNames.find(name) == initializerNames.end())  {
+      input_descriptors_data_.emplace_back(vip);
     }
-    DescriptorData& dd = it->second;
-    dd.name = vi.name();
-    dd.descriptor.name = dd.name.c_str();
-    if (!vi.type().tensor_type().has_elem_type()) {
-      throw std::runtime_error(
-          "Non-static ModelProto: Output data type not found");
-    }
-    dd.descriptor.dataType = vi.type().tensor_type().elem_type();
-    dd.descriptor.dimensions =
-        vi.type().tensor_type().shape().dim_size();
-    for (auto i = 0; i < dd.descriptor.dimensions; ++i) {
-      const auto& dim = vi.type().tensor_type().shape().dim(i);
-      if (!dim.has_dim_value()) {
-        throw std::runtime_error(
-            "Non-static ModelProto: Output shape dimension not found");
-      }
-      dd.shape.emplace_back(dim.dim_value());
-    }
-    dd.descriptor.shape = dd.shape.data();
-    dd.descriptor.memoryType =
-        ONNXIFI_MEMORY_TYPE_CPU;  // TODO: Expand memory types?
-    uint64_t buffer_size;
-    DISPATCH_OVER_NUMERIC_DATA_TYPE(
-        dd.descriptor.dataType, getBufferSize, buffer_size,
-        dd.descriptor.shape, dd.descriptor.dimensions)
-    dd.buffer.resize(buffer_size);
-    dd.descriptor.buffer =
-        reinterpret_cast<onnxPointer>(dd.buffer.data());
+  }
+  for (const auto& vip : outputs)  {
+    output_descriptors_data_.emplace_back(vip);
   }
 }
 
-void DataConversion::DescriptorDataMapFromNumpyDict(
-    py::dict& numpyArrays,
-    std::unordered_map<std::string, DescriptorData>& descriptorsData) {
-  for (const auto& item : numpyArrays) {
-    std::string name = std::string(py::str(item.first));
-    DescriptorData& dd = descriptorsData[name];
-    py::array numpyArray = py::reinterpret_borrow<py::array>(
-        item.second);  // TODO: Check if of type py::array
-    fillDescriptorData(dd, numpyArray, name);
-  }
-}
+DataConversion::~DataConversion() {}
 
 template <typename onnx_type, typename py_type>
 void DataConversion::fillDescriptorDataImpl(
     DescriptorData& dd,
-    const py::buffer_info& arrayInfo,
-    ONNX_NAMESPACE::TensorProto_DataType dataType,
-    const std::string& name) {
-  dd.name = name;
-  dd.descriptor.name = dd.name.c_str();
-  dd.descriptor.dataType = dataType;
-  dd.descriptor.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
-  dd.descriptor.dimensions = arrayInfo.ndim;
-  dd.shape.resize(dd.descriptor.dimensions);
-  std::copy(arrayInfo.shape.begin(), arrayInfo.shape.end(), dd.shape.begin());
-  dd.descriptor.shape = dd.shape.data();
-  auto numElements = std::accumulate(dd.shape.begin(), dd.shape.end(),
-                                     1UL, std::multiplies<uint64_t>());
-  dd.buffer.resize(numElements * sizeof(onnx_type));
+    const py::array& numpyArray,
+    ONNX_NAMESPACE::TensorProto_DataType dataType)  {
+  if (dd.descriptor.dataType != dataType) throw std::runtime_error("Wrong input data type");
+  if (dd.descriptor.dimensions != numpyArray.ndim()) throw std::runtime_error("Wrong input dimension");
+  if (!std::equal(numpyArray.shape(), numpyArray.shape() + numpyArray.ndim(), dd.shape.begin())) throw std::runtime_error("Wrong input shape");
   onnx_type* buffer = reinterpret_cast<onnx_type*>(dd.buffer.data());
-  py_type* data = reinterpret_cast<py_type*>(arrayInfo.ptr);
-  std::copy(data, data + numElements, buffer);
+  const py_type* data = reinterpret_cast<const py_type*>(numpyArray.data());
+  std::copy(data, data + numpyArray.size(), buffer);
   dd.descriptor.buffer = reinterpret_cast<onnxPointer>(buffer);
 }
 
 
-void DataConversion::fillDescriptorData(DescriptorData& dd,
-                                        py::array& py_array,
-                                        const std::string& name) {
-  auto arrayInfo = py_array.request();
-  if (arrayInfo.format == "?") {
-    fillDescriptorDataImpl<int32_t, bool>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_BOOL, name);
-  } else if (arrayInfo.format == "b") {
+//TODO: Perform checks that numpy array is of write shape/typei
+//TODO: Change char comparison to rigorous form
+void DataConversion::fillDescriptorDataVector(const py::list& numpyArrayList, std::vector<DescriptorData>& descriptorsData)  {
+  if (descriptorsData.size() != numpyArrayList.size())  {
+    throw std::runtime_error("Incompatible vector sizes");
+  }
+  auto ddIterator = descriptorsData.begin();
+  auto npIterator = numpyArrayList.begin();
+  while (npIterator != numpyArrayList.end())  {
+    auto& dd = *ddIterator;
+    const auto numpyArray = py::reinterpret_borrow<py::array>(*npIterator);
+    const auto dtype = numpyArray.dtype();
+    if (dtype.is(py::dtype::of<bool>())) {
+       fillDescriptorDataImpl<int32_t, bool>(
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_BOOL);
+  } else if (dtype.is(py::dtype::of<int8_t>())) {
     fillDescriptorDataImpl<int32_t, int8_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_INT8, name);
-  } else if (arrayInfo.format == "h") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_INT8);
+  } else if (dtype.is(py::dtype::of<int16_t>())) {
     fillDescriptorDataImpl<int32_t, int16_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_INT16, name);
-  } else if (arrayInfo.format == "i") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_INT16);
+  } else if (dtype.is(py::dtype::of<int32_t>())) {
     fillDescriptorDataImpl<int32_t, int32_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_INT32, name);
-  } else if (arrayInfo.format == "l") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_INT32);
+  } else if (dtype.is(py::dtype::of<int64_t>())) {
     fillDescriptorDataImpl<int64_t, int64_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_INT64, name);
-  } else if (arrayInfo.format == "B") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_INT64);
+  } else if (dtype.is(py::dtype::of<uint8_t>())) {
     fillDescriptorDataImpl<int32_t, uint8_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_UINT8, name);
-  } else if (arrayInfo.format == "H") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_UINT8);
+  } else if (dtype.is(py::dtype::of<uint16_t>())) {
     fillDescriptorDataImpl<int32_t, uint16_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_UINT16, name);
-  } else if (arrayInfo.format == "I") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_UINT16);
+  } else if (dtype.is(py::dtype::of<uint32_t>())) {
     fillDescriptorDataImpl<uint64_t, uint32_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_UINT32, name);
-  } else if (arrayInfo.format == "L") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_UINT32);
+  } else if (dtype.is(py::dtype::of<uint64_t>())) {
     fillDescriptorDataImpl<uint64_t, uint64_t>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_UINT64, name);
-  } else if (arrayInfo.format == "e") {
-    // TODO: fillDescriptorDataImpl<int32_t, half>(dd, arrayInfo,
-    //         ONNX_NAMESPACE::TensorProto_DataType_FLOAT16, name);
-  } else if (arrayInfo.format == "f") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_UINT64);
+  }/*else if (dtype.is(py::dtype::of<half>())) {
+    TODO: fillDescriptorDataImpl<int32_t, half>(dd, numpyArray,
+    //         ONNX_NAMESPACE::TensorProto_DataType_FLOAT16);
+  }*/ else if (dtype.is(py::dtype::of<float>())) {
     fillDescriptorDataImpl<float, float>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_FLOAT, name);
-  } else if (arrayInfo.format == "d") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_FLOAT);
+  } else if (dtype.is(py::dtype::of<double>())) {
     fillDescriptorDataImpl<double, double>(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_DOUBLE, name);
-  } else if (arrayInfo.format == "Zf") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_DOUBLE);
+  } else if (dtype.is(py::dtype::of<std::complex<float>>())) {
     fillDescriptorDataImpl<std::complex<float>, std::complex<float> >(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_COMPLEX64, name);
-  } else if (arrayInfo.format == "Zd") {
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_COMPLEX64);
+  } else if (dtype.is(py::dtype::of<std::complex<double>>())) {
     fillDescriptorDataImpl<std::complex<double>, std::complex<double> >(
-        dd, arrayInfo, ONNX_NAMESPACE::TensorProto_DataType_COMPLEX128, name);
+        dd, numpyArray, ONNX_NAMESPACE::TensorProto_DataType_COMPLEX128);
   } else {
     throw std::runtime_error("Unsupported numpy data type");
+  }
+
+    ++ddIterator;
+    ++npIterator;
   }
 }
 
 template <typename onnx_type, typename py_type>
-void DataConversion::addNumpyArray(py::dict& numpyArrays,
+void DataConversion::addNumpyArray(py::list& numpyArrayList,
                                    const DescriptorData& dd) {
   auto numElements = std::accumulate(dd.shape.begin(), dd.shape.end(),
                                      1UL, std::multiplies<uint64_t>());
@@ -298,24 +251,42 @@ void DataConversion::addNumpyArray(py::dict& numpyArrays,
   std::copy(oldBuffer, oldBuffer + numElements, intermediateBuffer);
   std::vector<ptrdiff_t> shape(dd.descriptor.shape,
                                dd.descriptor.shape + dd.descriptor.dimensions);
-  auto numpyArray = py::array_t<py_type>(shape, intermediateBuffer);
-  numpyArrays[py::str(std::string(dd.descriptor.name))] = numpyArray;
+  numpyArrayList.append(std::move(py::array_t<py_type>(shape, intermediateBuffer)));
 }
 
-void DataConversion::NumpyDictFromDescriptorDataMap(
-    py::dict& numpyArrays,
-    const std::unordered_map<std::string, DescriptorData>& descriptorsData) {
+void DataConversion::fillNumpyArrayList(
+    py::list& numpyArrayList,
+    const std::vector<DescriptorData>& descriptorsData) {
   for (const auto& dd : descriptorsData) {
-    DISPATCH_OVER_NUMERIC_DATA_TYPE(dd.second.descriptor.dataType, addNumpyArray,
-                                    numpyArrays, dd.second)
+    DISPATCH_OVER_NUMERIC_DATA_TYPE(dd.descriptor.dataType, addNumpyArray,
+                                    numpyArrayList, dd)
   }
 }
 
 std::vector<onnxTensorDescriptor> DataConversion::getTensorDescriptors(
-    const std::unordered_map<std::string, DescriptorData>& descriptorsData) {
+    const std::vector<DescriptorData>& descriptorsData) {
   std::vector<onnxTensorDescriptor> tensorDescriptors;
   for (const auto& dd : descriptorsData) {
-    tensorDescriptors.emplace_back(dd.second.descriptor);
+    tensorDescriptors.emplace_back(dd.descriptor);
   }
   return tensorDescriptors;
 }
+
+py::list DataConversion::getOutputs() const  {
+  py::list outputs;
+  fillNumpyArrayList(outputs, output_descriptors_data_);
+  return outputs;
+}
+
+void DataConversion::setInputs(const py::list& inputs)  {
+  fillDescriptorDataVector(inputs, input_descriptors_data_);
+}
+
+std::vector<onnxTensorDescriptor> DataConversion::getInputDescriptors() const  {
+  return getTensorDescriptors(input_descriptors_data_);
+}
+
+std::vector<onnxTensorDescriptor> DataConversion::getOutputDescriptors() const  {
+  return getTensorDescriptors(output_descriptors_data_);
+}
+

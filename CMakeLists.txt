@@ -97,7 +97,7 @@ SET(GRPC_LIBRARIES
   "/usr/local/lib/libgrpc.so"
   "/usr/local/lib/libgrpc++.so")
 
-# onnx_xla library
+# onnx_xla library (whole archive when anything links to it)
  file(GLOB_RECURSE onnx_xla_src
   onnx_xla/*.cc)
 add_library(onnx_xla ${onnx_xla_src})
@@ -138,5 +138,5 @@ file(GLOB_RECURSE binaries
 foreach(bin ${binaries})
   get_filename_component(name ${bin} NAME_WE)
   add_executable(${name} ${bin})
-  target_link_libraries(${name} onnx_xla)
+  target_link_libraries(${name} -Wl,--whole-archive onnx_xla -Wl,--no-whole-archive)
 endforeach()

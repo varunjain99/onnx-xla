@@ -5,6 +5,8 @@
 #include "onnx/onnxifi.h"
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
 
+#include "onnx_xla/types.h"
+
 #include <functional>
 #include <utility>
 
@@ -24,8 +26,9 @@ namespace onnx_xla  {
   using ::ONNX_NAMESPACE::Symbol;
   using ::ONNX_NAMESPACE::Node;
 
+  using ValueLiteralMap = std::unordered_map<const Value*, std::unique_ptr<Literal>>;
   using ValueOpMap = std::unordered_map<const Value*, XlaOp>;
-  using TranslationFunction = std::function<onnxStatus(const Node&, XlaBuilder&, ValueOpMap&)>;
+  using TranslationFunction = std::function<onnxStatus(const Node&, XlaBuilder&, ValueOpMap&, const ValueLiteralMap&)>;
   using TranslationMap = std::unordered_map<Symbol, TranslationFunction>;
   
   //Class for registry of ONNX operators with corresponding translation functions
@@ -41,7 +44,7 @@ namespace onnx_xla  {
       //Updates builder
       //In: Expect valueToOp to exist for every node input
       //Out: Expect valueToOp to be assigned for every node output
-    onnxStatus translate(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp);
+    onnxStatus translate(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp, const ValueLiteralMap& valueToLiteral);
     //Returns reference to static singleton registry
     static OperatorRegistry& registry();
   private:

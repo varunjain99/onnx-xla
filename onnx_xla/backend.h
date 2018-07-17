@@ -135,6 +135,9 @@ namespace onnx_xla {
     //whose output corresponds to them
     ValueOpMap value_to_op_;
 
+    //Keep track of constant literals
+    ValueLiteralMap value_to_literal_;
+
     //Keeps track of number of parameters in computation
     //  TODO: Make local? Only used by one function
     int64 global_param_number_;

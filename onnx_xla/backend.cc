@@ -250,6 +250,7 @@ namespace onnx_xla {
         auto l_ptr = executor_->descriptorToLiteral(t);
         auto constant = builder_.ConstantLiteral(*l_ptr);
         value_to_op_[v] = constant;
+        value_to_literal_[v] = std::move(l_ptr);
       }
     } else {
       executor_->num_inputs_ = (uint32_t) ((int64_t) (ir_->inputs().size()) - (int64_t) (ir_->initializers().size()));
@@ -258,7 +259,9 @@ namespace onnx_xla {
         isInitialized[name] = true;
         auto l_ptr = executor_->tensorToLiteral(t);
         auto constant = builder_.ConstantLiteral(*l_ptr);
-        value_to_op_[inputNameToValue[name]] = constant;
+        const Value* v = inputNameToValue[name];
+        value_to_op_[v] = constant;
+        value_to_literal_[v] = std::move(l_ptr);
       }
     }
 
@@ -295,7 +298,7 @@ namespace onnx_xla {
     }
     auto& registry = OperatorRegistry::registry();
     for (auto it = ir_->begin(); it != ir_->end(); ++it) {
-      auto translateStatus = registry.translate(**it, builder_, value_to_op_);
+      auto translateStatus = registry.translate(**it, builder_, value_to_op_, value_to_literal_);
       if (translateStatus != ONNXIFI_STATUS_SUCCESS)  {
         return translateStatus;
       }

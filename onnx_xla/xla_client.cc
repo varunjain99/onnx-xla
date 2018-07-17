@@ -6,7 +6,7 @@
 
 namespace onnx_xla {
 
-XlaClient::XlaClient(const std::string &target) {
+XlaClient::XlaClient(const std::string& target) {
   auto channel =
       grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
   channel->WaitForConnected(gpr_time_add(
@@ -24,7 +24,7 @@ std::string XlaClient::TryRun() {
   const auto y_param = builder.Parameter(
       1, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "y");
   builder.Add(x_param, y_param);
-    const auto a_param = builder.Parameter(
+  const auto a_param = builder.Parameter(
       2, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "a");
   const auto b_param = builder.Parameter(
       3, xla::ShapeUtil::MakeShape(xla::PrimitiveType::F32, {2}), "b");
@@ -46,8 +46,9 @@ std::string XlaClient::TryRun() {
   auto b_data = xla::TransferParameterToServer(*b_literal.release());
   // execute
   std::unique_ptr<xla::Literal> result_comp = xla::ExecuteComputation(
-      computation, {x_data.release(), y_data.release(), a_data.release(), b_data.release()});
-//  std::cout << result_comp->DecomposeTuple().size() << std::endl;
+      computation,
+      {x_data.release(), y_data.release(), a_data.release(), b_data.release()});
+  //  std::cout << result_comp->DecomposeTuple().size() << std::endl;
   std::vector<xla::Literal> result_literals = result_comp->DecomposeTuple();
   // print result
   ONNX_NAMESPACE::TensorProto result;

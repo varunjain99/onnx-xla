@@ -31,6 +31,7 @@ namespace onnx_xla  {
 
 
   //TODO: ENFORCE_EQ
+  //Test this
   //Takes in data tensor and shape input
   //Error if shape input is dynamic
   //Parses ONNX shape input (can have 0's and one -1)
@@ -52,7 +53,7 @@ namespace onnx_xla  {
       const int64& dim = onnxOperatorTargetShape.at(i);
       if (dim == -1)  {
           if(negativeOneIndex > -1) { //TODO: ENFORCE_GT
-            std::cerr << "Invalid input: only one -1 allowed in input shape" std::endl;
+            std::cerr << "Invalid input: only one -1 allowed in input shape" << std::endl;
             return ONNXIFI_STATUS_INVALID_MODEL;
           }
           negativeOneIndex = i;
@@ -72,19 +73,21 @@ namespace onnx_xla  {
       }
     }
 
-    auto onnxProduct = std::accumulate(onnxOperatorTargetShape.begin(), onnxOperatorTargetShape.end(), 1UL, std::multiplies<int64>());
+    auto numElements = std::accumulate(originalShape.begin(), originalShape.end(), 1UL, std::multiplies<int64_t>());
     auto xlaProduct = std::accumulate(xlaOperatorTargetShape.begin(), xlaOperatorTargetShape.end(), 1UL, std::multiplies<int64>());
-    if (negativeOneIndex = -1)  {
-      if (xlaProduct != onnxProduct)  {
-        throw std::runtime_error("");  //TODO:
+    if (negativeOneIndex == -1)  {
+      if (xlaProduct != numElements)  { //TODO: enforce
+          std::cerr << "Invalid shape to reshape to" << std::endl;
+          return ONNXIFI_STATUS_INVALID_MODEL;
       }
     } else {
-      if (onnxProduct % (-xlaProduct) != 0)  {
-        throw std::runtime_error(""); //TODO:
+      if (numElements % (-xlaProduct) != 0)  {
+          std::cerr << "Invalid shape to reshape to" << std::endl;
+          return ONNXIFI_STATUS_INVALID_MODEL;
       }
-      xlaOperatorTargetShape[negativeOneIndex] *= onnxProduct / xlaProduct;
+      xlaOperatorTargetShape[negativeOneIndex] *= numElements / xlaProduct;
     }
-    auto reshapeOp = builder.Reshape(valueToOp[n.inputs().at(0)], xlaOperatorTargetShape);
+    auto reshapeOp = builder.Reshape(valueToOp.at(n.inputs().at(0)), xlaOperatorTargetShape);
     valueToOp[n.outputs().at(0)] = reshapeOp;  
   }
   REGISTER_OPERATOR_TRANSLATOR(Reshape, translateReshape)

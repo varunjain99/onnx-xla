@@ -10,7 +10,7 @@
 
 onnxStatus onnxifiTryCatch(std::function<onnxStatus()> tryBlock)  {
   try  {                                                   
-    return tryBlock();          
+    return tryBlock(); 
   }
   catch (const std::bad_alloc& e) {                                            
     std::cerr << "Allocation failed: " << e.what() << std::endl;               
@@ -20,7 +20,8 @@ onnxStatus onnxifiTryCatch(std::function<onnxStatus()> tryBlock)  {
     std::cerr << "Internal Error: " << e.what() << std::endl;                  
     return ONNXIFI_STATUS_INTERNAL_ERROR;                                      
   }                                                                            
-  catch (...) {                                                                
+  catch (...) {
+    std::cerr << "Internal Error" << std::endl;                                                                
     return ONNXIFI_STATUS_INTERNAL_ERROR;                                      
   }
 }
@@ -29,8 +30,14 @@ onnxStatus onnxifiTryCatch(std::function<onnxStatus()> tryBlock)  {
 //TODO: Determining # of CPU, GPU, TPU devices and return
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendIDs)(onnxBackendID *backendIDs, size_t *numBackends) {
-  onnxifiTryCatch([&] {
-    *numBackends = 0;
+  return onnxifiTryCatch([&] {
+    if (!numBackends)  {
+      return ONNXIFI_STATUS_INVALID_POINTER;
+    }
+    if (!backendIDs || *numBackends < 1)  {
+      *numBackends = 1;
+      return ONNXIFI_STATUS_FALLBACK;
+    }
     *backendIDs = reinterpret_cast<onnxBackendID>(new OnnxXlaBackendID());
     *numBackends = 1;
     return ONNXIFI_STATUS_SUCCESS;
@@ -40,7 +47,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 //Free memory for given backend ID
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!backendID) {
       return ONNXIFI_STATUS_INVALID_ID;
     }
@@ -57,7 +64,7 @@ ONNXIFI_SYMBOL_NAME(onnxReleaseBackendID)(onnxBackendID backendID) {
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendInfo)(onnxBackendID backendID, onnxBackendInfo infoType,
                         void *infoValue, size_t *infoValueSize) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!infoValueSize) {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
@@ -147,7 +154,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxGetBackendCompatibility)(onnxBackendID backendID, size_t onnxModelSize,
                                  const void *onnxModel) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!onnxModel) {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
@@ -163,7 +170,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitBackend)(onnxBackendID backendID, const uint64_t *auxPropertiesList,
                      onnxBackend *backend) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     auto *backend_id = reinterpret_cast<OnnxXlaBackendID *>(backendID);
     *backend = reinterpret_cast<onnxBackend>(new BackendControl(backend_id));
     return ONNXIFI_STATUS_SUCCESS;
@@ -173,7 +180,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 //Release BackendControl object
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxReleaseBackend)(onnxBackend backend) {
-  onnxifiTryCatch([&] {    
+  return onnxifiTryCatch([&] {    
     if (!backend) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
     }
@@ -192,7 +199,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                    const void *onnxModel, uint32_t weightsCount,
                    const onnxTensorDescriptor *weightDescriptors,
                    onnxGraph *graph) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     *graph = NULL;
     if (!backend) {
       return ONNXIFI_STATUS_INVALID_BACKEND;
@@ -217,7 +224,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
                     const onnxTensorDescriptor *inputDescriptors,
                     uint32_t outputsCount,
                     const onnxTensorDescriptor *outputDescriptors) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
@@ -235,7 +242,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxRunGraph)(onnxGraph graph, const onnxMemoryFence *inputFence,
                   onnxMemoryFence *outputFence) {
- onnxifiTryCatch([&] {
+ return onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
@@ -272,7 +279,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 //Frees executor memory
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxReleaseGraph)(onnxGraph graph) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
     }
@@ -285,7 +292,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 //Initialize event by creating EventControl object on the heap
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxInitEvent)(onnxBackend backend, onnxEvent* event) {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_POINTER;
     }
@@ -303,7 +310,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 //Signal Event by changing the signalled boolean under mutex hold
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxSignalEvent)(onnxEvent event)  {
-  onnxifiTryCatch([&] {    
+  return onnxifiTryCatch([&] {    
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }
@@ -323,7 +330,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 //Wait for signalled to be turned true using conditional variable to coordinate
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxWaitEvent)(onnxEvent event)  {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }
@@ -340,7 +347,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
 //Free memory that was allocated for the EventControl object
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI ONNXIFI_SYMBOL_NAME(
     onnxReleaseEvent)(onnxEvent event)  {
-  onnxifiTryCatch([&] {
+  return onnxifiTryCatch([&] {
     if (!event)  {
       return ONNXIFI_STATUS_INVALID_EVENT;
     }

@@ -1,5 +1,5 @@
 #include "onnx_xla/operator_registry.h"
-#include <iostream>
+
 namespace onnx_xla  {
   
   OperatorRegistry::OperatorRegisterOnce::OperatorRegisterOnce(const Symbol& nodeKind, TranslationFunction translator)  {
@@ -15,6 +15,7 @@ namespace onnx_xla  {
     if (it != map.end()) {
       return it->second(n, builder, valueToOp, valueToLiteral);
     } else {
+      std::cerr << "Operator translator not found" << std::endl;
       return ONNXIFI_STATUS_UNSUPPORTED_OPERATOR;
     }
   }
@@ -28,7 +29,6 @@ namespace onnx_xla  {
     static TranslationMap map;
     return map;
   }
-
 
   //TODO: ENFORCE_EQ macro
   //TODO: Test this
@@ -100,24 +100,5 @@ namespace onnx_xla  {
   }
   REGISTER_OPERATOR_TRANSLATOR(Reshape, translateReshape)
 
-
-
-  onnxStatus translateRelu(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp, const ValueLiteralMap& valueToLiteral)  {
-    auto input = valueToOp[n.inputs().at(0)];
-    auto shape = builder.GetShape(input);
-    if (!shape.ok())  {
-      throw std::runtime_error("Internal error: Unexpected operation shape");
-    }
-    auto zero = builder.ConstantLiteral(*LiteralBase::CreateFromShape(shape.ValueOrDie()));
-    auto maximum = builder.Max(input, zero);
-    valueToOp[n.outputs().at(0)] = maximum;
-    return ONNXIFI_STATUS_SUCCESS;
-  }
-  REGISTER_OPERATOR_TRANSLATOR(Relu, translateRelu)
- 
-  //TODO: Handle Undefined properly
-  onnxStatus translateUndefined(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp, const ValueLiteralMap& valueToLiteral)  {
-    return ONNXIFI_STATUS_SUCCESS;
-  }
-  REGISTER_OPERATOR_TRANSLATOR(Undefined, translateUndefined) 
 }
+

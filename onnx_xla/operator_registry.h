@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <utility>
+#include <algorithm>
 
 namespace onnx_xla  {
 

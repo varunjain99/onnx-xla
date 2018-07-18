@@ -247,7 +247,7 @@ struct BackendRep {
 
   // TODO: Change usage of memoryFence (onnxEvent instead of onnxEvent*) when
   // submodule pulled
-  //Runs graph given input list, returning output list
+  // Runs graph given input list, returning output list
   py::list run(py::list inputs, py::kwargs kwargs) {
     onnxMemoryFence inputFence;
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;

@@ -18,7 +18,7 @@ assert(backend.supports_device("CPU"))
 assert(not backend.supports_device("GPU"))
 
 node = onnx.helper.make_node(
-      'Relu', ['x'], ['y'], name='test')
+      'Relu', ['x'], ['y'], name='relu_node')
 graph = onnx.helper.make_graph(
     nodes=[node],
     name='SingleRelu',
@@ -46,10 +46,10 @@ np.testing.assert_equal(expected_outputs, outputs)
 
 # temporary test until unit test PR goes through
 node = onnx.helper.make_node(
-      'Sum', ['a', 'b', 'c'], ['d'], name='test')
+      'Sum', ['a', 'b', 'c'], ['d'], name='sum_node')
 graph = onnx.helper.make_graph(
     nodes=[node],
-    name='SingleRelu',
+    name='SingleSum',
     inputs=[onnx.helper.make_tensor_value_info(
         'a', onnx.TensorProto.INT32, [1, 2]),
             onnx.helper.make_tensor_value_info(

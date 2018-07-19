@@ -17,21 +17,21 @@ onnxStatus translateReshape(const Node& n,
               << std::endl;
     return ONNXIFI_STATUS_UNSUPPORTED_VERSION;
   }
-  // Compute # of elements in data tensor (check validity of shapes)
+  // Compute # of elements in input data tensor (check validity of shapes)
   const std::vector<Dimension>& originalShape = n.inputs().at(0)->sizes();
   int64_t numElements = 1;
-  for (std::vector<Dimension>::const_iterator it = originalShape.begin();
-       it != originalShape.end(); ++it) {
-    if (!it->is_int) {
+  for (const auto& dimension : originalShape) {
+    if (!dimension.is_int) {
       std::cerr << "Reshape operator input data shape is not known"
                 << std::endl;
       return ONNXIFI_STATUS_UNSUPPORTED_SHAPE;
     }
-    numElements *= it->dim;
+    numElements *= dimension.dim;
   }
 
   // Use static ONNX target shape data (from the constant literal constructed)
-  // to build XLA target shape data and compute xlaProduct
+  // to build XLA target shape data and compute xlaProduct (product of shape
+  // constructed)
   const tensorflow::gtl::ArraySlice<int64> onnxOperatorTargetShape =
       shapeDataIt->second->data<int64>();
   std::vector<int64> xlaOperatorTargetShape;
@@ -59,6 +59,7 @@ onnxStatus translateReshape(const Node& n,
   }
 
   // Use numElements and xlaProduct to complete xlaOperatorTargetShape
+  // Infer what -1 should be or check reshape is valid
   if (negativeOneIndex == -1) {
     if (xlaProduct != numElements) {  // TODO: enforce
       std::cerr << "Invalid shape to reshape to" << std::endl;

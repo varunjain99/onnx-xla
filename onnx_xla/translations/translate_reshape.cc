@@ -19,6 +19,10 @@ onnxStatus translateReshape(const Node& n,
   }
   // Compute # of elements in input data tensor (check validity of shapes)
   const std::vector<Dimension>& originalShape = n.inputs().at(0)->sizes();
+  if (originalShape.size() == 0) {
+    std::cerr << "Missing input shape" << std::endl;
+    return ONNXIFI_STATUS_UNSUPPORTED_SHAPE;
+  }
   int64_t numElements = 1;
   for (const auto& dimension : originalShape) {
     if (!dimension.is_int) {
@@ -74,9 +78,8 @@ onnxStatus translateReshape(const Node& n,
   }
 
   // Add resulting XlaOp to builder
-  auto reshapeOp =
+  valueToOp[n.outputs().at(0)] =
       builder.Reshape(valueToOp.at(n.inputs().at(0)), xlaOperatorTargetShape);
-  valueToOp[n.outputs().at(0)] = reshapeOp;
   return ONNXIFI_STATUS_SUCCESS;
 }
 REGISTER_OPERATOR_TRANSLATOR(Reshape, translateReshape)

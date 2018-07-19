@@ -5,7 +5,7 @@ namespace onnx_xla {
 // 1) Find max of a batch
 // 2) Subtract from current numbers
 // 3) Exponentiate
-// 3) Divide with implicit broadcasting
+// 4) Divide with implicit broadcasting
 // TODO: Use and ENFORCE macro for checks
 onnxStatus translateSoftmax(const Node& n,
                             XlaBuilder& builder,
@@ -37,9 +37,7 @@ onnxStatus translateSoftmax(const Node& n,
     }
     windowDimensions.emplace_back(dimension.dim);
   }
-  for (auto i = 0; i < axis; ++i) {
-    windowDimensions[i] = 1;
-  }
+  std::fill(windowDimensions.begin(), windowDimensions.begin() + axis, 1);
 
   // windowStrides is all 1's
   std::vector<int64> windowStrides(valueInput->sizes().size(), 1);

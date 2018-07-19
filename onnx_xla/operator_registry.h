@@ -64,6 +64,22 @@ class OperatorRegistry final {
   static TranslationMap& map();
 };
 
+// Utility struct to help build pool ops and use the results and intermediate
+// values
+struct PoolHelper {
+  std::vector<int64> windowDimensions;
+  std::vector<int64> windowStrides;
+  std::vector<std::pair<int64, int64>> padding;
+
+  XlaOp poolOp;
+
+  onnxStatus buildPoolOp(const XlaComputation& poolComp,
+                         const XlaOp& initValue,
+                         XlaOp& inputOp,
+                         XlaBuilder& builder,
+                         const Node& n);
+};
+
 // Use this macro to register Symbol("name") with translator of type
 // TranslationFunction
 #define REGISTER_OPERATOR_TRANSLATOR(name, translator)                        \

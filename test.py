@@ -8,8 +8,7 @@ import onnx
 from onnx import ModelProto, NodeProto
 import numpy as np
 
-#TODO:  use python's unittest module to make these real test cases
-#       instead of this crude one
+# This is for experimental purposes
 backend = OnnxifiBackend()
 
 print("Available devices")

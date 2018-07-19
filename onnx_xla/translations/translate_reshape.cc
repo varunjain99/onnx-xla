@@ -2,7 +2,6 @@
 
 namespace onnx_xla {
 // TODO: ENFORCE_EQ macro
-// TODO: Test this
 // Takes in data tensor and shape input
 // Error if shape input is dynamic
 // Parses ONNX shape input (can have 0's and one -1)
@@ -77,6 +76,7 @@ onnxStatus translateReshape(const Node& n,
   auto reshapeOp =
       builder.Reshape(valueToOp.at(n.inputs().at(0)), xlaOperatorTargetShape);
   valueToOp[n.outputs().at(0)] = reshapeOp;
+  return ONNXIFI_STATUS_SUCCESS;
 }
 REGISTER_OPERATOR_TRANSLATOR(Reshape, translateReshape)
 }

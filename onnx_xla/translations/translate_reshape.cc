@@ -39,7 +39,7 @@ onnxStatus translateReshape(const Node& n,
   const tensorflow::gtl::ArraySlice<int64> onnxOperatorTargetShape =
       shapeDataIt->second->data<int64>();
   std::vector<int64> xlaOperatorTargetShape;
-  int64 xlaProduct = 1;
+  int64_t xlaProduct = 1;
   int64_t negativeOneIndex = -1;
   for (auto i = 0; i < onnxOperatorTargetShape.size(); ++i) {
     const int64& dim = onnxOperatorTargetShape.at(i);

@@ -10,6 +10,8 @@
 #include <functional>
 #include <utility>
 #include <algorithm>
+#include <cmath>
+#include <utility>
 
 namespace onnx_xla {
 
@@ -19,6 +21,7 @@ using ::xla::Shape;
 using ::xla::primitive_util::NativeToPrimitiveType;
 using ::xla::XlaOp;
 using ::xla::XlaBuilder;
+using ::xla::XlaComputation;
 using ::xla::LiteralBase;
 using ::xla::StatusOr;
 

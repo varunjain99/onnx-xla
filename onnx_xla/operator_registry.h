@@ -40,25 +40,30 @@ namespace onnx_xla  {
     public:
       OperatorRegisterOnce(const Symbol& nodeKind, TranslationFunction translator);     
     };
- 
-    //Translate given node
-      //Updates builder
-      //In: Expect valueToOp to exist for every node input
-      //Out: Expect valueToOp to be assigned for every node output
-    onnxStatus translate(const Node& n, XlaBuilder& builder, ValueOpMap& valueToOp, const ValueLiteralMap& valueToLiteral);
-    //Returns reference to static singleton registry
-    static OperatorRegistry& registry();
-  private:
-    //Singleton instance should only be made in the class
-    OperatorRegistry() = default;
-    //Wrapper for registry map - should not be directly accessed
-      //Register in map through below macro
-      //Execute translation function through registry()->executeTranslation
-    static TranslationMap& map();
-  };
-  
-  //Use this macro to register Symbol("name") with translator of type TranslationFunction 
-  #define REGISTER_OPERATOR_TRANSLATOR(name, translator)                                     \
-    static OperatorRegistry::OperatorRegisterOnce register##name(Symbol(#name), translator); \
 
+  // Translate given node
+  // Updates builder
+  // In: Expect valueToOp to exist for every node input
+  // Out: Expect valueToOp to be assigned for every node output
+  onnxStatus translate(const Node& n,
+                       XlaBuilder& builder,
+                       ValueOpMap& valueToOp,
+                       const ValueLiteralMap& valueToLiteral);
+  // Returns reference to static singleton registry
+  static OperatorRegistry& registry();
+
+ private:
+  // Singleton instance should only be made in the class
+  OperatorRegistry() = default;
+  // Wrapper for registry map - should not be directly accessed
+  // Register in map through below macro
+  // Execute translation function through registry()->executeTranslation
+  static TranslationMap& map();
+};
+
+// Use this macro to register Symbol("name") with translator of type
+// TranslationFunction
+#define REGISTER_OPERATOR_TRANSLATOR(name, translator)                        \
+  static OperatorRegistry::OperatorRegisterOnce register##name(Symbol(#name), \
+                                                               translator);
 }

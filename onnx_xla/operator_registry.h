@@ -11,35 +11,38 @@
 #include <utility>
 #include <algorithm>
 
-namespace onnx_xla  {
+namespace onnx_xla {
 
-  using ::xla::Literal;
-  using ::xla::ShapeUtil;
-  using ::xla::Shape;
-  using ::xla::primitive_util::NativeToPrimitiveType;
-  using ::xla::XlaOp;
-  using ::xla::XlaBuilder;
-  using ::xla::LiteralBase;
-  using ::xla::StatusOr;
+using ::xla::Literal;
+using ::xla::ShapeUtil;
+using ::xla::Shape;
+using ::xla::primitive_util::NativeToPrimitiveType;
+using ::xla::XlaOp;
+using ::xla::XlaBuilder;
+using ::xla::LiteralBase;
+using ::xla::StatusOr;
 
-  using ::ONNX_NAMESPACE::Value;
-  using ::ONNX_NAMESPACE::Dimension;
-  using ::ONNX_NAMESPACE::Symbol;
-  using ::ONNX_NAMESPACE::Node;
+using ::ONNX_NAMESPACE::Value;
+using ::ONNX_NAMESPACE::Dimension;
+using ::ONNX_NAMESPACE::Symbol;
+using ::ONNX_NAMESPACE::Node;
 
-  using ValueLiteralMap = std::unordered_map<const Value*, std::unique_ptr<Literal>>;
-  using ValueOpMap = std::unordered_map<const Value*, XlaOp>;
-  using TranslationFunction = std::function<onnxStatus(const Node&, XlaBuilder&, ValueOpMap&, const ValueLiteralMap&)>;
-  using TranslationMap = std::unordered_map<Symbol, TranslationFunction>;
-  
-  //Class for registry of ONNX operators with corresponding translation functions
-  class OperatorRegistry final {
-  public:
-    //Use constructor (through macro) to register translator at static time
-    class OperatorRegisterOnce final  {
-    public:
-      OperatorRegisterOnce(const Symbol& nodeKind, TranslationFunction translator);     
-    };
+using ValueLiteralMap =
+    std::unordered_map<const Value*, std::unique_ptr<Literal>>;
+using ValueOpMap = std::unordered_map<const Value*, XlaOp>;
+using TranslationFunction = std::function<
+    onnxStatus(const Node&, XlaBuilder&, ValueOpMap&, const ValueLiteralMap&)>;
+using TranslationMap = std::unordered_map<Symbol, TranslationFunction>;
+
+// Class for registry of ONNX operators with corresponding translation functions
+class OperatorRegistry final {
+ public:
+  // Use constructor (through macro) to register translator at static time
+  class OperatorRegisterOnce final {
+   public:
+    OperatorRegisterOnce(const Symbol& nodeKind,
+                         TranslationFunction translator);
+  };
 
   // Translate given node
   // Updates builder

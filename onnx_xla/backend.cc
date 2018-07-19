@@ -264,8 +264,9 @@ onnxStatus XlaTransform::handleInputs() {
       value_to_literal_[v] = std::move(l_ptr);
     }
   } else {
-    executor_->num_inputs_ = (uint32_t) ((int64_t) (ir_->inputs().size()) - (int64_t) (ir_->initializers().size()));
-    for (const Tensor& t : ir_->initializers())  {
+    executor_->num_inputs_ = (uint32_t)((int64_t)(ir_->inputs().size()) -
+                                        (int64_t)(ir_->initializers().size()));
+    for (const Tensor& t : ir_->initializers()) {
       std::string name(t.name());
       isInitialized[name] = true;
       auto l_ptr = executor_->tensorToLiteral(t);
@@ -308,7 +309,8 @@ onnxStatus XlaTransform::translateGraph() {
   }
   auto& registry = OperatorRegistry::registry();
   for (auto it = ir_->begin(); it != ir_->end(); ++it) {
-    auto translateStatus = registry.translate(**it, builder_, value_to_op_, value_to_literal_);
+    auto translateStatus =
+        registry.translate(**it, builder_, value_to_op_, value_to_literal_);
     if (translateStatus != ONNXIFI_STATUS_SUCCESS) {
       return translateStatus;
     }

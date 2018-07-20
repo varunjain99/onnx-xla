@@ -149,6 +149,7 @@ void dynamic_relu_test() {
   }
   executor->executeComputation(&inputFence, &outputFence);
 
+
   // Check correctness
   ONNX_ASSERT(outputEvent->signalled_);
   float* output_ptr = (float*)output.buffer;

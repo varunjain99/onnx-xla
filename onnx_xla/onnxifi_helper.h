@@ -2,8 +2,7 @@
 
 #include "backend.h"
 
-
-//TODO: More formal representation of backendID - CPU, GPU, TPU?
+// TODO: More formal representation of backendID - CPU, GPU, TPU?
 struct OnnxXlaBackendID {
   int device_id{0};
 };
@@ -15,19 +14,19 @@ struct EventControl {
   std::condition_variable condvar_;
 };
 
-
-//Backend engine
+// Backend engine
 //  backendID will eventually determine translation detail
 struct BackendControl {
-public:
+ public:
   BackendControl(OnnxXlaBackendID* id);
 
-  //use OnnxParser and XlaTransform to fill *graph
-  onnxStatus build(const void* serializedModel, size_t serializedModelSize, uint32_t weightsCount,
-                   const onnxTensorDescriptor *weightDescriptors, onnxGraph* graph);
+  // use OnnxParser and XlaTransform to fill *graph
+  onnxStatus build(const void* serializedModel,
+                   size_t serializedModelSize,
+                   uint32_t weightsCount,
+                   const onnxTensorDescriptor* weightDescriptors,
+                   onnxGraph* graph);
 
-private:
+ private:
   OnnxXlaBackendID* backendID;
 };
-
-

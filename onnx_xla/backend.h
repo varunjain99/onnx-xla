@@ -29,12 +29,11 @@ class XlaExecutor;
 class OnnxParser;
 
 // Engine to execute an XlaComputation constructed by XlaTransform. The
-// computation_
-// is filled by the XlaTransform object. To run, call initIO to verify IO
-// metadata and to declare IO locations. Once IO data is present, execute
-// executeComputation
-// to run. If successful, output tensors will be present at the output_buffers_
-// pointers.
+// computation_ is filled by the XlaTransform object. To run, call initIO
+// to verify IO metadata and to declare IO locations. Once IO data is 
+// present, execute executeComputation to run. If successful, output 
+// tensors will be present at the output_buffers_ pointers.
+
 class XlaExecutor final {
  public:
   // Constructor initialized with backend handle

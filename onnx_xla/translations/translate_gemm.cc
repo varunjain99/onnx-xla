@@ -22,7 +22,7 @@ onnxStatus translateGemm(const Node& n,
 
   // Tranpose if needed and shape checks
   auto AOp = valueToOp.at(n.inputs().at(0));
-  auto BOp = valueToOp.at(n.inputs().at(0));
+  auto BOp = valueToOp.at(n.inputs().at(1));
   auto shapeA = builder.GetShape(AOp).ValueOrDie();
   auto shapeB = builder.GetShape(BOp).ValueOrDie();
   if (ShapeUtil::Rank(shapeA) != 2 ||
@@ -71,7 +71,7 @@ onnxStatus translateGemm(const Node& n,
   if (rankC == 1) {
     broadcastDims.emplace_back(1);
   }
-  valueToOp[n.outputs().at(0)] = builder.Mul(ABOp, COp, broadcastDims);
+  valueToOp[n.outputs().at(0)] = builder.Add(ABOp, COp, broadcastDims);
   return ONNXIFI_STATUS_SUCCESS;
 }
 REGISTER_OPERATOR_TRANSLATOR(Gemm, translateGemm)

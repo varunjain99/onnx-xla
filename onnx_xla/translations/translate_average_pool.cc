@@ -1,4 +1,4 @@
-#include "onnx_xla/operator_registry.h"
+/*#include "onnx_xla/operator_registry.h"
 
 namespace onnx_xla {
 
@@ -64,4 +64,4 @@ onnxStatus translateAveragePool(const Node& n,
   return poolStatus;
 }
 REGISTER_OPERATOR_TRANSLATOR(AveragePool, translateAveragePool)
-}
+}*/

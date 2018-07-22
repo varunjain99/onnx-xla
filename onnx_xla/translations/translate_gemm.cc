@@ -20,9 +20,10 @@ onnxStatus translateGemm(const Node& n,
   }
   auto dataType = onnxToPrimitive(onnxType);
 
-  // Tranpose if needed and shape checks
+  // Set transpose values and do shape checks
   auto AOp = valueToOp.at(n.inputs().at(0));
   auto BOp = valueToOp.at(n.inputs().at(1));
+  ::xla::DotDimensionNumbers dnums;
   auto shapeA = builder.GetShape(AOp).ValueOrDie();
   auto shapeB = builder.GetShape(BOp).ValueOrDie();
   if (ShapeUtil::Rank(shapeA) != 2 ||
@@ -34,13 +35,17 @@ onnxStatus translateGemm(const Node& n,
   auto dimB = ShapeUtil::GetDimension(shapeB, 0);
 
   if (n.hasAttribute(ktransA) && n.i(ktransA) != 0) {
-    AOp = builder.Transpose(AOp, {1, 0});
     dimA = ShapeUtil::GetDimension(shapeA, 0);
+    dnums.add_lhs_contracting_dimensions(0);
+  } else {
+    dnums.add_lhs_contracting_dimensions(1);
   }
 
   if (n.hasAttribute(ktransB) && n.i(ktransB) != 0) {
-    BOp = builder.Transpose(BOp, {1, 0});
     dimB = ShapeUtil::GetDimension(shapeB, 1);
+    dnums.add_rhs_contracting_dimensions(1);
+  } else {
+    dnums.add_rhs_contracting_dimensions(0);
   }
 
   if (dimA != dimB) {
@@ -50,7 +55,7 @@ onnxStatus translateGemm(const Node& n,
   }
 
   // Compute alpha * A * B
-  auto ABOp = builder.Dot(AOp, BOp);
+  auto ABOp = builder.DotGeneral(AOp, BOp, dnums);
   if (n.hasAttribute(kalpha)) {
     auto alphaOp = ::tensorflow::FloatLiteral(&builder, dataType, n.f(kalpha));
     ABOp = builder.Mul(ABOp, alphaOp);

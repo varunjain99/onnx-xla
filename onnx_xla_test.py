@@ -13,9 +13,8 @@ pytest_plugins = 'onnx.backend.test.report',
 
 backend_test = onnx.backend.test.BackendTest(OnnxifiBackend(), __name__)
 
-backend_test.include(r'(test_relu'  # Test relu.
-                     '|test_gemm_nobroadcast'
-                     '|test_gemm_broadcast'
+backend_test.include(r'(test_relu'  # Test Relu.
+                     '|test_gemm' # Test Gemm
                      ')')
 
 

@@ -13,7 +13,7 @@ onnxStatus translateConcat(const Node& n,
 
   std::vector<XlaOp> inputs;
   for (auto i = 0; i < n.inputs().size(); ++i) {
-    inputs.emplace_back(valueToOp.at(n.inputs().at(i)));
+    inputs.emplace_back(valueToOp.at(n.inputs()[i]));
   }
 
   valueToOp[n.outputs().at(0)] = builder.ConcatInDim(inputs, axis);

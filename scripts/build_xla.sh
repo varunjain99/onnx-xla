@@ -31,5 +31,6 @@ index 3935992..00216df 100644
        strip_prefix = "nasm-2.12.02",
 EOF
 
+bazel build -c opt //tensorflow/compiler/tf2xla/lib:util
 bazel build -c opt //tensorflow/compiler/xla/rpc:libxla_computation_client.so
 bazel build -c opt //tensorflow/compiler/xla/rpc:grpc_service_main_cpu

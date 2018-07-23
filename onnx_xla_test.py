@@ -23,6 +23,7 @@ backend_test.include(r'(test_relu'  # Test relu.
                      '|test_softmax_axis_1'
                      '|test_softmax_default_axis'
                      '|test_softmax_axis_2'
+                     '|test_concat' # Test Concat
                      ')')
 
 

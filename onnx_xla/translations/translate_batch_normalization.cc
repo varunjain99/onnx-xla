@@ -3,9 +3,6 @@
 namespace onnx_xla {
 
 // Tranlates batch normalization in test mode
-// TODO: Specifics of Training mode
-// TODO: No equivalent of momentum
-// TODO: No equivalent of spatial
 onnxStatus translateBatchNormalization(const Node& n,
                                        XlaBuilder& builder,
                                        ValueOpMap& valueToOp) {

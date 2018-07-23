@@ -23,7 +23,7 @@ onnxStatus translateGlobalAveragePool(const Node& n,
   for (const auto& dimension : n.inputs().at(0)->sizes()) {
     if (!dimension.is_int) {  // TODO: Enforce
       std::cerr << "Missing dimension" << std::endl;
-      return ONNIFI_STATUS_INVALID_MODEL;
+      return ONNXIFI_STATUS_INVALID_MODEL;
     }
     windowDimensions.emplace_back(dimension.dim);
   }
@@ -31,7 +31,7 @@ onnxStatus translateGlobalAveragePool(const Node& n,
 
   std::vector<int64> windowStrides(windowDimensions.size(), 1);
 
-  PoolOp = builder.ReduceWindow(
+  auto PoolOp = builder.ReduceWindow(
       valueToOp.at(n.inputs().at(0)),
       builder.ConstantLiteral(Literal::Zero(dataType)), add, windowDimensions,
       windowStrides, Padding::kValid);

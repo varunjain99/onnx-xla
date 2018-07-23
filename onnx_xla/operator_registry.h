@@ -22,6 +22,8 @@ using ::xla::XlaOp;
 using ::xla::XlaBuilder;
 using ::xla::LiteralBase;
 using ::xla::StatusOr;
+using ::xla::XlaComputation;
+using ::xla::Padding;
 
 using ::ONNX_NAMESPACE::Value;
 using ::ONNX_NAMESPACE::Dimension;

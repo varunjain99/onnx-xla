@@ -4,6 +4,7 @@
 #include "onnx/common/ir_pb_converter.h"
 #include "onnx/onnxifi.h"
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
+#include "tensorflow/compiler/tf2xla/lib/util.h"
 
 #include "onnx_xla/types.h"
 

@@ -15,6 +15,7 @@ backend_test = onnx.backend.test.BackendTest(OnnxifiBackend(), __name__)
 
 backend_test.include(r'(test_relu'  # Test relu.
                      '|test_batchnorm' # Test BatchNormalization
+                     '|test_concat' # Test Concat
                      ')')
 
 

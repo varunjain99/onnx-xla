@@ -5,8 +5,8 @@ namespace onnx_xla {
 // 1. Square input
 // 2. Use reduce to sum
 onnxStatus translateLRN(const Node& n,
-                                      XlaBuilder& builder,
-                                      ValueOpMap& valueToOp) {
+                        XlaBuilder& builder,
+                        ValueOpMap& valueToOp) {
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
   // Read in attributes and make them XlaOp
   // TODO: Refactor this conversion
@@ -23,8 +23,9 @@ onnxStatus translateLRN(const Node& n,
   auto betaOp = ::tensorflow::FloatLiteral(&builder, dataType, beta);
 
   float bias = 1.0f;
-  if (n.hasAttribute(Symbol("bias"))) {
-    beta = n.f(kbeta);
+  auto kbias = Symbol("bias");
+  if (n.hasAttribute(kbias)) {
+    bias = n.f(kbias);
   }
   auto biasOp = ::tensorflow::FloatLiteral(&builder, dataType, bias);
 

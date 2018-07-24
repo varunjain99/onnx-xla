@@ -14,6 +14,7 @@ pytest_plugins = 'onnx.backend.test.report',
 backend_test = onnx.backend.test.BackendTest(OnnxifiBackend(), __name__)
 
 backend_test.include(r'(test_relu'  # Test relu.
+                     '|test_softmax' # Test softmax
                      '|test_batchnorm' # Test BatchNormalization
                      '|test_gemm' # Test Gemm
                      '|test_concat' # Test Concat

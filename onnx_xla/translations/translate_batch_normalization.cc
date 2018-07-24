@@ -7,9 +7,14 @@ namespace onnx_xla {
 onnxStatus translateBatchNormalization(const Node& n,
                                        XlaBuilder& builder,
                                        ValueOpMap& valueToOp) {
-  if (n.outputs().size() > 1 || n.hasAttribute(kmomentum) ||
-      n.hasAttribute(Symbol("spatial"))) {  // TODO: ENFORCE
-    throw std::runtime_error("Only test mode of BatchNormalization supported");
+  // If requires output of train mode, throw
+  if (n.outputs().size() > 1) {
+    for (auto i = 1; i < n.outputs().size(); ++i) {
+      if (n.outputs()[i]->uses().size() > 0) {
+        throw std::runtime_error(
+            "Only test mode of BatchNormalization supported");
+      }
+    }
   }
 
   // TODO: Fetch default from ONNX Schema

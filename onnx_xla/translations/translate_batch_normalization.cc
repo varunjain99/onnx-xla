@@ -3,6 +3,7 @@
 namespace onnx_xla {
 
 // Tranlates batch normalization in test mode
+// Use BatchNormInference with input XlaOps, epsilon, and feature dimension(1)
 onnxStatus translateBatchNormalization(const Node& n,
                                        XlaBuilder& builder,
                                        ValueOpMap& valueToOp) {
@@ -11,6 +12,7 @@ onnxStatus translateBatchNormalization(const Node& n,
     throw std::runtime_error("Only test mode of BatchNormalization supported");
   }
 
+  // TODO: Fetch default from ONNX Schema
   float epsilon = 1e-5;
   if (n.hasAttribute(kepsilon)) {
     epsilon = n.f(kepsilon);

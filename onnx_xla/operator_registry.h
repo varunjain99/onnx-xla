@@ -61,6 +61,14 @@ class OperatorRegistry final {
   static XlaComputation max(PrimitiveType dataType);
   static XlaComputation add(PrimitiveType dataType);
 
+  // Given two XlaOps, returns a broadcast dimensions vector required by the
+  // XlaBuilder to perform elementary binary operations that support
+  // multidirectional broadcasting
+  static std::vector<int64> getMultidirectionalBroadcastArg(
+      const XlaBuilder& builder,
+      const XlaOp& firstOp,
+      const XlaOp& secondOp);
+
  private:
   // Singleton instance should only be made in the class
   OperatorRegistry() = default;

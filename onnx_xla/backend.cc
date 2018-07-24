@@ -160,7 +160,9 @@ onnxStatus XlaExecutor::initIO(uint32_t inputsCount,
 #undef CHECK_TYPE_AND_SHAPE
 }
 
-onnxStatus XlaExecutor::sendInputs(const onnxMemoryFence* inputFence) {
+onnxStatus XlaExecutor::executeComputation(const onnxMemoryFence* inputFence,
+                                           onnxMemoryFence* outputFence) {
+  std::vector<GlobalData*> arguments;
   auto waitStatus = onnxWaitEvent(*inputFence->event);
   if (waitStatus != ONNXIFI_STATUS_SUCCESS) {
     return waitStatus;
@@ -168,12 +170,10 @@ onnxStatus XlaExecutor::sendInputs(const onnxMemoryFence* inputFence) {
   for (const std::string& s : param_input_name_) {
     auto l_ptr = this->inputNameToLiteral(s);
     auto l_data_ptr = xla::TransferParameterToServer(*l_ptr);
-    arguments_.push_back(l_data_ptr.release());
+    arguments.push_back(l_data_ptr.release());
   }
-  return ONNXIFI_STATUS_SUCCESS;
-}
+  auto result = xla::ExecuteComputation(computation_, arguments);
 
-onnxStatus XlaExecutor::executeComputation(onnxMemoryFence* outputFence) {
 #define OPERATION(type_to, type_from, vec)                            \
   type_to* destination = (type_to*)output_buffers_[output_names_[i]]; \
   for (auto j = 0; j < num_elements; ++j) {                           \
@@ -181,7 +181,6 @@ onnxStatus XlaExecutor::executeComputation(onnxMemoryFence* outputFence) {
   }                                                                   \
   break;
 
-  auto result = xla::ExecuteComputation(computation_, arguments_);
   std::vector<Literal> outputLiterals = result->DecomposeTuple();
   for (auto i = 0; i < outputLiterals.size(); ++i) {
     int64_t num_elements = 1;

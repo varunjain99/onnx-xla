@@ -14,15 +14,7 @@ pytest_plugins = 'onnx.backend.test.report',
 backend_test = onnx.backend.test.BackendTest(OnnxifiBackend(), __name__)
 
 backend_test.include(r'(test_relu'  # Test relu.
-                     '|test_sum_example' # Test sum
-                     '|test_sum_one_input'
-                     '|test_sum_two_inputs'
-                     '|test_softmax_example' # Test softmax
-                     '|test_softmax_large_number'
-                     '|test_softmax_axis_0'
-                     '|test_softmax_axis_1'
-                     '|test_softmax_default_axis'
-                     '|test_softmax_axis_2'
+                     '|test_softmax' # Test softmax
                      '|test_gemm' # Test Gemm
                      '|test_concat' # Test Concat
                      ')')

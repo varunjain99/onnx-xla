@@ -34,4 +34,37 @@ TranslationMap& OperatorRegistry::map() {
   static TranslationMap map;
   return map;
 }
+
+XlaComputation OperatorRegistry::add(PrimitiveType dataType) {
+  XlaBuilder builder("add");
+  auto y = builder.Parameter(0, ShapeUtil::MakeShape(dataType, {}), "y");
+  auto x = builder.Parameter(1, ShapeUtil::MakeShape(dataType, {}), "x");
+  builder.Add(y, x);
+  return builder.Build().ConsumeValueOrDie();
+}
+
+XlaComputation OperatorRegistry::max(PrimitiveType dataType) {
+  XlaBuilder builder("max");
+  auto y = builder.Parameter(0, ShapeUtil::MakeShape(dataType, {}), "y");
+  auto x = builder.Parameter(1, ShapeUtil::MakeShape(dataType, {}), "x");
+  builder.Max(y, x);
+  return builder.Build().ConsumeValueOrDie();
+}
+
+std::vector<int64> OperatorRegistry::getMultidirectionalBroadcastArg(
+    const XlaBuilder& builder,
+    const XlaOp& firstOp,
+    const XlaOp& secondOp) {
+  auto firstNDim = ShapeUtil::Rank(builder.GetShape(firstOp).ValueOrDie());
+  auto secondNDim = ShapeUtil::Rank(builder.GetShape(secondOp).ValueOrDie());
+  std::vector<int64> broadcastDims;
+  if (firstNDim != secondNDim || firstNDim != 0 || secondNDim != 0) {
+    auto minDim = std::min(firstNDim, secondNDim);
+    auto maxDim = std::max(firstNDim, secondNDim);
+    for (auto j = 0; j < minDim; ++j) {
+      broadcastDims.push_back(j + maxDim - minDim);
+    }
+  }
+  return broadcastDims;
+}
 }

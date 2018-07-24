@@ -11,6 +11,7 @@
 #include <functional>
 #include <utility>
 #include <algorithm>
+#include <numeric>
 
 namespace onnx_xla {
 
@@ -20,10 +21,11 @@ using ::xla::Shape;
 using ::xla::primitive_util::NativeToPrimitiveType;
 using ::xla::XlaOp;
 using ::xla::XlaBuilder;
+using ::xla::XlaComputation;
 using ::xla::LiteralBase;
 using ::xla::StatusOr;
-using ::xla::XlaComputation;
 using ::xla::Padding;
+using ::xla::PrimitiveType;
 
 using ::ONNX_NAMESPACE::Value;
 using ::ONNX_NAMESPACE::Dimension;
@@ -54,6 +56,18 @@ class OperatorRegistry final {
                        ValueOpMap& valueToOp);
   // Returns reference to static singleton registry
   static OperatorRegistry& registry();
+
+  // Utilities to help with operator translation
+  static XlaComputation max(PrimitiveType dataType);
+  static XlaComputation add(PrimitiveType dataType);
+
+  // Given two XlaOps, returns a broadcast dimensions vector required by the
+  // XlaBuilder to perform elementary binary operations that support
+  // multidirectional broadcasting
+  static std::vector<int64> getMultidirectionalBroadcastArg(
+      const XlaBuilder& builder,
+      const XlaOp& firstOp,
+      const XlaOp& secondOp);
 
  private:
   // Singleton instance should only be made in the class

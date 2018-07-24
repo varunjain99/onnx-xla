@@ -276,11 +276,7 @@ ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
     if (initStatus != ONNXIFI_STATUS_SUCCESS) {
       return initStatus;
     }
-    auto sendInputsStatus = executor->sendInputs(inputFence);
-    if (sendInputsStatus != ONNXIFI_STATUS_SUCCESS) {
-      return sendInputsStatus;
-    }
-    return executor->executeComputation(outputFence);
+    return executor->executeComputation(inputFence, outputFence);
   });
 }
 

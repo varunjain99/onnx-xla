@@ -65,8 +65,7 @@ void static_relu_test() {
   runner.translateGraph();
   auto executor = runner.executor();
   executor->initIO(0, nullptr, 1, &output);
-  executor->sendInputs(&inputFence);
-  executor->executeComputation(&outputFence);
+  executor->executeComputation(&inputFence, &outputFence);
 
   // Check correctness
   ONNX_ASSERT(outputEvent->signalled_);
@@ -148,8 +147,7 @@ void dynamic_relu_test() {
     std::mt19937 rand_engine(rand_dev());
     input_ptr[i] = unif(rand_engine);
   }
-  executor->sendInputs(&inputFence);
-  executor->executeComputation(&outputFence);
+  executor->executeComputation(&inputFence, &outputFence);
 
   // Check correctness
   ONNX_ASSERT(outputEvent->signalled_);

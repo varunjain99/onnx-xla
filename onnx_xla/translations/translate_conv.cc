@@ -18,7 +18,7 @@ onnxStatus translateConv(const Node& n,
       XlaBuilder::CreateDefaultConvDimensionNumbers(
           helper.getWindowStrides().size()));
 
-  if (n.inputs().size() == 3) {
+  if (n.inputs().size() == 3 && n.inputs().at(2)->uniqueName() != "") {
     XlaOp biasOp = valueToOp.at(n.inputs().at(2));
     convOp = builder.Add(convOp, biasOp, {0});
   }

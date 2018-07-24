@@ -6,16 +6,8 @@ namespace onnx_xla {
 onnxStatus translateAveragePool(const Node& n,
                                 XlaBuilder& builder,
                                 ValueOpMap& valueToOp) {
-  // Set add TODO: softmax PR moves this to operator_registry.h
+  // Set dataType
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
-  XlaComputation add;
-  {
-    XlaBuilder builder("add");
-    auto y = builder.Parameter(0, ShapeUtil::MakeShape(dataType, {}), "y");
-    auto x = builder.Parameter(1, ShapeUtil::MakeShape(dataType, {}), "x");
-    builder.Add(y, x);
-    add = builder.Build().ConsumeValueOrDie();
-  }
 
   // Create ConvPoolHelper object (constructs attributes formatted for
   // XlaBuilder)
@@ -24,9 +16,9 @@ onnxStatus translateAveragePool(const Node& n,
   // Enque a sum Xla operation
   XlaOp sumOp = builder.ReduceWindowWithGeneralPadding(
       valueToOp.at(n.inputs().at(0)),
-      builder.ConstantLiteral(Literal::Zero(dataType)), add,
-      helper.getWindowDimensions(), helper.getWindowStrides(),
-      helper.getInputPadding());
+      builder.ConstantLiteral(Literal::Zero(dataType)),
+      OperatorRegistry::add(dataType), helper.getWindowDimensions(),
+      helper.getWindowStrides(), helper.getInputPadding());
 
   // Build average with implicit broadcasting (if count_include_pad != 0)
   // TODO: Support for count_include_pad (No test cases right now)

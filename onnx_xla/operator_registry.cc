@@ -52,7 +52,7 @@ std::vector<int64_t> OperatorRegistry::parseOnnxInputSizes(const Node& n,
 
   return shapeInts;
 }
-  
+
 XlaComputation OperatorRegistry::add(PrimitiveType dataType) {
   XlaBuilder builder("add");
   auto y = builder.Parameter(0, ShapeUtil::MakeShape(dataType, {}), "y");

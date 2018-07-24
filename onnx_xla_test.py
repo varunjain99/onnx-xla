@@ -18,6 +18,7 @@ backend_test.include(r'(test_relu'  # Test relu.
                      '|test_gemm' # Test Gemm
                      '|test_concat' # Test Concat
                      '|test_transpose' #Test Transpose
+                     '|test_dropout' # Test Dropout
                      ')')
 
 

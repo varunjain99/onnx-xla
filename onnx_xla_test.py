@@ -16,6 +16,9 @@ backend_test = onnx.backend.test.BackendTest(OnnxifiBackend(), __name__)
 backend_test.include(r'(test_relu'  # Test Relu.
                      '|test_gemm' # Test Gemm
                      '|test_concat' # Test Concat
+                     '|test_add' # Test Add
+                     '|test_mul' # Test Mul
+                     '|test_sum' # Test Sum
                      ')')
 
 

@@ -21,6 +21,7 @@ backend_test.include(r'(test_relu'  # Test relu.
                      '|test_maxpool' # Test MaxPool
                      '|test_basic_conv' # Test Conv
                      '|test_conv_with'
+                     '|test_average_pool' #Test AveragePool
                      ')')
 
 

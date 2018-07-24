@@ -50,7 +50,7 @@ XlaComputation OperatorRegistry::max(PrimitiveType dataType) {
   builder.Max(y, x);
   return builder.Build().ConsumeValueOrDie();
 }
-  
+
 std::vector<int64> OperatorRegistry::getMultidirectionalBroadcastArg(
     const XlaBuilder& builder,
     const XlaOp& firstOp,

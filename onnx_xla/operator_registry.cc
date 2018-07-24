@@ -52,7 +52,7 @@ std::vector<int64_t> OperatorRegistry::parseOnnxInputSizes(const Node& n,
 
   return shapeInts;
 }
-  
+
 std::vector<int64> OperatorRegistry::getMultidirectionalBroadcastArg(
     const XlaBuilder& builder,
     const XlaOp& firstOp,

@@ -12,7 +12,7 @@
 #include <utility>
 #include <algorithm>
 #include <cmath>
-#include <utility>
+#include <numeric>
 
 namespace onnx_xla {
 
@@ -25,6 +25,8 @@ using ::xla::XlaBuilder;
 using ::xla::XlaComputation;
 using ::xla::LiteralBase;
 using ::xla::StatusOr;
+using ::xla::Padding;
+using ::xla::PrimitiveType;
 
 using ::ONNX_NAMESPACE::Value;
 using ::ONNX_NAMESPACE::Dimension;
@@ -61,6 +63,10 @@ class OperatorRegistry final {
   // Throws if not possible
   static std::vector<int64_t> parseOnnxInputSizes(const Node& n,
                                                   size_t inputIndex);
+
+  // Utilities to help with operator translation
+  static XlaComputation max(PrimitiveType dataType);
+  static XlaComputation add(PrimitiveType dataType);
 
   // Given two XlaOps, returns a broadcast dimensions vector required by the
   // XlaBuilder to perform elementary binary operations that support

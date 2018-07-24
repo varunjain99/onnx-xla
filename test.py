@@ -43,6 +43,18 @@ print("Input")
 print(x)
 np.testing.assert_equal(expected_outputs, outputs)
 
+#Running graph again
+x = np.random.randn(1, 2).astype(np.float32)
+y = np.maximum(x, 0)
+
+outputs = backendrep.run([x])
+expected_outputs = [y]
+
+print("Output")
+print(expected_outputs[0])
+print("Input")
+print(x)
+
 # temporary test until unit test PR goes through
 node = onnx.helper.make_node(
       'Sum', ['a', 'b', 'c'], ['d'], name='sum_node')
@@ -75,5 +87,6 @@ print("Output")
 print(expected_outputs)
 print("Input")
 print([a,b,c])
+
 np.testing.assert_equal(expected_outputs, outputs)
 

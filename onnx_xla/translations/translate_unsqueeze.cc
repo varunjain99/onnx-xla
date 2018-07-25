@@ -6,11 +6,7 @@ onnxStatus translateUnsqueeze(const Node& n,
                               XlaBuilder& builder,
                               ValueOpMap& valueToOp) {
   // Set origShape and axes
-  // TODO: Use static function from Pooling PR to set origShape
-  std::vector<int64> origShape;
-  for (const auto& dimension : n.inputs().at(0)->sizes()) {
-    origShape.emplace_back(dimension.dim);
-  }
+  std::vector<int64> origShape = parseOnnxInputSizes(n, 0);
 
   if (!n.hasAttribute(kaxes)) {  // TODO ENFORCE
     std::cerr << "Missing Required Attribute" << std::endl;

@@ -163,7 +163,7 @@ onnxStatus XlaExecutor::initIO(uint32_t inputsCount,
 onnxStatus XlaExecutor::executeComputation(const onnxMemoryFence* inputFence,
                                            onnxMemoryFence* outputFence) {
   std::vector<GlobalData*> arguments;
-  auto waitStatus = onnxWaitEvent(*inputFence->event);
+  auto waitStatus = onnxWaitEvent(inputFence->event);
   if (waitStatus != ONNXIFI_STATUS_SUCCESS) {
     return waitStatus;
   }
@@ -189,7 +189,7 @@ onnxStatus XlaExecutor::executeComputation(const onnxMemoryFence* inputFence,
     }
     SWITCH(io_data_type_[output_names_[i]])
   }
-  return onnxSignalEvent(*outputFence->event);
+  return onnxSignalEvent(outputFence->event);
 #undef OPERATION
 }
 

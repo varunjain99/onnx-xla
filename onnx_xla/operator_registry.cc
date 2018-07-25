@@ -53,12 +53,11 @@ XlaComputation OperatorRegistry::max(PrimitiveType dataType) {
 
 std::vector<int64> OperatorRegistry::parseOnnxInputSizes(const Node& n,
                                                          size_t inputIndex) {
-  std::vector<int64> shapeInts;
-  const auto& shapeDims = n.inputs().at(inputIndex)->sizes();
-  if (shapeDims.size() == 0) {  // TODO: Enforce
+  if (!n.inputs().at(inputIndex)->has_sizes()) {  // TODO: Enforce
     throw std::runtime_error("Missing shape");
   }
-
+  std::vector<int64> shapeInts;
+  const auto& shapeDims = n.inputs().at(inputIndex)->sizes();
   for (const auto& dimension : shapeDims) {
     if (!dimension.is_int) {  // TODO: Enforce
       throw std::runtime_error("Invalid dimension");

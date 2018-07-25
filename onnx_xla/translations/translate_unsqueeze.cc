@@ -6,7 +6,7 @@ onnxStatus translateUnsqueeze(const Node& n,
                               XlaBuilder& builder,
                               ValueOpMap& valueToOp) {
   // Set origShape and axes
-  std::vector<int64> origShape = parseOnnxInputSizes(n, 0);
+  std::vector<int64> origShape = OperatorRegistry::parseOnnxInputSizes(n, 0);
 
   if (!n.hasAttribute(kaxes)) {  // TODO ENFORCE
     std::cerr << "Missing Required Attribute" << std::endl;

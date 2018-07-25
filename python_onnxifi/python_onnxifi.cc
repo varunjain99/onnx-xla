@@ -245,44 +245,38 @@ struct BackendRep {
     }
   }
 
-  // TODO: Change usage of memoryFence (onnxEvent instead of onnxEvent*) when
-  // submodule pulled
   // Runs graph given input list, returning output list
   py::list run(py::list inputs, py::kwargs kwargs) {
     onnxMemoryFence inputFence;
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
-    onnxEvent inputEvent;
     conversion_.setInputs(inputs);
-    if (onnxInitEvent(backend_, &inputEvent) != ONNXIFI_STATUS_SUCCESS) {
+    if (onnxInitEvent(backend_, &inputFence.event) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error(
           "Internal Error: Event for input memory fence could not be "
           "initialized (expected ONNXIFI_STATUS_SUCCESS)");
     }
-    if (onnxSignalEvent(inputEvent) != ONNXIFI_STATUS_SUCCESS) {
+    if (onnxSignalEvent(inputFence.event) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error(
           "Internal Error: Event for input memory fence could not be signalled "
           "(expected ONNXIFI_STATUS_SUCCESS)");
     }
-    inputFence.event = &inputEvent;
     onnxMemoryFence outputFence;
     outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
-    onnxEvent outputEvent;
-    outputFence.event = &outputEvent;
     if (onnxRunGraph(graph_, &inputFence, &outputFence) !=
         ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error("Graph failed to run successfully");
     }
-    if (onnxWaitEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS) {
+    if (onnxWaitEvent(outputFence.event) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error(
           "Internal Error: Error waiting for output event (expected "
           "ONNXIFI_STATUS_SUCCESS)");
     }
-    if (onnxReleaseEvent(inputEvent) != ONNXIFI_STATUS_SUCCESS) {
+    if (onnxReleaseEvent(inputFence.event) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error(
           "Internal Error: Error releasing input event (expected "
           "ONNXIFI_STATUS_SUCCESS)");
     }
-    if (onnxReleaseEvent(outputEvent) != ONNXIFI_STATUS_SUCCESS) {
+    if (onnxReleaseEvent(outputFence.event) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error(
           "Internal Error: Error releasing output event (expected "
           "ONNXIFI_STATUS_SUCCESS)");

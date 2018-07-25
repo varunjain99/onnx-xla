@@ -61,6 +61,11 @@ class OperatorRegistry final {
   static XlaComputation max(PrimitiveType dataType);
   static XlaComputation add(PrimitiveType dataType);
 
+  // Converts input sizes vector of Dimension into vector of int64
+  // Throws if not possible (missing shape dimensions)
+  static std::vector<int64> parseOnnxInputSizes(const Node& n,
+                                                size_t inputIndex);
+
   // Given two XlaOps, returns a broadcast dimensions vector required by the
   // XlaBuilder to perform elementary binary operations that support
   // multidirectional broadcasting

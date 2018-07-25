@@ -10,37 +10,26 @@ namespace onnx_xla {
 onnxStatus translateSoftmax(const Node& n,
                             XlaBuilder& builder,
                             ValueOpMap& valueToOp) {
-  const Value* valueInput = n.inputs().at(0);
-  auto inputOp = valueToOp.at(valueInput);
-  auto dataType = onnxToPrimitive(valueInput->elemType());
+  auto inputOp = valueToOp.at(n.inputs().at(0));
+  auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
 
   // Set axis value, defaulting to 1
   int64_t axis = 1;
   if (n.hasAttribute(kaxis)) {
     axis = n.i(kaxis);
   }
-  if (axis < 0 || axis > valueInput->sizes().size()) {  // TODO: ENFORCE
+  if (axis < 0 || axis > n.inputs().at(0)->sizes().size()) {  // TODO: ENFORCE
     std::cerr << "Invalid axis attribute" << std::endl;
     return ONNXIFI_STATUS_INVALID_MODEL;
   }
 
   // Set windowDimensions, which corresponds to a single batch
-  if (valueInput->sizes().size() == 0) {  // TODO: ENFORCE
-    std::cerr << "Invalid shape" << std::endl;
-    return ONNXIFI_STATUS_INVALID_MODEL;
-  }
-  std::vector<int64> windowDimensions;
-  for (const auto& dimension : valueInput->sizes()) {
-    if (!dimension.is_int) {  // TODO: ENFORCE
-      std::cerr << "Invalid input shape dimension" << std::endl;
-      return ONNXIFI_STATUS_INVALID_MODEL;
-    }
-    windowDimensions.emplace_back(dimension.dim);
-  }
+  std::vector<int64> windowDimensions =
+      OperatorRegistry::parseOnnxInputSizes(n, 0);
   std::fill(windowDimensions.begin(), windowDimensions.begin() + axis, 1);
 
   // windowStrides is all 1's
-  std::vector<int64> windowStrides(valueInput->sizes().size(), 1);
+  std::vector<int64> windowStrides(windowDimensions.size(), 1);
 
   // Compute max of each batch
   auto maxOp = builder.ReduceWindow(

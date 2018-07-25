@@ -58,12 +58,6 @@ class OperatorRegistry final {
   // Returns reference to static singleton registry
   static OperatorRegistry& registry();
 
-  // Utility function to help translations
-  // Converts input sizes vector of Dimension into vector of int64_t
-  // Throws if not possible
-  static std::vector<int64_t> parseOnnxInputSizes(const Node& n,
-                                                  size_t inputIndex);
-
   // Utilities to help with operator translation
   static XlaComputation max(PrimitiveType dataType);
   static XlaComputation add(PrimitiveType dataType);

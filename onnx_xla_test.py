@@ -31,6 +31,8 @@ backend_test.include(r'(test_relu'  # Test relu.
                      '|test_dropout' # Test Dropout
                      ')')
 
+backend_test.exclude(r'(test_maxpool_with_argmax' # MaxPool with indices not yet supported
+                     ')')
 
 # import all test cases at global scope to make them visible to python.unittest
 globals().update(backend_test

@@ -35,24 +35,6 @@ TranslationMap& OperatorRegistry::map() {
   return map;
 }
 
-std::vector<int64_t> OperatorRegistry::parseOnnxInputSizes(const Node& n,
-                                                           size_t inputIndex) {
-  std::vector<int64_t> shapeInts;
-  const auto& shapeDims = n.inputs().at(inputIndex)->sizes();
-  if (shapeDims.size() == 0) {
-    throw std::runtime_error("Missing shape");
-  }
-
-  for (const auto& dimension : shapeDims) {
-    if (!dimension.is_int) {
-      throw std::runtime_error("Invalid dimension");
-    }
-    shapeInts.emplace_back(dimension.dim);
-  }
-
-  return shapeInts;
-}
-
 XlaComputation OperatorRegistry::add(PrimitiveType dataType) {
   XlaBuilder builder("add");
   auto y = builder.Parameter(0, ShapeUtil::MakeShape(dataType, {}), "y");

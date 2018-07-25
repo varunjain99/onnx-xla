@@ -51,6 +51,22 @@ XlaComputation OperatorRegistry::max(PrimitiveType dataType) {
   return builder.Build().ConsumeValueOrDie();
 }
 
+std::vector<int64> OperatorRegistry::parseOnnxInputSizes(const Node& n,
+                                                         size_t inputIndex) {
+  if (!n.inputs().at(inputIndex)->has_sizes()) {  // TODO: Enforce
+    throw std::runtime_error("Missing shape");
+  }
+  std::vector<int64> shapeInts;
+  const auto& shapeDims = n.inputs().at(inputIndex)->sizes();
+  for (const auto& dimension : shapeDims) {
+    if (!dimension.is_int) {  // TODO: Enforce
+      throw std::runtime_error("Invalid dimension");
+    }
+    shapeInts.emplace_back(dimension.dim);
+  }
+  return shapeInts;
+}
+
 std::vector<int64> OperatorRegistry::getMultidirectionalBroadcastArg(
     const XlaBuilder& builder,
     const XlaOp& firstOp,

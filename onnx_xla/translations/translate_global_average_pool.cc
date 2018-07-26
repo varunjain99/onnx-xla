@@ -10,19 +10,15 @@ onnxStatus translateGlobalAveragePool(const Node& n,
   // Set dataType
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
 
-  // TODO: Use static function from Pooling PR to set window
-  std::vector<int64> windowDimensions;
-  for (const auto& dimension : n.inputs().at(0)->sizes()) {
-    if (!dimension.is_int) {  // TODO: Enforce
-      std::cerr << "Missing dimension" << std::endl;
-      return ONNXIFI_STATUS_INVALID_MODEL;
-    }
-    windowDimensions.emplace_back(dimension.dim);
-  }
+  // Set 1 window per channel
+  std::vector<int64> windowDimensions = OperatorRegistry::parseOnnxInputSizes(n, 0);
   windowDimensions.at(1) = 1;
 
+  // Set strides
   std::vector<int64> windowStrides(windowDimensions.size(), 1);
 
+
+  // Execute pooling and division
   auto PoolOp =
       builder.ReduceWindow(valueToOp.at(n.inputs().at(0)),
                            builder.ConstantLiteral(Literal::Zero(dataType)),

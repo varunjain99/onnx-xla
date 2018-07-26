@@ -53,12 +53,12 @@ void static_relu_test() {
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto inputEvent = new EventControl();
   inputEvent->signalled_ = true;
-  inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+  inputFence.event = reinterpret_cast<onnxEvent>(inputEvent);
   onnxMemoryFence outputFence;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto outputEvent = new EventControl();
   outputEvent->signalled_ = false;
-  outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+  outputFence.event = reinterpret_cast<onnxEvent>(outputEvent);
 
   // Execute using XLA backend
   XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);
@@ -128,12 +128,12 @@ void dynamic_relu_test() {
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto inputEvent = new EventControl();
   inputEvent->signalled_ = true;
-  inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+  inputFence.event = reinterpret_cast<onnxEvent>(inputEvent);
   onnxMemoryFence outputFence;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto outputEvent = new EventControl();
   outputEvent->signalled_ = false;
-  outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+  outputFence.event = reinterpret_cast<onnxEvent>(outputEvent);
 
   // Execute using XLA backend
   XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);

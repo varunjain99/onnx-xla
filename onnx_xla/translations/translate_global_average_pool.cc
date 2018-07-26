@@ -11,12 +11,12 @@ onnxStatus translateGlobalAveragePool(const Node& n,
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
 
   // Set 1 window per channel
-  std::vector<int64> windowDimensions = OperatorRegistry::parseOnnxInputSizes(n, 0);
+  std::vector<int64> windowDimensions =
+      OperatorRegistry::parseOnnxInputSizes(n, 0);
   windowDimensions.at(1) = 1;
 
   // Set strides
   std::vector<int64> windowStrides(windowDimensions.size(), 1);
-
 
   // Execute pooling and division
   auto PoolOp =

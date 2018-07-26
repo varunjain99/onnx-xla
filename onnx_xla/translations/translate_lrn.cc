@@ -9,7 +9,7 @@ onnxStatus translateLRN(const Node& n,
                         ValueOpMap& valueToOp) {
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
   // Read in attributes and make them XlaOp
-  // TODO: Refactor this conversion
+  // TODO: Read default from schema
   float alpha = 1e-4f;
   if (n.hasAttribute(kalpha)) {
     alpha = n.f(kalpha);
@@ -42,25 +42,16 @@ onnxStatus translateLRN(const Node& n,
 
   // Pool with add, making the required attributes
   // Note: kSame pads 1 more in the higher values of a dimension when the
-  // padding
-  // required is odd (which corresponds to ONNX LRN operator definition)
-  // TODO: Use OperatoryRegistry function from Softmax PR
-  XlaComputation add;
-  {
-    XlaBuilder builder("add");
-    auto y = builder.Parameter(0, ShapeUtil::MakeShape(dataType, {}), "y");
-    auto x = builder.Parameter(1, ShapeUtil::MakeShape(dataType, {}), "x");
-    builder.Add(y, x);
-    add = builder.Build().ConsumeValueOrDie();
-  }
+  // padding is odd (which corresponds to ONNX LRN operator definition)
 
   std::vector<int64> windowDimensions(n.inputs().at(0)->sizes().size(), 1);
   windowDimensions.at(1) = size;
   std::vector<int64> windowStrides(windowDimensions.size(), 1);
 
   auto sumSquaresOp = builder.ReduceWindow(
-      squaredOp, builder.ConstantLiteral(Literal::Zero(dataType)), add,
-      windowDimensions, windowStrides, Padding::kSame);
+      squaredOp, builder.ConstantLiteral(Literal::Zero(dataType)),
+      OperatorRegistry::add(dataType), windowDimensions, windowStrides,
+      Padding::kSame);
 
   // Do final arithmetic
   valueToOp[n.outputs().at(0)] = builder.Div(

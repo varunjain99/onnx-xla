@@ -13,6 +13,7 @@
 //(from the onnx repository) on the XLA backend. The ONNXIFI interface is used
 //to run a ModelProto on the XLA backend.
 
+using namespace ONNX_NAMESPACE;
 
 bool almost_equal(float a, float b, float epsilon = 1e-5)  {
   return std::abs(a - b) < epsilon;
@@ -73,16 +74,11 @@ int main(int argc, char** argv)  {
   //Set up I/O memory fences
   onnxMemoryFence inputFence;
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
-  onnxEvent inputEvent;
-  inputFence.event = &inputEvent;
-  if (onnxInitEvent(backend, inputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
+  if (onnxInitEvent(backend, &inputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error initializing event for input memory fence" << std::endl;
   }
-  inputFence.event = &inputEvent;
   onnxMemoryFence outputFence;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
-  onnxEvent outputEvent;
-  outputFence.event = &outputEvent;
  
  //Run the graph
   onnxGraph graph;
@@ -94,7 +90,7 @@ int main(int argc, char** argv)  {
                  outputsCount, &output) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error setting Graph IO" << std::endl;
   }
-  if (onnxSignalEvent(*inputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
+  if (onnxSignalEvent(inputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error signalling event for input memory fence" << std::endl;
   }
   if (onnxRunGraph(graph, &inputFence, &outputFence) != ONNXIFI_STATUS_SUCCESS)  {
@@ -102,7 +98,7 @@ int main(int argc, char** argv)  {
   }
 
   //Check correctness
-  if (onnxWaitEvent(*outputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
+  if (onnxWaitEvent(outputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error waiting for event for output fence" << std:: endl;
   }
 
@@ -120,10 +116,10 @@ int main(int argc, char** argv)  {
   if (onnxReleaseGraph(graph) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error releasing graph" << std::endl;
   }
-  if (onnxReleaseEvent(*inputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
+  if (onnxReleaseEvent(inputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Erro releasing event for input fence" << std::endl;
   }
-  if (onnxReleaseEvent(*outputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
+  if (onnxReleaseEvent(outputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Erro releasing event for output fence" << std::endl;
   }
   if (onnxReleaseBackend(backend) != ONNXIFI_STATUS_SUCCESS)  {

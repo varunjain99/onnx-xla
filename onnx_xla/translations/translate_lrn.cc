@@ -1,9 +1,10 @@
 #include "onnx_xla/operator_registry.h"
 
 namespace onnx_xla {
-// Translat LRN
+// Translate LRN
 // 1. Square input
-// 2. Use reduce to sum
+// 2. Use reduce to sum squares
+// 3. Do arithmetic to finish
 onnxStatus translateLRN(const Node& n,
                         XlaBuilder& builder,
                         ValueOpMap& valueToOp) {

@@ -12,7 +12,7 @@
 #include "tensorflow/compiler/xla/rpc/xla_service.grpc.pb.h"
 #include <grpcpp/grpcpp.h>
 
-#include "onnx_xla/types.h"
+#include "onnx_xla/utils.h"
 #include "onnx_xla/operator_registry.h"
 
 #include <memory>
@@ -29,13 +29,11 @@ class XlaExecutor;
 class OnnxParser;
 
 // Engine to execute an XlaComputation constructed by XlaTransform. The
-// computation_
-// is filled by the XlaTransform object. To run, call initIO to verify IO
-// metadata and to declare IO locations. Once IO data is present, execute
-// sendInputs
-// and executeComputation to run. If successful, output tensors will be present
-// at the
-// output_buffers_ pointers.
+// computation_ is filled by the XlaTransform object. To run, call initIO
+// to verify IO metadata and to declare IO locations. Once IO data is
+// present, execute executeComputation to run. If successful, output
+// tensors will be present at the output_buffers_ pointers.
+
 class XlaExecutor final {
  public:
   // Constructor initialized with backend handle
@@ -49,11 +47,10 @@ class XlaExecutor final {
 
   // Sends input tensor values to the server
   // Input fence (initialized) signals when inputs are ready
-  onnxStatus sendInputs(const onnxMemoryFence* inputFence);
-
   // Runs the computation on the server using passed input
   // outputFence (initialized) is signalled once outputs are ready
-  onnxStatus executeComputation(onnxMemoryFence* outputFence);
+  onnxStatus executeComputation(const onnxMemoryFence* inputFence,
+                                onnxMemoryFence* outputFence);
 
   // backend handle
   const onnxBackend backend_;
@@ -61,11 +58,6 @@ class XlaExecutor final {
  private:
   // computation to be run
   XlaComputation computation_;
-
-  // Input data to be passed to the server
-  // Filled in by sendInputs
-  // Used by executeComputation
-  std::vector<GlobalData*> arguments_;
 
   // Store IO metadata to
   //  Verify IO has correct shape, data type, TODO: memory type

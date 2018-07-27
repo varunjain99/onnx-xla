@@ -53,20 +53,19 @@ void static_relu_test() {
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto inputEvent = new EventControl();
   inputEvent->signalled_ = true;
-  inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+  inputFence.event = reinterpret_cast<onnxEvent>(inputEvent);
   onnxMemoryFence outputFence;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto outputEvent = new EventControl();
   outputEvent->signalled_ = false;
-  outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+  outputFence.event = reinterpret_cast<onnxEvent>(outputEvent);
 
   // Execute using XLA backend
   XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);
   runner.translateGraph();
   auto executor = runner.executor();
   executor->initIO(0, nullptr, 1, &output);
-  executor->sendInputs(&inputFence);
-  executor->executeComputation(&outputFence);
+  executor->executeComputation(&inputFence, &outputFence);
 
   // Check correctness
   ONNX_ASSERT(outputEvent->signalled_);
@@ -129,12 +128,12 @@ void dynamic_relu_test() {
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto inputEvent = new EventControl();
   inputEvent->signalled_ = true;
-  inputFence.event = reinterpret_cast<onnxEvent*>(&inputEvent);
+  inputFence.event = reinterpret_cast<onnxEvent>(inputEvent);
   onnxMemoryFence outputFence;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto outputEvent = new EventControl();
   outputEvent->signalled_ = false;
-  outputFence.event = reinterpret_cast<onnxEvent*>(&outputEvent);
+  outputFence.event = reinterpret_cast<onnxEvent>(outputEvent);
 
   // Execute using XLA backend
   XlaTransform runner(NULL, std::move(relu_graph), "relu", 0, nullptr);
@@ -148,8 +147,7 @@ void dynamic_relu_test() {
     std::mt19937 rand_engine(rand_dev());
     input_ptr[i] = unif(rand_engine);
   }
-  executor->sendInputs(&inputFence);
-  executor->executeComputation(&outputFence);
+  executor->executeComputation(&inputFence, &outputFence);
 
   // Check correctness
   ONNX_ASSERT(outputEvent->signalled_);

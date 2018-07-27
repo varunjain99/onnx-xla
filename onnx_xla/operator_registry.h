@@ -4,12 +4,14 @@
 #include "onnx/common/ir_pb_converter.h"
 #include "onnx/onnxifi.h"
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
+#include "tensorflow/compiler/tf2xla/lib/util.h"
 
-#include "onnx_xla/types.h"
+#include "onnx_xla/utils.h"
 
 #include <functional>
 #include <utility>
 #include <algorithm>
+#include <numeric>
 
 namespace onnx_xla {
 
@@ -19,8 +21,11 @@ using ::xla::Shape;
 using ::xla::primitive_util::NativeToPrimitiveType;
 using ::xla::XlaOp;
 using ::xla::XlaBuilder;
+using ::xla::XlaComputation;
 using ::xla::LiteralBase;
 using ::xla::StatusOr;
+using ::xla::Padding;
+using ::xla::PrimitiveType;
 
 using ::ONNX_NAMESPACE::Value;
 using ::ONNX_NAMESPACE::Dimension;

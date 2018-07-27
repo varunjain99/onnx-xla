@@ -9,8 +9,7 @@ from onnx import ModelProto, NodeProto
 from onnx import numpy_helper
 import numpy as np
 
-#TODO:  use python's unittest module to make these real test cases
-#       instead of this crude one
+# This is for experimental purposes
 backend = OnnxifiBackend()
 
 print("Available devices")
@@ -42,34 +41,12 @@ outputs = backendrep.run([x])
 expected_outputs = [y]
 np.testing.assert_equal(expected_outputs, outputs)
 
-# Temporary sum test case
-node = onnx.helper.make_node(
-      'Sum', ['a', 'b', 'c'], ['d'], name='sum_node')
-graph = onnx.helper.make_graph(
-    nodes=[node],
-    name='SingleSum',
-    inputs=[onnx.helper.make_tensor_value_info(
-        'a', onnx.TensorProto.INT32, [1, 2]),
-            onnx.helper.make_tensor_value_info(
-        'b', onnx.TensorProto.INT32, [1, 2]),
-            onnx.helper.make_tensor_value_info(
-        'c', onnx.TensorProto.INT32, [1, 2]),],
-    outputs=[onnx.helper.make_tensor_value_info(
-        'd', onnx.TensorProto.INT32, [1, 2])])
-model = onnx.helper.make_model(graph, producer_name='backend-test')
-onnx.checker.check_model(model)
+#Running graph again
+x = np.random.randn(1, 2).astype(np.float32)
+y = np.maximum(x, 0)
 
-assert(backend.is_compatible(model, device='CPU'))
-backendrep = backend.prepare(model, device='CPU')
-
-a = np.random.randn(1, 2).astype(np.int32)
-b = np.random.randn(1, 2).astype(np.int32)
-c = np.random.randn(1, 2).astype(np.int32)
-d = np.sum([a,b,c,], axis = 0)
-
-outputs = backendrep.run([a,b,c])
-expected_outputs = [d]
-
+outputs = backendrep.run([x])
+expected_outputs = [y]
 np.testing.assert_equal(expected_outputs, outputs)
 
 # test reshape

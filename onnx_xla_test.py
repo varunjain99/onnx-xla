@@ -19,6 +19,7 @@ backend_test.include(r'(test_relu'  # Test relu.
                      '|test_gemm' # Test Gemm
                      '|test_concat' # Test Concat
                      '|test_unsqueeze' # Test Unsqueeze
+                     '|test_lrn' # Test LRN
                      '|test_add' # Test Add
                      '|test_sub' # Test Sub
                      '|test_div' # Test Div

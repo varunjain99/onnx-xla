@@ -10,20 +10,21 @@ onnxStatus translateGlobalAveragePool(const Node& n,
   // Set dataType
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
 
-  // Set 1 window per channel
-  std::vector<int64> windowDimensions =
-      OperatorRegistry::parseOnnxInputSizes(n, 0);
-  windowDimensions.at(1) = 1;
+  // Set 1 window per batch and channel
+  std::vector<int64_t> windowSizes = parseOnnxInputSizes(n, 0);
+  std::vector<int64> windowDimensions;
+  windowDimensions.insert(windowDimensions.end(), 2, 1);
+  windowDimensions.insert(windowDimensions.end(), windowSizes.begin() + 2,
+                          windowSizes.end());
 
   // Set strides
   std::vector<int64> windowStrides(windowDimensions.size(), 1);
 
   // Execute pooling and division
-  auto PoolOp =
-      builder.ReduceWindow(valueToOp.at(n.inputs().at(0)),
-                           builder.ConstantLiteral(Literal::Zero(dataType)),
-                           OperatorRegistry::add(dataType), windowDimensions,
-                           windowStrides, Padding::kValid);
+  auto PoolOp = builder.ReduceWindow(
+      valueToOp.at(n.inputs().at(0)),
+      builder.ConstantLiteral(Literal::Zero(dataType)), add(dataType),
+      windowDimensions, windowStrides, Padding::kValid);
 
   auto numWindowElements =
       std::accumulate(windowDimensions.begin(), windowDimensions.end(), 1L,

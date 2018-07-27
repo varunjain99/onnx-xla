@@ -7,7 +7,8 @@ namespace onnx_xla {
 // 3. Do arithmetic to finish
 onnxStatus translateLRN(const Node& n,
                         XlaBuilder& builder,
-                        ValueOpMap& valueToOp) {
+                        ValueOpMap& valueToOp,
+                        const ValueLiteralMap& valueToLiteral) {
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
   // Read in attributes and make them XlaOp
   // TODO: Read default from schema

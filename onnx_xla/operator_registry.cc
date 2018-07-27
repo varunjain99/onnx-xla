@@ -14,11 +14,12 @@ OperatorRegistry::OperatorRegisterOnce::OperatorRegisterOnce(
 
 onnxStatus OperatorRegistry::translate(const Node& n,
                                        XlaBuilder& builder,
-                                       ValueOpMap& valueToOp) {
+                                       ValueOpMap& valueToOp,
+                                       const ValueLiteralMap& valueToLiteral) {
   auto& map = OperatorRegistry::map();
   auto it = map.find(n.kind());
   if (it != map.end()) {
-    return it->second(n, builder, valueToOp);
+    return it->second(n, builder, valueToOp, valueToLiteral);
   } else {
     std::cerr << "Operator translator not found" << std::endl;
     return ONNXIFI_STATUS_UNSUPPORTED_OPERATOR;

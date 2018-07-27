@@ -10,7 +10,8 @@ namespace onnx_xla {
 // 5) Add with unidirectional broadcasting
 onnxStatus translateGemm(const Node& n,
                          XlaBuilder& builder,
-                         ValueOpMap& valueToOp) {
+                         ValueOpMap& valueToOp,
+                         const ValueLiteralMap& valueToLiteral) {
   // Type checks
   auto onnxType = n.inputs().at(0)->elemType();
   if (onnxType != n.inputs().at(1)->elemType() ||

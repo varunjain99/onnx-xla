@@ -9,7 +9,8 @@ namespace onnx_xla {
 // TODO: Use and ENFORCE macro for checks
 onnxStatus translateSoftmax(const Node& n,
                             XlaBuilder& builder,
-                            ValueOpMap& valueToOp) {
+                            ValueOpMap& valueToOp,
+                            const ValueLiteralMap& valueToLiteral) {
   auto inputOp = valueToOp.at(n.inputs().at(0));
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
 

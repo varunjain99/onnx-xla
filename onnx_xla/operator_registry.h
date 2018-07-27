@@ -32,9 +32,11 @@ using ::ONNX_NAMESPACE::Dimension;
 using ::ONNX_NAMESPACE::Symbol;
 using ::ONNX_NAMESPACE::Node;
 
+using ValueLiteralMap =
+    std::unordered_map<const Value*, std::unique_ptr<Literal>>;
 using ValueOpMap = std::unordered_map<const Value*, XlaOp>;
-using TranslationFunction =
-    std::function<onnxStatus(const Node&, XlaBuilder&, ValueOpMap&)>;
+using TranslationFunction = std::function<
+    onnxStatus(const Node&, XlaBuilder&, ValueOpMap&, const ValueLiteralMap&)>;
 using TranslationMap = std::unordered_map<Symbol, TranslationFunction>;
 
 // Class for registry of ONNX operators with corresponding translation functions
@@ -53,7 +55,8 @@ class OperatorRegistry final {
   // Out: Expect valueToOp to be assigned for every node output
   onnxStatus translate(const Node& n,
                        XlaBuilder& builder,
-                       ValueOpMap& valueToOp);
+                       ValueOpMap& valueToOp,
+                       const ValueLiteralMap& valueToLiteral);
   // Returns reference to static singleton registry
   static OperatorRegistry& registry();
 

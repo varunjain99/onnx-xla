@@ -4,7 +4,8 @@ namespace onnx_xla {
 // Compute relu by taking max between the input and constant zero literal
 onnxStatus translateRelu(const Node& n,
                          XlaBuilder& builder,
-                         ValueOpMap& valueToOp) {
+                         ValueOpMap& valueToOp,
+                         const ValueLiteralMap& valueToLiteral) {
   auto input = valueToOp[n.inputs().at(0)];
   auto shape = builder.GetShape(input);
   if (!shape.ok()) {

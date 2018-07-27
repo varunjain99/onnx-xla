@@ -4,7 +4,8 @@ namespace onnx_xla {
 // Translate Transpose
 onnxStatus translateTranspose(const Node& n,
                               XlaBuilder& builder,
-                              ValueOpMap& valueToOp) {
+                              ValueOpMap& valueToOp,
+                              const ValueLiteralMap& valueToLiteral) {
   // Build permutation
   std::vector<int64> permutation;
   if (n.hasAttribute(kperm)) {

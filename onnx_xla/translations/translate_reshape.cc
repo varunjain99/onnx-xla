@@ -18,20 +18,10 @@ onnxStatus translateReshape(const Node& n,
     return ONNXIFI_STATUS_UNSUPPORTED_VERSION;
   }
   // Compute # of elements in input data tensor (check validity of shapes)
-  const std::vector<Dimension>& originalShape = n.inputs().at(0)->sizes();
-  if (originalShape.size() == 0) {
-    std::cerr << "Missing input shape" << std::endl;
-    return ONNXIFI_STATUS_UNSUPPORTED_SHAPE;
-  }
-  int64_t numElements = 1;
-  for (const auto& dimension : originalShape) {
-    if (!dimension.is_int) {
-      std::cerr << "Reshape operator input data shape is not known"
-                << std::endl;
-      return ONNXIFI_STATUS_UNSUPPORTED_SHAPE;
-    }
-    numElements *= dimension.dim;
-  }
+  const std::vector<int64_t> originalShape = parseOnnxInputSizes(n, 0);
+  int64_t numElements =
+      std::accumulate(originalShape.begin(), originalShape.end(), 1L,
+                      std::multiplies<int64_t>());
 
   // Use static ONNX target shape data (from the constant literal constructed)
   // to build XLA target shape data and compute xlaProduct (product of shape
@@ -52,7 +42,7 @@ onnxStatus translateReshape(const Node& n,
       negativeOneIndex = i;
       xlaOperatorTargetShape.emplace_back(-1);
     } else if (dim == 0) {
-      xlaOperatorTargetShape.emplace_back(originalShape[i].dim);
+      xlaOperatorTargetShape.emplace_back(originalShape[i]);
     } else if (dim > 1) {
       xlaOperatorTargetShape.emplace_back(dim);
     } else {  // TODO: Enforce

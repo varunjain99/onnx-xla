@@ -5,9 +5,9 @@ source "${script_path%/*}/setup.sh"
 
 pip install protobuf numpy
 # Install onnx
-cd third_party/onnx
-python setup.py install 
-cd -
+#cd third_party/onnx
+#python setup.py install 
+#cd -
 # Install onnx-xla
-python setup.py install 
+#python setup.py install 
 

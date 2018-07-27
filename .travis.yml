@@ -30,6 +30,9 @@ after_failure:
 cache:
   - timeout: 300
   - directories:
+    - home/travis/build/varunjain99/onnx-xla/third_party/tensorflow/bazel-genfiles/
+    - home/travis/build/varunjain99/onnx-xla/third_party/tensorflow/bazel-tensorflow/
+    - home/travis/build/varunjain99/onnx-xla/third_party/tensorflow/bazel-bin/
     - $BUILD_CCACHE_DIR
     - $HOME/.ccache
     - $HOME/.cache/pb

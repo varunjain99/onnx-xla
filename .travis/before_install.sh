@@ -9,21 +9,21 @@ fi
 echo Using $NUMCORES cores
 
 # Install dependencies
-sudo apt-get update
-APT_INSTALL_CMD='sudo apt-get install -y --no-install-recommends'
-$APT_INSTALL_CMD dos2unix
+#sudo apt-get update
+#APT_INSTALL_CMD='sudo apt-get install -y --no-install-recommends'
+#$APT_INSTALL_CMD dos2unix
 
-function install_protobuf() {
-    # Install protobuf
-    local pb_dir="$HOME/.cache/pb"
-    mkdir -p "$pb_dir"
-    wget -qO- "https://github.com/google/protobuf/releases/download/v${PB_VERSION}/protobuf-${PB_VERSION}.tar.gz" | tar -xz -C "$pb_dir" --strip-components 1
-    ccache -z
-    cd "$pb_dir" && ./configure && make -j${NUMCORES} && make check && sudo make install && sudo ldconfig && cd -
-    ccache -s
-}
+#function install_protobuf() {
+#    # Install protobuf
+#    local pb_dir="$HOME/.cache/pb"
+#    mkdir -p "$pb_dir"
+#    wget -qO- "https://github.com/google/protobuf/releases/download/v${PB_VERSION}/protobuf-${PB_VERSION}.tar.gz" | tar -xz -C "$pb_dir" --strip-components 1
+#    ccache -z
+#    cd "$pb_dir" && ./configure && make -j${NUMCORES} && make check && sudo make install && sudo ldconfig && cd -
+#    ccache -s
+#}
 
-install_protobuf
+#install_protobuf
 
 sudo add-apt-repository -y ppa:openjdk-r/ppa
 sudo apt-get update && sudo apt-get -y install openjdk-8-jdk

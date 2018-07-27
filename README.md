@@ -18,6 +18,7 @@ TODO:
 
 8. Add weight descriptor support to the python interface to ONNXIFI
 
+9. Benchmark two version of LRN(materializing square and not)
 
 Steps to test:
 

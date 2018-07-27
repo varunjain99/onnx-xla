@@ -7,5 +7,5 @@ pip install protobuf numpy
 cd third_party/onnx
 time CMAKE_ARGS="-DONNX_WERROR=ON" ONNX_NAMESPACE=ONNX_NAMESPACE_FOO_BAR_FOR_CI python setup.py install 
 cd -
-python setup.py install 
+time ONNX_NAMESPACE=ONNX_NAMESPACE_FOO_BAR_FOR_CI_XLA python setup.py install 
 

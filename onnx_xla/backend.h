@@ -12,7 +12,7 @@
 #include "tensorflow/compiler/xla/rpc/xla_service.grpc.pb.h"
 #include <grpcpp/grpcpp.h>
 
-#include "onnx_xla/types.h"
+#include "onnx_xla/utils.h"
 #include "onnx_xla/operator_registry.h"
 
 #include <memory>

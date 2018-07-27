@@ -12,7 +12,7 @@
 #include "tensorflow/compiler/xla/rpc/xla_service.grpc.pb.h"
 #include <grpcpp/grpcpp.h>
 
-#include "onnx_xla/types.h"
+#include "onnx_xla/utils.h"
 #include "onnx_xla/operator_registry.h"
 
 #include <memory>
@@ -138,6 +138,9 @@ class XlaTransform final {
   // Used to keep track of values and XlaOp's
   // whose output corresponds to them
   ValueOpMap value_to_op_;
+
+  // Keep track of constant literals
+  ValueLiteralMap value_to_literal_;
 
   // Keeps track of number of parameters in computation
   //  TODO: Make local? Only used by one function

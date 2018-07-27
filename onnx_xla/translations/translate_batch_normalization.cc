@@ -6,7 +6,8 @@ namespace onnx_xla {
 // Use BatchNormInference with input XlaOps, epsilon, and feature dimension(1)
 onnxStatus translateBatchNormalization(const Node& n,
                                        XlaBuilder& builder,
-                                       ValueOpMap& valueToOp) {
+                                       ValueOpMap& valueToOp,
+                                       const ValueLiteralMap& valueToLiteral) {
   // If requires output of train mode, throw
   for (auto i = 1; i < n.outputs().size(); ++i) {
     if (n.outputs()[i]->uses().size() > 0) {

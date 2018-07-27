@@ -6,7 +6,7 @@
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
 #include "tensorflow/compiler/tf2xla/lib/util.h"
 
-#include "onnx_xla/types.h"
+#include "onnx_xla/utils.h"
 
 #include <functional>
 #include <utility>
@@ -33,9 +33,11 @@ using ::ONNX_NAMESPACE::Dimension;
 using ::ONNX_NAMESPACE::Symbol;
 using ::ONNX_NAMESPACE::Node;
 
+using ValueLiteralMap =
+    std::unordered_map<const Value*, std::unique_ptr<Literal>>;
 using ValueOpMap = std::unordered_map<const Value*, XlaOp>;
-using TranslationFunction =
-    std::function<onnxStatus(const Node&, XlaBuilder&, ValueOpMap&)>;
+using TranslationFunction = std::function<
+    onnxStatus(const Node&, XlaBuilder&, ValueOpMap&, const ValueLiteralMap&)>;
 using TranslationMap = std::unordered_map<Symbol, TranslationFunction>;
 
 // Class for registry of ONNX operators with corresponding translation functions
@@ -54,26 +56,10 @@ class OperatorRegistry final {
   // Out: Expect valueToOp to be assigned for every node output
   onnxStatus translate(const Node& n,
                        XlaBuilder& builder,
-                       ValueOpMap& valueToOp);
+                       ValueOpMap& valueToOp,
+                       const ValueLiteralMap& valueToLiteral);
   // Returns reference to static singleton registry
   static OperatorRegistry& registry();
-
-  // Utilities to help with operator translation
-  static XlaComputation max(PrimitiveType dataType);
-  static XlaComputation add(PrimitiveType dataType);
-
-  // Converts input sizes vector of Dimension into vector of int64
-  // Throws if not possible (missing shape dimensions)
-  static std::vector<int64> parseOnnxInputSizes(const Node& n,
-                                                size_t inputIndex);
-
-  // Given two XlaOps, returns a broadcast dimensions vector required by the
-  // XlaBuilder to perform elementary binary operations that support
-  // multidirectional broadcasting
-  static std::vector<int64> getMultidirectionalBroadcastArg(
-      const XlaBuilder& builder,
-      const XlaOp& firstOp,
-      const XlaOp& secondOp);
 
  private:
   // Singleton instance should only be made in the class

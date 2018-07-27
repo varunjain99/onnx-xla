@@ -4,8 +4,10 @@ script_path=$(python -c "import os; import sys; print(os.path.realpath(sys.argv[
 source "${script_path%/*}/setup.sh"
 
 pip install protobuf numpy
+# Install onnx
 cd third_party/onnx
-time CMAKE_ARGS="-DONNX_WERROR=ON" ONNX_NAMESPACE=ONNX_NAMESPACE_FOO_BAR_FOR_CI python setup.py install 
+python setup.py install 
 cd -
-time ONNX_NAMESPACE=ONNX_NAMESPACE_FOO_BAR_FOR_CI_XLA python setup.py install 
+# Install onnx-xla
+python setup.py install 
 

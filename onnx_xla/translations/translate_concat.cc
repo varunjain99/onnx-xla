@@ -4,7 +4,8 @@ namespace onnx_xla {
 // Translate Concat Operator
 onnxStatus translateConcat(const Node& n,
                            XlaBuilder& builder,
-                           ValueOpMap& valueToOp) {
+                           ValueOpMap& valueToOp,
+                           const ValueLiteralMap& valueToLiteral) {
   if (!n.hasAttribute(kaxis)) {  // TODO: ENFORCE
     std::cerr << "Missing required axis attribute" << std::endl;
     return ONNXIFI_STATUS_INVALID_MODEL;

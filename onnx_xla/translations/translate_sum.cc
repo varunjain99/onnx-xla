@@ -9,7 +9,8 @@ namespace onnx_xla {
 // 2) Otherwise, use numpy matching of trailing dimensions
 onnxStatus translateSum(const Node& n,
                         XlaBuilder& builder,
-                        ValueOpMap& valueToOp) {
+                        ValueOpMap& valueToOp,
+                        const ValueLiteralMap& valueToLiteral) {
   auto firstOp = valueToOp.at(n.inputs().at(0));
   for (auto i = 1; i < n.inputs().size(); ++i) {
     auto secondOp = valueToOp.at(n.inputs().at(i));

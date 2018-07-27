@@ -79,14 +79,14 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/onnx)
 
 # xla library
 SET(XLA_INCLUDE_DIRS
-  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-tensorflow"
-  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-genfiles"
-  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-tensorflow/external/protobuf_archive/src"
-  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-tensorflow/external/eigen_archive")
+  "${PROJECT_SOURCE_DIR}/third_party/tensorflow/bazel-tensorflow"
+  "${PROJECT_SOURCE_DIR}/third_party/tensorflow/bazel-genfiles"
+  "${PROJECT_SOURCE_DIR}/third_party/tensorflow/bazel-tensorflow/external/protobuf_archive/src"
+  "${PROJECT_SOURCE_DIR}/third_party/tensorflow/bazel-tensorflow/external/eigen_archive")
 SET(XLA_LIBRARIES
-  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-bin/tensorflow/compiler/tf2xla/lib/libutil.so"
-  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-bin/tensorflow/compiler/xla/rpc/libxla_computation_client.so"
-  "${PROJECT_SOURCE_DIR}/third_party/pytorch/third_party/tensorflow/bazel-bin/tensorflow/libtensorflow_framework.so")
+  "${PROJECT_SOURCE_DIR}/third_party/tensorflow/bazel-bin/tensorflow/compiler/tf2xla/lib/libutil.so"
+  "${PROJECT_SOURCE_DIR}/third_party/tensorflow/bazel-bin/tensorflow/compiler/xla/rpc/libxla_computation_client.so"
+  "${PROJECT_SOURCE_DIR}/third_party/tensorflow/bazel-bin/tensorflow/libtensorflow_framework.so")
 add_custom_command(
   OUTPUT ${XLA_LIBRARIES}
   COMMAND ${PROJECT_SOURCE_DIR}/scripts/build_xla.sh)

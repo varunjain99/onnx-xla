@@ -4,7 +4,8 @@ namespace onnx_xla {
 // Translate Unsqueeze by using XLA's Reshape
 onnxStatus translateUnsqueeze(const Node& n,
                               XlaBuilder& builder,
-                              ValueOpMap& valueToOp) {
+                              ValueOpMap& valueToOp,
+                              const ValueLiteralMap& valueToLiteral) {
   // Set origShape and axes
   std::vector<int64_t> origShape = parseOnnxInputSizes(n, 0);
 

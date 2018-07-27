@@ -5,7 +5,8 @@ namespace onnx_xla {
 
 onnxStatus translateConv(const Node& n,
                          XlaBuilder& builder,
-                         ValueOpMap& valueToOp) {
+                         ValueOpMap& valueToOp,
+                         const ValueLiteralMap& valueToLiteral) {
   // Create ConvPoolHelper object (constructs attributes formatted for
   // XlaBuilder)
   ConvPoolHelper helper(n);

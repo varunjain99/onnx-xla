@@ -36,7 +36,7 @@ ConvPoolHelper::ConvPoolHelper(const Node& n) {
     } else {
       // If not VALID, then SAME_UPPER or SAME_LOWER
       // Translate input sizes into int64 vector
-      const auto inputSizes = OperatorRegistry::parseOnnxInputSizes(n, 0);
+      const std::vector<int64_t> inputSizes = parseOnnxInputSizes(n, 0);
 
       // Set iterators to beginning of spatial dimensions
       auto dimensionsIt = windowDimensions.cend() - numSpatialAxes;
@@ -45,7 +45,7 @@ ConvPoolHelper::ConvPoolHelper(const Node& n) {
       auto sizesIt = inputSizes.cend() - numSpatialAxes;
 
       // Compute axisPadding using formula in docs for SAME_UPPER and SAME_LOWER
-      std::vector<int64> axisPadding;
+      std::vector<int64_t> axisPadding;
       for (auto i = 0; i < numSpatialAxes; ++i) {
         auto outputShape = (*sizesIt + *stridesIt - 1) / *stridesIt;
         axisPadding.emplace_back((outputShape - 1) * *stridesIt +
@@ -95,7 +95,7 @@ void ConvPoolHelper::appendVecFromSimpleAttr(const Symbol& attr,
                                              std::vector<int64>& vec) {
   if (!n.hasAttribute(attr)) {
     if (attr == kkernel_shape && n.kind() == kConv) {
-      const auto kernelDims = OperatorRegistry::parseOnnxInputSizes(n, 1);
+      const std::vector<int64_t> kernelDims = parseOnnxInputSizes(n, 1);
       if (kernelDims.size() != numSpatialAxes) {
         throw std::runtime_error("Valid kernel shape could not be inferred");
       }

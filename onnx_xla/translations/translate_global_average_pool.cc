@@ -6,7 +6,8 @@ namespace onnx_xla {
 // 2. Divide by size of window
 onnxStatus translateGlobalAveragePool(const Node& n,
                                       XlaBuilder& builder,
-                                      ValueOpMap& valueToOp) {
+                                      ValueOpMap& valueToOp,
+                                      const ValueLiteralMap& valueToLiteral) {
   // Set dataType
   auto dataType = onnxToPrimitive(n.inputs().at(0)->elemType());
 

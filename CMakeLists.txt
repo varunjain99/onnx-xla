@@ -12,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -ggdb")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb")
 
+if (FALSE)
 if(TARGET protobuf::libprotobuf)
   # Sometimes we need to use protoc compiled for host architecture while
   # linking libprotobuf against target architecture. See
@@ -61,6 +62,7 @@ else()
       NO_DEFAULT_PATH)
     find_package(Protobuf REQUIRED)
   endif()
+endif()
 endif()
 
 include_directories(

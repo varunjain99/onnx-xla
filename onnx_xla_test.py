@@ -18,6 +18,7 @@ backend_test.include(r'(test_relu'  # Test relu.
                      '|test_batchnorm' # Test BatchNormalization
                      '|test_gemm' # Test Gemm
                      '|test_concat' # Test Concat
+                     '|test_lrn' # Test LRN
                      '|test_add' # Test Add
                      '|test_sub' # Test Sub
                      '|test_div' # Test Div

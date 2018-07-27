@@ -6,7 +6,7 @@
 #include "tensorflow/compiler/xla/client/xla_client/xla_builder.h"
 #include "tensorflow/compiler/tf2xla/lib/util.h"
 
-#include "onnx_xla/types.h"
+#include "onnx_xla/utils.h"
 
 #include <functional>
 #include <utility>
@@ -56,23 +56,6 @@ class OperatorRegistry final {
                        ValueOpMap& valueToOp);
   // Returns reference to static singleton registry
   static OperatorRegistry& registry();
-
-  // Utilities to help with operator translation
-  static XlaComputation max(PrimitiveType dataType);
-  static XlaComputation add(PrimitiveType dataType);
-
-  // Converts input sizes vector of Dimension into vector of int64
-  // Throws if not possible (missing shape dimensions)
-  static std::vector<int64> parseOnnxInputSizes(const Node& n,
-                                                size_t inputIndex);
-
-  // Given two XlaOps, returns a broadcast dimensions vector required by the
-  // XlaBuilder to perform elementary binary operations that support
-  // multidirectional broadcasting
-  static std::vector<int64> getMultidirectionalBroadcastArg(
-      const XlaBuilder& builder,
-      const XlaOp& firstOp,
-      const XlaOp& secondOp);
 
  private:
   // Singleton instance should only be made in the class

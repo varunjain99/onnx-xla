@@ -24,9 +24,11 @@ onnxStatus translateSoftmax(const Node& n,
   }
 
   // Set windowDimensions, which corresponds to a single batch
-  std::vector<int64> windowDimensions =
-      OperatorRegistry::parseOnnxInputSizes(n, 0);
-  std::fill(windowDimensions.begin(), windowDimensions.begin() + axis, 1);
+  std::vector<int64_t> windowSizes = parseOnnxInputSizes(n, 0);
+  std::vector<int64> windowDimensions;
+  windowDimensions.insert(windowDimensions.end(), axis, 1);
+  windowDimensions.insert(windowDimensions.end(), windowSizes.begin() + axis,
+                          windowSizes.end());
 
   // windowStrides is all 1's
   std::vector<int64> windowStrides(windowDimensions.size(), 1);
@@ -34,8 +36,7 @@ onnxStatus translateSoftmax(const Node& n,
   // Compute max of each batch
   auto maxOp = builder.ReduceWindow(
       inputOp, builder.ConstantLiteral(Literal::MinValue(dataType)),
-      OperatorRegistry::max(dataType), windowDimensions, windowStrides,
-      Padding::kValid);
+      max(dataType), windowDimensions, windowStrides, Padding::kValid);
 
   // Subtract max from each number (implict broadcasting)
   auto subOp = builder.Sub(inputOp, maxOp);
@@ -45,9 +46,8 @@ onnxStatus translateSoftmax(const Node& n,
 
   // Sum up expOp for each batch
   auto dividendsOp = builder.ReduceWindow(
-      expOp, builder.ConstantLiteral(Literal::Zero(dataType)),
-      OperatorRegistry::add(dataType), windowDimensions, windowStrides,
-      Padding::kValid);
+      expOp, builder.ConstantLiteral(Literal::Zero(dataType)), add(dataType),
+      windowDimensions, windowStrides, Padding::kValid);
 
   // Build softmax by dividing
   valueToOp[n.outputs().at(0)] = builder.Div(expOp, dividendsOp);

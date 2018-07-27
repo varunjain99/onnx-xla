@@ -13,9 +13,8 @@ onnxStatus translateSum(const Node& n,
   auto firstOp = valueToOp.at(n.inputs().at(0));
   for (auto i = 1; i < n.inputs().size(); ++i) {
     auto secondOp = valueToOp.at(n.inputs().at(i));
-    firstOp = builder.Add(firstOp, secondOp,
-                          OperatorRegistry::getMultidirectionalBroadcastArg(
-                              builder, firstOp, secondOp));
+    firstOp = builder.Add(firstOp, secondOp, getMultidirectionalBroadcastArg(
+                                                 builder, firstOp, secondOp));
   }
   valueToOp[n.outputs().at(0)] = firstOp;
   return ONNXIFI_STATUS_SUCCESS;

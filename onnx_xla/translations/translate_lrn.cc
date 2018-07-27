@@ -51,8 +51,7 @@ onnxStatus translateLRN(const Node& n,
 
   auto sumSquaresOp = builder.ReduceWindow(
       squaredOp, builder.ConstantLiteral(Literal::Zero(dataType)),
-      OperatorRegistry::add(dataType), windowDimensions, windowStrides,
-      Padding::kSame);
+      add(dataType), windowDimensions, windowStrides, Padding::kSame);
 
   // Do final arithmetic
   valueToOp[n.outputs().at(0)] = builder.Div(

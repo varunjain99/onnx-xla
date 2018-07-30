@@ -14,22 +14,23 @@ pytest_plugins = 'onnx.backend.test.report',
 backend_test = onnx.backend.test.BackendTest(OnnxifiBackend(), __name__)
 
 backend_test.include(r'(test_relu'  # Test relu.
-                     '|test_softmax' # Test softmax
-                     '|test_batchnorm' # Test BatchNormalization
-                     '|test_gemm' # Test Gemm
-                     '|test_concat' # Test Concat
-                     '|test_lrn' # Test LRN
-                     '|test_add' # Test Add
-                     '|test_sub' # Test Sub
-                     '|test_div' # Test Div
-                     '|test_mul' # Test Mul
-                     '|test_sum' # Test Sum
-                     '|test_transpose' #Test Transpose
-                     '|test_maxpool' # Test MaxPool
-                     '|test_basic_conv' # Test Conv
-                     '|test_conv_with'
-                     '|test_average_pool' #Test AveragePool
-                     '|test_dropout' # Test Dropout
+#                     '|test_softmax' # Test softmax
+#                     '|test_batchnorm' # Test BatchNormalization
+#                     '|test_gemm' # Test Gemm
+#                     '|test_concat' # Test Concat
+#                     '|test_lrn' # Test LRN
+#                     '|test_add' # Test Add
+#                     '|test_sub' # Test Sub
+#                     '|test_div' # Test Div
+#                     '|test_mul' # Test Mul
+#                     '|test_sum' # Test Sum
+#                     '|test_transpose' #Test Transpose
+#                     '|test_maxpool' # Test MaxPool
+#                     '|test_basic_conv' # Test Conv
+#                     '|test_conv_with'
+#                     '|test_average_pool' #Test AveragePool
+#                     '|test_dropout' # Test Dropout
+                     '|test_resnet50' 
                      ')')
 
 backend_test.exclude(r'(test_maxpool_with_argmax' # MaxPool with indices not yet supported

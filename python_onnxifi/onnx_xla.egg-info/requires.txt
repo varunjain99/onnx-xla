@@ -1,6 +1,0 @@
-protobuf
-numpy
-six
-typing>=3.6.4
-typing-extensions>=3.6.2.1
-onnx

@@ -1,8 +1,0 @@
-README.md
-setup.py
-python_onnxifi/onnxifi_backend.py
-python_onnxifi/onnx_xla.egg-info/PKG-INFO
-python_onnxifi/onnx_xla.egg-info/SOURCES.txt
-python_onnxifi/onnx_xla.egg-info/dependency_links.txt
-python_onnxifi/onnx_xla.egg-info/requires.txt
-python_onnxifi/onnx_xla.egg-info/top_level.txt

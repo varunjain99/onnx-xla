@@ -75,6 +75,7 @@ DescriptorData::DescriptorData(DescriptorData&& d) noexcept {
   name = std::move(d.name);
   buffer = std::move(d.buffer);
   shape = std::move(d.shape);
+  descriptor.tag = d.descriptor.tag;
   descriptor.name = name.c_str();
   descriptor.dimensions = shape.size();
   descriptor.shape = shape.data();
@@ -87,6 +88,7 @@ DescriptorData::DescriptorData(const DescriptorData& d) {
   name = d.name;
   buffer = d.buffer;
   shape = d.shape;
+  descriptor.tag = d.descriptor.tag;
   descriptor.name = name.c_str();
   descriptor.dimensions = shape.size();
   descriptor.shape = shape.data();
@@ -96,6 +98,7 @@ DescriptorData::DescriptorData(const DescriptorData& d) {
 }
 
 DescriptorData::DescriptorData(const ValueInfoProto& vip) {
+  descriptor.tag = ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1;
   name = vip.name();
   descriptor.name = name.c_str();
   if (!vip.type().tensor_type().has_elem_type()) {  // TODO: ENFORCE_EQ
@@ -269,9 +272,9 @@ void DataConversion::fillNumpyArrayList(
   }
 }
 
-std::vector<onnxTensorDescriptor> DataConversion::getTensorDescriptors(
+std::vector<onnxTensorDescriptorV1> DataConversion::getTensorDescriptors(
     const std::vector<DescriptorData>& descriptorsData) {
-  std::vector<onnxTensorDescriptor> tensorDescriptors;
+  std::vector<onnxTensorDescriptorV1> tensorDescriptors;
   for (const auto& dd : descriptorsData) {
     tensorDescriptors.emplace_back(dd.descriptor);
   }
@@ -288,10 +291,12 @@ void DataConversion::setInputs(const py::list& inputs) {
   fillDescriptorDataVector(inputs, input_descriptors_data_);
 }
 
-std::vector<onnxTensorDescriptor> DataConversion::getInputDescriptors() const {
+std::vector<onnxTensorDescriptorV1> DataConversion::getInputDescriptors()
+    const {
   return getTensorDescriptors(input_descriptors_data_);
 }
 
-std::vector<onnxTensorDescriptor> DataConversion::getOutputDescriptors() const {
+std::vector<onnxTensorDescriptorV1> DataConversion::getOutputDescriptors()
+    const {
   return getTensorDescriptors(output_descriptors_data_);
 }

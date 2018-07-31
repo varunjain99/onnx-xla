@@ -247,7 +247,8 @@ struct BackendRep {
 
   // Runs graph given input list, returning output list
   py::list run(py::list inputs, py::kwargs kwargs) {
-    onnxMemoryFence inputFence;
+    onnxMemoryFenceV1 inputFence;
+    inputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
     inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     conversion_.setInputs(inputs);
     if (onnxInitEvent(backend_, &inputFence.event) != ONNXIFI_STATUS_SUCCESS) {
@@ -260,7 +261,8 @@ struct BackendRep {
           "Internal Error: Event for input memory fence could not be signalled "
           "(expected ONNXIFI_STATUS_SUCCESS)");
     }
-    onnxMemoryFence outputFence;
+    onnxMemoryFenceV1 outputFence;
+    outputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
     outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
     if (onnxRunGraph(graph_, &inputFence, &outputFence) !=
         ONNXIFI_STATUS_SUCCESS) {

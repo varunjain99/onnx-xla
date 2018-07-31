@@ -41,16 +41,16 @@ class XlaExecutor final {
 
   // Used to pass IO metadata and locations to the engine
   onnxStatus initIO(uint32_t inputsCount,
-                    const onnxTensorDescriptor* inputDescriptors,
+                    const onnxTensorDescriptorV1* inputDescriptors,
                     uint32_t outputsCount,
-                    const onnxTensorDescriptor* outputDescriptors);
+                    const onnxTensorDescriptorV1* outputDescriptors);
 
   // Sends input tensor values to the server
   // Input fence (initialized) signals when inputs are ready
   // Runs the computation on the server using passed input
   // outputFence (initialized) is signalled once outputs are ready
-  onnxStatus executeComputation(const onnxMemoryFence* inputFence,
-                                onnxMemoryFence* outputFence);
+  onnxStatus executeComputation(const onnxMemoryFenceV1* inputFence,
+                                onnxMemoryFenceV1* outputFence);
 
   // backend handle
   const onnxBackend backend_;
@@ -80,7 +80,7 @@ class XlaExecutor final {
   // Helper functions to translate tensors, inputs, and weights to literals
   std::unique_ptr<Literal> tensorToLiteral(const Tensor& t);
   std::unique_ptr<Literal> inputNameToLiteral(const std::string& name);
-  std::unique_ptr<Literal> descriptorToLiteral(const onnxTensorDescriptor& t);
+  std::unique_ptr<Literal> descriptorToLiteral(const onnxTensorDescriptorV1& t);
 
   friend class XlaTransform;
 };
@@ -103,7 +103,7 @@ class XlaTransform final {
                std::unique_ptr<Graph> ir,
                const std::string& build_name,
                uint32_t weightsCount,
-               const onnxTensorDescriptor* weightDescriptors);
+               const onnxTensorDescriptorV1* weightDescriptors);
   ~XlaTransform();
 
   // Fills up XlaExecutor based on the IR graph. Function accomplishes:
@@ -126,7 +126,7 @@ class XlaTransform final {
 
   // Weight Descriptor information
   uint32_t weights_count_;
-  const onnxTensorDescriptor* weight_descriptors_;
+  const onnxTensorDescriptorV1* weight_descriptors_;
 
   // Builder that builds XlaComputation
   //  TODO: Remove? Currently only used by one function

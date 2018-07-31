@@ -16,9 +16,9 @@ namespace py = pybind11;
 using ::ONNX_NAMESPACE::ModelProto;
 using ::ONNX_NAMESPACE::ValueInfoProto;
 
-// Utility classes to navigate conversions of onnxTensorDescriptor and numpy
+// Utility classes to navigate conversions of onnxTensorDescriptorV1 and numpy
 
-// Struct to manage onnxTensorDescriptor data for lifetime of the descriptor
+// Struct to manage onnxTensorDescriptorV1 data for lifetime of the descriptor
 struct DescriptorData {
   // Setup metadata and allocate buffer
   DescriptorData(const ValueInfoProto& vip);
@@ -26,7 +26,7 @@ struct DescriptorData {
   DescriptorData(const DescriptorData& d);
   DescriptorData(DescriptorData&& d) noexcept;
 
-  onnxTensorDescriptor descriptor;
+  onnxTensorDescriptorV1 descriptor;
   // Containers for memory managment
   std::vector<uint64_t> shape;
   std::string name;
@@ -57,8 +57,8 @@ class DataConversion final {
   void setInputs(const py::list& inputs);
 
   // Return tensor descriptors from the stored member variables
-  std::vector<onnxTensorDescriptor> getInputDescriptors() const;
-  std::vector<onnxTensorDescriptor> getOutputDescriptors() const;
+  std::vector<onnxTensorDescriptorV1> getInputDescriptors() const;
+  std::vector<onnxTensorDescriptorV1> getOutputDescriptors() const;
 
  private:
   /************************************************************************/
@@ -95,8 +95,8 @@ class DataConversion final {
   /************************************************************************/
   /********************     ADDITIONAL HELPERS  ***************************/
 
-  // Returns vector of onnxTensorDescriptor based on descriptorsData vector
-  static std::vector<onnxTensorDescriptor> getTensorDescriptors(
+  // Returns vector of onnxTensorDescriptorV1 based on descriptorsData vector
+  static std::vector<onnxTensorDescriptorV1> getTensorDescriptors(
       const std::vector<DescriptorData>& descriptorsData);
 
   /************************************************************************/

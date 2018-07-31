@@ -45,7 +45,8 @@ int main(int argc, char** argv)  {
   uint64_t shape[2] = {1, 2};
 
   uint32_t inputsCount = 1;
-  onnxTensorDescriptor input;
+  onnxTensorDescriptorV1 input;
+  input.tag = ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1;
   input.name = "x";
   input.dataType = ONNXIFI_DATATYPE_FLOAT32;
   input.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
@@ -54,7 +55,8 @@ int main(int argc, char** argv)  {
   input.buffer = (onnxPointer) new float[24];
 
   uint32_t outputsCount = 1;
-  onnxTensorDescriptor output;  
+  onnxTensorDescriptorV1 output;  
+  output.tag = ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1;
   output.name = "y";
   output.dataType = ONNXIFI_DATATYPE_FLOAT32;
   output.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
@@ -72,12 +74,14 @@ int main(int argc, char** argv)  {
   float *output_ptr = (float*) output.buffer;
 
   //Set up I/O memory fences
-  onnxMemoryFence inputFence;
+  onnxMemoryFenceV1 inputFence;
+  inputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   if (onnxInitEvent(backend, &inputFence.event) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error initializing event for input memory fence" << std::endl;
   }
-  onnxMemoryFence outputFence;
+  onnxMemoryFenceV1 outputFence;
+  outputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
  
  //Run the graph

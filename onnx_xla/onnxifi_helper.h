@@ -24,7 +24,7 @@ struct BackendControl {
   onnxStatus build(const void* serializedModel,
                    size_t serializedModelSize,
                    uint32_t weightsCount,
-                   const onnxTensorDescriptor* weightDescriptors,
+                   const onnxTensorDescriptorV1* weightDescriptors,
                    onnxGraph* graph);
 
  private:

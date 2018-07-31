@@ -39,7 +39,8 @@ void static_relu_test() {
 
   // Set up IO information
   uint64_t shape[3] = {2, 3, 4};
-  onnxTensorDescriptor output;
+  onnxTensorDescriptorV1 output;
+  output.tag = ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1;
   output.name = "relu_output";
   output.dataType = ONNXIFI_DATATYPE_FLOAT32;
   output.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
@@ -49,12 +50,14 @@ void static_relu_test() {
 
   // Setup events
   // Hacky event usage to make it work (cannot use onnxifi with backend)
-  onnxMemoryFence inputFence;
+  onnxMemoryFenceV1 inputFence;
+  inputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto inputEvent = new EventControl();
   inputEvent->signalled_ = true;
   inputFence.event = reinterpret_cast<onnxEvent>(inputEvent);
-  onnxMemoryFence outputFence;
+  onnxMemoryFenceV1 outputFence;
+  outputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto outputEvent = new EventControl();
   outputEvent->signalled_ = false;
@@ -107,14 +110,16 @@ void dynamic_relu_test() {
 
   // Set up IO information
   uint64_t shape[3] = {2, 3, 4};
-  onnxTensorDescriptor output;
-  onnxTensorDescriptor input;
+  onnxTensorDescriptorV1 output;
+  onnxTensorDescriptorV1 input;
+  output.tag = ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1;
   output.name = "relu_output";
   output.dataType = ONNXIFI_DATATYPE_FLOAT32;
   output.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
   output.dimensions = 3;
   output.shape = shape;
   output.buffer = (onnxPointer) new float[24];
+  input.tag = ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1;
   input.name = "relu_input";
   input.dataType = ONNXIFI_DATATYPE_FLOAT32;
   input.memoryType = ONNXIFI_MEMORY_TYPE_CPU;
@@ -124,12 +129,14 @@ void dynamic_relu_test() {
 
   // Setup events
   // Hacky event usage to make it work (cannot use onnxifi with backend)
-  onnxMemoryFence inputFence;
+  onnxMemoryFenceV1 inputFence;
+  inputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
   inputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto inputEvent = new EventControl();
   inputEvent->signalled_ = true;
   inputFence.event = reinterpret_cast<onnxEvent>(inputEvent);
-  onnxMemoryFence outputFence;
+  onnxMemoryFenceV1 outputFence;
+  outputFence.tag = ONNXIFI_TAG_MEMORY_FENCE_V1;
   outputFence.type = ONNXIFI_SYNCHRONIZATION_EVENT;
   auto outputEvent = new EventControl();
   outputEvent->signalled_ = false;

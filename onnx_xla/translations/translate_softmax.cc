@@ -19,10 +19,6 @@ onnxStatus translateSoftmax(const Node& n,
   if (n.hasAttribute(kaxis)) {
     axis = n.i(kaxis);
   }
-  for (auto x : n.inputs().at(0)->sizes()) {
-    std::cout << "SIZE: " << x.dim << std::endl;
-  }
-  std::cout << "AXIS: " << axis << std::endl;
 
   if (axis < 0 || axis > n.inputs().at(0)->sizes().size()) {  // TODO: ENFORCE
     std::cerr << "Invalid axis attribute" << std::endl;

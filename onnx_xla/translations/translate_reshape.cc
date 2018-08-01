@@ -67,11 +67,6 @@ onnxStatus translateReshape(const Node& n,
     xlaOperatorTargetShape[negativeOneIndex] *= numElements / xlaProduct;
   }
 
-  std::cout << "RESHAPE INPUT SIZE: " << n.inputs().at(0)->sizes().size()
-            << std::endl;
-  std::cout << "RESHAPE OUTPUT SIZE: " << n.outputs().at(0)->sizes().size()
-            << std::endl;
-
   // Add resulting XlaOp to builder
   valueToOp[n.outputs().at(0)] =
       builder.Reshape(valueToOp.at(n.inputs().at(0)), xlaOperatorTargetShape);

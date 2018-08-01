@@ -21,9 +21,6 @@ onnxStatus translateGemm(const Node& n,
   }
   auto dataType = onnxToPrimitive(onnxType);
 
-  std::cout << "OC2_DUMMY_0 SIZE: " << n.inputs().at(0)->sizes().size()
-            << std::endl;
-
   // Set transpose values and do shape checks
   auto AOp = valueToOp.at(n.inputs().at(0));
   auto BOp = valueToOp.at(n.inputs().at(1));

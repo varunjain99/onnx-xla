@@ -4,11 +4,12 @@ EventControl::EventControl() : signalled_(false) {}
 
 BackendControl::BackendControl(OnnxXlaBackendID* id) : backendID(id) {}
 
-onnxStatus BackendControl::build(const void* serializedModel,
-                                 size_t serializedModelSize,
-                                 uint32_t weightsCount,
-                                 const onnxTensorDescriptor* weightDescriptors,
-                                 onnxGraph* graph) {
+onnxStatus BackendControl::build(
+    const void* serializedModel,
+    size_t serializedModelSize,
+    uint32_t weightsCount,
+    const onnxTensorDescriptorV1* weightDescriptors,
+    onnxGraph* graph) {
   onnx_xla::OnnxParser parser(serializedModel, serializedModelSize);
   std::unique_ptr<ONNX_NAMESPACE::Graph> ir(nullptr);
   auto parseStatus = parser.parse(ir);

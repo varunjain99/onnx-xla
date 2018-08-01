@@ -103,7 +103,7 @@ std::unique_ptr<Literal> XlaExecutor::inputNameToLiteral(
 }
 
 std::unique_ptr<Literal> XlaExecutor::descriptorToLiteral(
-    const onnxTensorDescriptor& t) {
+    const onnxTensorDescriptorV1& t) {
   std::vector<int64> sizes(&t.shape[0], &t.shape[t.dimensions]);
   int64 num_elements = std::accumulate(sizes.begin(), sizes.end(), (int64)1,
                                        std::multiplies<int64>());
@@ -122,10 +122,11 @@ std::unique_ptr<Literal> XlaExecutor::descriptorToLiteral(
 #undef OPERATION
 }
 
-onnxStatus XlaExecutor::initIO(uint32_t inputsCount,
-                               const onnxTensorDescriptor* inputDescriptors,
-                               uint32_t outputsCount,
-                               const onnxTensorDescriptor* outputDescriptors) {
+onnxStatus XlaExecutor::initIO(
+    uint32_t inputsCount,
+    const onnxTensorDescriptorV1* inputDescriptors,
+    uint32_t outputsCount,
+    const onnxTensorDescriptorV1* outputDescriptors) {
   if (num_inputs_ != inputsCount) {
     throw std::runtime_error("Did not receive expected number of inputs");
   }
@@ -133,25 +134,28 @@ onnxStatus XlaExecutor::initIO(uint32_t inputsCount,
     throw std::runtime_error("Did not receive expected number of outputs");
   }
 
-#define CHECK_TYPE_AND_SHAPE(VAR)                                   \
-  for (auto i = 0; i < num_##VAR##s_; ++i) {                        \
-    const std::string name(VAR##Descriptors[i].name);               \
-    if (io_data_type_.find(name) == io_data_type_.end()) {          \
-      return ONNXIFI_STATUS_INVALID_NAME;                           \
-    }                                                               \
-    VAR##_buffers_[name] = VAR##Descriptors[i].buffer;              \
-    if (VAR##Descriptors[i].dataType != io_data_type_[name]) {      \
-      return ONNXIFI_STATUS_MISMATCHING_DATATYPE;                   \
-    }                                                               \
-    if (VAR##Descriptors[i].dimensions != io_shape_[name].size()) { \
-      return ONNXIFI_STATUS_MISMATCHING_SHAPE;                      \
-    }                                                               \
-    for (auto j = 0; j < io_shape_[name].size(); ++j) {             \
-      if (!io_shape_[name][j].is_int ||                             \
-          io_shape_[name][j].dim != VAR##Descriptors[i].shape[j]) { \
-        return ONNXIFI_STATUS_MISMATCHING_SHAPE;                    \
-      }                                                             \
-    }                                                               \
+#define CHECK_TYPE_AND_SHAPE(VAR)                                      \
+  for (auto i = 0; i < num_##VAR##s_; ++i) {                           \
+    if (VAR##Descriptors[i].tag != ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1) { \
+      return ONNXIFI_STATUS_UNSUPPORTED_TAG;                           \
+    }                                                                  \
+    const std::string name(VAR##Descriptors[i].name);                  \
+    if (io_data_type_.find(name) == io_data_type_.end()) {             \
+      return ONNXIFI_STATUS_INVALID_NAME;                              \
+    }                                                                  \
+    VAR##_buffers_[name] = VAR##Descriptors[i].buffer;                 \
+    if (VAR##Descriptors[i].dataType != io_data_type_[name]) {         \
+      return ONNXIFI_STATUS_MISMATCHING_DATATYPE;                      \
+    }                                                                  \
+    if (VAR##Descriptors[i].dimensions != io_shape_[name].size()) {    \
+      return ONNXIFI_STATUS_MISMATCHING_SHAPE;                         \
+    }                                                                  \
+    for (auto j = 0; j < io_shape_[name].size(); ++j) {                \
+      if (!io_shape_[name][j].is_int ||                                \
+          io_shape_[name][j].dim != VAR##Descriptors[i].shape[j]) {    \
+        return ONNXIFI_STATUS_MISMATCHING_SHAPE;                       \
+      }                                                                \
+    }                                                                  \
   }
 
   CHECK_TYPE_AND_SHAPE(input);
@@ -160,8 +164,8 @@ onnxStatus XlaExecutor::initIO(uint32_t inputsCount,
 #undef CHECK_TYPE_AND_SHAPE
 }
 
-onnxStatus XlaExecutor::executeComputation(const onnxMemoryFence* inputFence,
-                                           onnxMemoryFence* outputFence) {
+onnxStatus XlaExecutor::executeComputation(const onnxMemoryFenceV1* inputFence,
+                                           onnxMemoryFenceV1* outputFence) {
   std::vector<GlobalData*> arguments;
   auto waitStatus = onnxWaitEvent(inputFence->event);
   if (waitStatus != ONNXIFI_STATUS_SUCCESS) {
@@ -197,7 +201,7 @@ XlaTransform::XlaTransform(onnxBackend backend,
                            std::unique_ptr<Graph> ir,
                            const std::string& build_name,
                            uint32_t weightsCount,
-                           const onnxTensorDescriptor* weightDescriptors)
+                           const onnxTensorDescriptorV1* weightDescriptors)
     : weights_count_(weightsCount),
       weight_descriptors_(weightDescriptors),
       builder_(build_name),
@@ -237,9 +241,12 @@ onnxStatus XlaTransform::handleInputs() {
     executor_->num_inputs_ =
         (uint32_t)((int64_t)(ir_->inputs().size()) - (int64_t)(weights_count_));
     for (auto i = 0; i < weights_count_; ++i) {
+      if (weight_descriptors_[i].tag != ONNXIFI_TAG_TENSOR_DESCRIPTOR_V1) {
+        return ONNXIFI_STATUS_UNSUPPORTED_TAG;
+      }
       std::string name(weight_descriptors_[i].name);
       isInitialized[name] = true;
-      const onnxTensorDescriptor& t = weight_descriptors_[i];
+      const onnxTensorDescriptorV1& t = weight_descriptors_[i];
       const Value* v = inputNameToValue[name];
       if (t.dataType == v->elemType()) {
         return ONNXIFI_STATUS_MISMATCHING_DATATYPE;

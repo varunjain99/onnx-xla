@@ -196,7 +196,7 @@ onnxInitGraph(onnxBackend backend,
               size_t onnxModelSize,
               const void* onnxModel,
               uint32_t weightsCount,
-              const onnxTensorDescriptor* weightDescriptors,
+              const onnxTensorDescriptorV1* weightDescriptors,
               onnxGraph* graph) {
   return onnxifiTryCatch([&] {
     *graph = NULL;
@@ -221,9 +221,9 @@ onnxInitGraph(onnxBackend backend,
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 onnxSetGraphIO(onnxGraph graph,
                uint32_t inputsCount,
-               const onnxTensorDescriptor* inputDescriptors,
+               const onnxTensorDescriptorV1* inputDescriptors,
                uint32_t outputsCount,
-               const onnxTensorDescriptor* outputDescriptors) {
+               const onnxTensorDescriptorV1* outputDescriptors) {
   return onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
@@ -243,8 +243,8 @@ onnxSetGraphIO(onnxGraph graph,
 // TODO: more robust error handling in header file to be included
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 onnxRunGraph(onnxGraph graph,
-             const onnxMemoryFence* inputFence,
-             onnxMemoryFence* outputFence) {
+             const onnxMemoryFenceV1* inputFence,
+             onnxMemoryFenceV1* outputFence) {
   return onnxifiTryCatch([&] {
     if (!graph) {
       return ONNXIFI_STATUS_INVALID_GRAPH;
@@ -255,6 +255,9 @@ onnxRunGraph(onnxGraph graph,
     if (!inputFence) {
       throw std::runtime_error("Invalid input memory fence");
     }
+    if (inputFence->tag != ONNXIFI_TAG_MEMORY_FENCE_V1) {
+      return ONNXIFI_STATUS_UNSUPPORTED_TAG;
+    }
     if (inputFence->type != ONNXIFI_SYNCHRONIZATION_EVENT) {
       throw std::runtime_error(
           "The input memory fence must have type "
@@ -263,6 +266,9 @@ onnxRunGraph(onnxGraph graph,
     }
     if (!outputFence) {
       throw std::runtime_error("Invalid output memory fence");
+    }
+    if (outputFence->tag != ONNXIFI_TAG_MEMORY_FENCE_V1) {
+      return ONNXIFI_STATUS_UNSUPPORTED_TAG;
     }
     if (outputFence->type != ONNXIFI_SYNCHRONIZATION_EVENT) {
       throw std::runtime_error(

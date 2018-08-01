@@ -10,7 +10,7 @@ TODO:
 
 4. Clean up onnx_xla/backend.cc macros
 
-5. Update Onnx submodule (version tag PR)
+5. Maybe move to one client (benchmark this?)
 
 6. Add support for half in python interface to ONNXIFI
 

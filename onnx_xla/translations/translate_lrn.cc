@@ -57,7 +57,8 @@ onnxStatus translateLRN(const Node& n,
   // Do final arithmetic
   valueToOp[n.outputs().at(0)] = builder.Div(
       inputOp,
-      builder.Pow(builder.Add(biasOp, builder.Mul(alphaOp, sumSquaresOp)),
+      builder.Pow(builder.Add(biasOp, builder.Mul(builder.Div(alphaOp, sizeOp),
+                                                  sumSquaresOp)),
                   betaOp));
   return ONNXIFI_STATUS_SUCCESS;
 }

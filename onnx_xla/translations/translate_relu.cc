@@ -7,12 +7,8 @@ onnxStatus translateRelu(const Node& n,
                          ValueOpMap& valueToOp,
                          const ValueLiteralMap& valueToLiteral) {
   auto input = valueToOp[n.inputs().at(0)];
-  auto shape = builder.GetShape(input);
-  if (!shape.ok()) {
-    throw std::runtime_error("Internal error: Unexpected operation shape");
-  }
-  auto zero = builder.ConstantLiteral(
-      *LiteralBase::CreateFromShape(shape.ValueOrDie()));
+  auto zero = ::tensorflow::FloatLiteral(
+      &builder, onnxToPrimitive(n.inputs().at(0)->elemType()), 0);
   auto maximum = builder.Max(input, zero);
   valueToOp[n.outputs().at(0)] = maximum;
   return ONNXIFI_STATUS_SUCCESS;

@@ -27,9 +27,24 @@ backend_test.include(r'(test_relu'  # Test relu.
                      '|test_mul' # Test Mul
                      '|test_sum' # Test Sum
                      '|test_transpose' #Test Transpose
+                     '|test_maxpool' # Test MaxPool
+                     '|test_basic_conv' # Test Conv
+                     '|test_conv_with'
+                     '|test_average_pool' #Test AveragePool
                      '|test_dropout' # Test Dropout
+                     '|test_resnet50' 
+                     '|test_bvlc_alexnet'
+                     '|test_densenet121'
+                     '|test_inception_v1'
+                     '|test_inception_v2'
+#                     '|test_shufflenet'
+                     '|test_squeezenet'
+                     '|test_vgg19'
+                     '|test_zfnet512'
                      ')')
 
+backend_test.exclude(r'(test_maxpool_with_argmax' # MaxPool with indices not yet supported
+                     ')')
 
 # import all test cases at global scope to make them visible to python.unittest
 globals().update(backend_test

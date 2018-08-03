@@ -4,13 +4,13 @@ TODO:
 
 1. Fix bug in python setup.py develop (unable to copy module from build_ext)
 
-2. Merge PRs for node translate and test imagenet model translations
+2. Experiment with group convolution implementations to improve performance.
 
 3. Use utility macros in onnx_xla and python_onnxifi to perform asserts
 
 4. Clean up onnx_xla/backend.cc macros
 
-5. Update Onnx submodule (version tag PR)
+5. Maybe move to one client (benchmark this?)
 
 6. Add support for half in python interface to ONNXIFI
 
@@ -19,6 +19,7 @@ TODO:
 8. Add weight descriptor support to the python interface to ONNXIFI
 
 9. Benchmark two version of LRN(materializing square and not)
+
 
 Steps to test:
 

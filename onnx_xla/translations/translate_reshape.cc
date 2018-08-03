@@ -43,7 +43,7 @@ onnxStatus translateReshape(const Node& n,
       xlaOperatorTargetShape.emplace_back(-1);
     } else if (dim == 0) {
       xlaOperatorTargetShape.emplace_back(originalShape[i]);
-    } else if (dim > 1) {
+    } else if (dim > 0) {
       xlaOperatorTargetShape.emplace_back(dim);
     } else {  // TODO: Enforce
       std::cerr << "Dimension value cannot be less than -1" << std::endl;

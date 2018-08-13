@@ -86,7 +86,7 @@ int main(int argc, char** argv)  {
  
  //Run the graph
   onnxGraph graph;
-  if (onnxInitGraph(backend, (size_t) size, buffer, 0,
+  if (onnxInitGraph(backend, NULL, (size_t) size, buffer, 0,
                 nullptr, &graph) != ONNXIFI_STATUS_SUCCESS)  {
     std::cerr << "Error initializing graph" << std::endl;
   }

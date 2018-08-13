@@ -231,7 +231,7 @@ struct BackendRep {
         backend_(backend),
         serialized_model_(serializedModel),
         conversion_(serialized_model_) {
-    if (onnxInitGraph(backend, serialized_model_.size(),
+    if (onnxInitGraph(backend, NULL, serialized_model_.size(),
                       serialized_model_.c_str(), 0, nullptr,
                       &graph_) != ONNXIFI_STATUS_SUCCESS) {
       throw std::runtime_error("Could not initialize graph on given device");

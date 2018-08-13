@@ -121,7 +121,7 @@ onnxGetBackendInfo(onnxBackendID backendID,
       }
       case ONNXIFI_BACKEND_MEMORY_SIZE: {
         // TODO
-        return ONNXIFI_STATUS_UNSUPPORTED_PARAMETER;
+        return ONNXIFI_STATUS_UNSUPPORTED_ATTRIBUTE;
       }
       case ONNXIFI_BACKEND_MAX_GRAPH_SIZE: {
         return SET_UINT64(1000000UL);
@@ -141,7 +141,7 @@ onnxGetBackendInfo(onnxBackendID backendID,
       case ONNXIFI_BACKEND_CPU_MEMORY_READ_BANDWIDTH: {
         return SET_UINT64(0UL);
       }
-      default: { return ONNXIFI_STATUS_UNSUPPORTED_PARAMETER; }
+      default: { return ONNXIFI_STATUS_UNSUPPORTED_ATTRIBUTE; }
     }
   });
 }
@@ -193,6 +193,7 @@ onnxReleaseBackend(onnxBackend backend) {
 // TODO: more robust error handling in header file to be included
 ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
 onnxInitGraph(onnxBackend backend,
+              const uint64_t* auxPropertiesList,
               size_t onnxModelSize,
               const void* onnxModel,
               uint32_t weightsCount,
@@ -297,6 +298,28 @@ onnxReleaseGraph(onnxGraph graph) {
     delete executor;
     return ONNXIFI_STATUS_SUCCESS;
   });
+}
+
+// Returns event state
+ONNXIFI_PUBLIC ONNXIFI_CHECK_RESULT onnxStatus ONNXIFI_ABI
+onnxGetEventState(onnxEvent event, onnxEventState* state) {
+  if (!state) {
+    return ONNXIFI_STATUS_INVALID_POINTER;
+  }
+  *state = ONNXIFI_EVENT_STATE_INVALID;
+  if (!event) {
+    return ONNXIFI_STATUS_INVALID_EVENT;
+  }
+  auto* eventController = reinterpret_cast<EventControl*>(event);
+  {
+    std::lock_guard<std::mutex> lk(eventController->mutex_);
+    if (eventController->signalled_) {
+      *state = ONNXIFI_EVENT_STATE_SIGNALLED;
+    } else {
+      *state = ONNXIFI_EVENT_STATE_NONSIGNALLED;
+    }
+  }
+  return ONNXIFI_STATUS_SUCCESS;
 }
 
 // Initialize event by creating EventControl object on the heap
